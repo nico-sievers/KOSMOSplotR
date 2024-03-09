@@ -1,11 +1,12 @@
 Package: KOSMOSplotsR
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Created commonly used plots directly from the a standardised KOSMOS data sheet in a uniform layout
+Version: 1.0.0
+License: None
+Author: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
+Description: Simplifies the creation of the most commenly used plots from data that is available in the layout of a typical KOSMOS datasheet. Style and layout will automatically follow the decided standard.
+URL: https://github.com/nico-sievers/KOSMOSplotsR
+BugReports: https://github.com/nico-sievers/KOSMOSplotsR
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.3.1

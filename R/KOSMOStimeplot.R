@@ -7,6 +7,7 @@
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to "Experiment day".
 #' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
+#' @param baseline \code{(currently unavailable)}
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".
 #' @param ignore List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.
 #' @param startat0 Should the y-axis start at 0? \code{TRUE} or \code{False}. Defaults to \code{TRUE}.

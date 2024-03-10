@@ -11,7 +11,7 @@ An object of class \code{"data.frame"} as if loaded from a standard KOSMOS excel
 }
 }
 \usage{
-data(KOSMOStestdata)
+KOSMOStestdata
 }
 \description{
 Artificial dataset to showcase the functions within the KOSMOSplotsR package

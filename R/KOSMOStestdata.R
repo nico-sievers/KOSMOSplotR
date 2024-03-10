@@ -2,7 +2,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(KOSMOStestdata)
+# @usage data(KOSMOStestdata)
 #'
 #' @format An object of class \code{"data.frame"} as if loaded from a standard KOSMOS excel data sheet
 #' \describe{

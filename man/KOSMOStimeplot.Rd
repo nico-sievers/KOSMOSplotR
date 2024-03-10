@@ -44,6 +44,8 @@ KOSMOStimeplot(
 
 \item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"}
 
+\item{baseline}{\code{(currently unavailable)}}
+
 \item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".}
 
 \item{ignore}{List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.}

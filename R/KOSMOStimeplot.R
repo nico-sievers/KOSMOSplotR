@@ -2,9 +2,19 @@
 #'
 #' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'
-#' @param dataset A data set object following the common KOSMOS layout
-#' @param parameter The column name of the parameter to be plotted
-#' @param ylabel The y-axis label, defaults to the same value as \code{parameter}
+#' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.
+#' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
+#' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
+#' @param xlabel The x-axis label to be printed. Defaults to "Experiment day".
+#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
+#' @param baseline \code{(currently not available)}
+#' @param ignore List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.
+#' @param baseline
+#' @param baseline
+#' @param baseline
+#' @param baseline
+#' @param baseline
+#' @param baseline
 #'
 #' @return directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been made
 # @examples
@@ -14,13 +24,13 @@
 # @importFrom dplyr "%>%"
 
 
-KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment day",
-                      control=FALSE,baseline=FALSE,ignore=FALSE,
+KOSMOStimeplot=function(dataset=KOSMOStestdata,parameter=dimnames(dataset)[[2]][ncol(dataset)],ylabel=parameter,xlabel="Experiment day",
+                      control="Fjord",baseline=FALSE,ignore=FALSE,
+                      xlimit=FALSE,
+                      ylimit=FALSE,includeThisInYlimit=FALSE,startat0=FALSE,headspace=0,
                       stats.show=FALSE,stats.days=FALSE,stats.ignore=FALSE,
                       stats.digits=FALSE,stats.location="bottom",
                       stats.meanlabel=c("below","above"),stats.doublespecial=FALSE,
-                      xlimit=FALSE,
-                      ylimit=FALSE,includeThisInYlimit=FALSE,startat0=FALSE,headspace=0,
                       axis.tick="xy",axis.show="xy",
                       copepod.draw=FALSE,copepod.position="top",treatment.abline=FALSE,
                       new.plot=TRUE,

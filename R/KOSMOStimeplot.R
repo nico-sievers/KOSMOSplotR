@@ -151,7 +151,7 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
     usr=par("usr")
     clip(usr[1],max(days)+0.3,usr[3],usr[4])
     baselinemean=mean(unlist(datasetwithall[(datasetwithall$Treat_Meso %in% baseline) | (datasetwithall$Mesocosm %in% baseline),parameter]))
-    abline(h=baselinemean,col=controlcol,lwd=1.9*globalcex,lty="longdash")
+    abline(h=baselinemean,col=KOSMOScurrentControlcol,lwd=1.9*globalcex,lty="longdash")
     do.call(clip,as.list(usr))
   }
 
@@ -159,7 +159,8 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
   if(any(dataset$Treat_Meso==control)){
     ycontrol=dataset[dataset$Treat_Meso==control,]
     lines(days,ycontrol[[parameter]],
-          col=controlcol,
+          col=KOSMOScurrentControlcol,
+          lty=KOSMOScurrentControllty,
           lwd=1.5)
   }
   mesos=unique(dataset$Treat_Meso)
@@ -169,7 +170,7 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
     else{
       data_meso=dataset[dataset$Treat_Meso==meso,]
       data_meso=data_meso[[parameter]]
-      style=styletable[styletable[,"mesolist"]==meso,c("colourlist","ltylist","shapelist")]
+      style=KOSMOScurrentStyletable[KOSMOScurrentStyletable[,"mesolist"]==meso,c("colourlist","ltylist","shapelist")]
       lines(days,data_meso,
             col=style[["colourlist"]],
             lty=style[["ltylist"]],
@@ -181,8 +182,8 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
   if(any(dataset$Treat_Meso==control)){
     ycontrol=dataset[dataset$Treat_Meso==control,]
     points(days,ycontrol[[parameter]],
-           col=controlcol,
-           bg=controlcol,
+           col=KOSMOScurrentControlcol,
+           bg=KOSMOScurrentControlcol,
            pch=4,
            cex=1.5)
   }
@@ -192,7 +193,7 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
     else{
       data_meso=dataset[dataset$Treat_Meso==meso,]
       data_meso=data_meso[[parameter]]
-      style=styletable[styletable[,"mesolist"]==meso,c("colourlist","ltylist","shapelist")]
+      style=KOSMOScurrentStyletable[KOSMOScurrentStyletable[,"mesolist"]==meso,c("colourlist","ltylist","shapelist")]
       points(days,data_meso,
              col=style[["colourlist"]],
              bg=style[["colourlist"]],
@@ -226,10 +227,10 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
     #lines(rep(statsx,2),statsmeans)
     statslineoffset=0.35
     lines(c(statsx-statslineoffset,statsx+statslineoffset),rep(statsmeans[1],2),
-          col=styletable[nrow(styletable)/2,"colourlist"],
+          col=KOSMOScurrentStyletable[nrow(KOSMOScurrentStyletable)/2,"colourlist"],
           lwd=4.3*globalcex)
     lines(c(statsx-statslineoffset,statsx+statslineoffset),rep(statsmeans[2],2),
-          col=styletable[nrow(styletable),"colourlist"],
+          col=KOSMOScurrentStyletable[nrow(KOSMOScurrentStyletable),"colourlist"],
           lwd=4.3*globalcex)
 
     statsmeans=sort(statsmeans)

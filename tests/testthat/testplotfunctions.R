@@ -3,6 +3,6 @@ library(testthat)             # load testthat package
 library(KOSMOSplotsR)         # load our package
 
 
-KOSMOStestdata=da
+#KOSMOStestdata=da
 
 KOSMOStimeplot(KOSMOStestdata,"Parameter",control="Fjord")

@@ -5,13 +5,21 @@
 \title{KOSMOStimeplot}
 \usage{
 KOSMOStimeplot(
-  dataset,
-  parameter,
+  dataset = KOSMOStestdata,
+  parameter = dimnames(dataset)[[2]][ncol(dataset)],
   ylabel = parameter,
   xlabel = "Experiment day",
-  control = FALSE,
+  control = "Fjord",
   baseline = FALSE,
+  treatment.abline = FALSE,
   ignore = FALSE,
+  startat0 = TRUE,
+  headspace = 0,
+  includeThisInYlimit = FALSE,
+  ylimit = FALSE,
+  xlimit = FALSE,
+  axis.tick = "xy",
+  axis.show = "xy",
   stats.show = FALSE,
   stats.days = FALSE,
   stats.ignore = FALSE,
@@ -19,30 +27,70 @@ KOSMOStimeplot(
   stats.location = "bottom",
   stats.meanlabel = c("below", "above"),
   stats.doublespecial = FALSE,
-  xlimit = FALSE,
-  ylimit = FALSE,
-  includeThisInYlimit = FALSE,
-  startat0 = FALSE,
-  headspace = 0,
-  axis.tick = "xy",
-  axis.show = "xy",
   copepod.draw = FALSE,
   copepod.position = "top",
-  treatment.abline = FALSE,
   new.plot = TRUE,
   ...
 )
 }
 \arguments{
-\item{dataset}{A data set object following the common KOSMOS layout}
+\item{dataset}{A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.}
 
-\item{parameter}{The column name of the parameter to be plotted}
+\item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
-\item{ylabel}{The y-axis label, defaults to the same value as \code{parameter}}
+\item{ylabel}{The y-axis label to be printed. Defaults to the same value as \code{parameter}.}
+
+\item{xlabel}{The x-axis label to be printed. Defaults to "Experiment day".}
+
+\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"}
+
+\item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".}
+
+\item{ignore}{List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.}
+
+\item{startat0}{Should the y-axis start at 0? \code{TRUE} or \code{False}. Defaults to \code{TRUE}.}
+
+\item{headspace}{More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.}
+
+\item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.}
+
+\item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
+
+\item{xlimit}{Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.}
+
+\item{axis.tick}{\code{(will be made available with the next update)}}
+
+\item{axis.show}{\code{(will be made available with the next update)}}
+
+\item{stats.show}{\code{(will be made available with the next update)}}
+
+\item{stats.days}{\code{(will be made available with the next update)}}
+
+\item{stats.ignore}{\code{(will be made available with the next update)}}
+
+\item{stats.digits}{\code{(will be made available with the next update)}}
+
+\item{stats.location}{\code{(will be made available with the next update)}}
+
+\item{stats.meanlabel}{\code{(will be made available with the next update)}}
+
+\item{stats.doublespecial}{\code{(don}'\code{t ask...)}}
+
+\item{copepod.draw}{\code{(outdated, unavailable)}}
+
+\item{copepod.position}{\code{(outdated, unavailable)}}
+
+\item{new.plot}{If set to \code{FALSE}, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.}
+
+\item{...}{Further arguments of the base-R \code{plot}-function can be passed on, such as setting a title or background to the plot.}
 }
 \value{
-directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been made
+Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.
 }
 \description{
 Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+}
+\examples{
+KOSMOStimeplot()
+
 }

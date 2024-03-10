@@ -26,6 +26,8 @@ KOSMOStimeplot=function(dataset,parameter,ylabel=parameter,xlabel="Experiment da
                       new.plot=TRUE,
                       ...){
 
+  par("font"=11)
+
   dataset=as.data.frame(dataset[,c("Day","Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)])
   dataset$Day=as.integer(dataset$Day)
   dataset=dataset[order(dataset$Day),]

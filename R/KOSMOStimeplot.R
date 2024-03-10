@@ -34,8 +34,8 @@
 #' KOSMOStimeplot()
 #'
 #' @export
-#' @importFrom graphics, abline, axis, clip, lines, par, points, rasterImage, text, title
-#' @importFrom stats, anova, lm
+#' @importFrom graphics abline axis clip lines par points rasterImage text title
+#' @importFrom stats anova lm
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,parameter=dimnames(dataset)[[2]][ncol(dataset)],ylabel=parameter,xlabel="Experiment day",

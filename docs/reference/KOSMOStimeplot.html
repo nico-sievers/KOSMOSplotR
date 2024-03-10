@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">KOSMOSplotsR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
@@ -54,13 +54,21 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">KOSMOStimeplot</span><span class="op">(</span></span>
-<span>  <span class="va">dataset</span>,</span>
-<span>  <span class="va">parameter</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="va">KOSMOStestdata</span>,</span>
+<span>  parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>  ylabel <span class="op">=</span> <span class="va">parameter</span>,</span>
 <span>  xlabel <span class="op">=</span> <span class="st">"Experiment day"</span>,</span>
-<span>  control <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  control <span class="op">=</span> <span class="st">"Fjord"</span>,</span>
 <span>  baseline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  treatment.abline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ignore <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  startat0 <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  headspace <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  includeThisInYlimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ylimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  xlimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  axis.tick <span class="op">=</span> <span class="st">"xy"</span>,</span>
+<span>  axis.show <span class="op">=</span> <span class="st">"xy"</span>,</span>
 <span>  stats.show <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  stats.days <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  stats.ignore <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -68,16 +76,8 @@
 <span>  stats.location <span class="op">=</span> <span class="st">"bottom"</span>,</span>
 <span>  stats.meanlabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"below"</span>, <span class="st">"above"</span><span class="op">)</span>,</span>
 <span>  stats.doublespecial <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  xlimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  ylimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  includeThisInYlimit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  startat0 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  headspace <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  axis.tick <span class="op">=</span> <span class="st">"xy"</span>,</span>
-<span>  axis.show <span class="op">=</span> <span class="st">"xy"</span>,</span>
 <span>  copepod.draw <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  copepod.position <span class="op">=</span> <span class="st">"top"</span>,</span>
-<span>  treatment.abline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  new.plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -86,24 +86,123 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dataset</dt>
-<dd><p>A data set object following the common KOSMOS layout</p></dd>
+<dd><p>A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset <code>KOSMOStestdata</code> will be plotted to showcase the function.</p></dd>
 
 
 <dt>parameter</dt>
-<dd><p>The column name of the parameter to be plotted</p></dd>
+<dd><p>The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.</p></dd>
 
 
 <dt>ylabel</dt>
-<dd><p>The y-axis label, defaults to the same value as <code>parameter</code></p></dd>
+<dd><p>The y-axis label to be printed. Defaults to the same value as <code>parameter</code>.</p></dd>
+
+
+<dt>xlabel</dt>
+<dd><p>The x-axis label to be printed. Defaults to "Experiment day".</p></dd>
+
+
+<dt>control</dt>
+<dd><p>A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"</p></dd>
+
+
+<dt>baseline</dt>
+<dd><p><code>(currently unavailable)</code></p></dd>
+
+
+<dt>treatment.abline</dt>
+<dd><p>Should treatment additions be marked with vertical lines? <code>TRUE</code> or <code>False</code>. Defaults to <code>TRUE</code>, which means "yes".</p></dd>
+
+
+<dt>ignore</dt>
+<dd><p>List one or multiple mesocosm numbers to exclude those from the plot, i.e. <code>c(1,3,10)</code>.</p></dd>
+
+
+<dt>startat0</dt>
+<dd><p>Should the y-axis start at 0? <code>TRUE</code> or <code>False</code>. Defaults to <code>TRUE</code>.</p></dd>
+
+
+<dt>headspace</dt>
+<dd><p>More space needed above the data lines to include additional features such as labels? <code>headspace</code> enlarges the y-axis range by the given factor (i.e. <code>0.25</code>) by setting the upper axis limit to <code>125%</code> of the original value. Defaults to <code>0</code>.</p></dd>
+
+
+<dt>includeThisInYlimit</dt>
+<dd><p>Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.</p></dd>
+
+
+<dt>ylimit</dt>
+<dd><p>Set a fixed range for the y-axis following the pattern <code>c("lower end", "upper end")</code>. This overwrites <code>startat0</code>, <code>headspace</code>, and <code>includeThisInYlimit</code>. If set to <code>FALSE</code> (the default), the range will be defined based on the range of data values.</p></dd>
+
+
+<dt>xlimit</dt>
+<dd><p>Set a fixed range for the x-axis following the pattern <code>c("lower end", "upper end")</code>.  If set to <code>FALSE</code> (the default), the range will include all sampling days for which there is data in the table.</p></dd>
+
+
+<dt>axis.tick</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>axis.show</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.show</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.days</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.ignore</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.digits</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.location</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.meanlabel</dt>
+<dd><p><code>(will be made available with the next update)</code></p></dd>
+
+
+<dt>stats.doublespecial</dt>
+<dd><p><code>(don</code>'<code>t ask...)</code></p></dd>
+
+
+<dt>copepod.draw</dt>
+<dd><p><code>(outdated, unavailable)</code></p></dd>
+
+
+<dt>copepod.position</dt>
+<dd><p><code>(outdated, unavailable)</code></p></dd>
+
+
+<dt>new.plot</dt>
+<dd><p>If set to <code>FALSE</code>, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Further arguments of the base-R <code>plot</code>-function can be passed on, such as setting a title or background to the plot.</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been made</p>
+<p>Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">KOSMOStimeplot</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="KOSMOStimeplot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -112,7 +211,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by The package maintainer.</p>
+  <p></p><p>Developed by Nico Sievers.</p>
 </div>
 
 <div class="pkgdown">

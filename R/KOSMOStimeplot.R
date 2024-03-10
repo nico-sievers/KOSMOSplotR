@@ -1,4 +1,4 @@
-#' @title KOSMOStimeplot
+#' @title Function to plot a timeline graph across sampling days
 #'
 #' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'

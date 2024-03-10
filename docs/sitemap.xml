@@ -19,6 +19,24 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/KOSMOScurrentControlcol.html</loc>
+  </url>
+  <url>
+    <loc>/reference/KOSMOScurrentControllty.html</loc>
+  </url>
+  <url>
+    <loc>/reference/KOSMOScurrentStatscols.html</loc>
+  </url>
+  <url>
+    <loc>/reference/KOSMOScurrentStatslty.html</loc>
+  </url>
+  <url>
+    <loc>/reference/KOSMOScurrentStyletable.html</loc>
+  </url>
+  <url>
+    <loc>/reference/KOSMOStestdata.html</loc>
+  </url>
+  <url>
     <loc>/reference/KOSMOStimeplot.html</loc>
   </url>
 </urlset>

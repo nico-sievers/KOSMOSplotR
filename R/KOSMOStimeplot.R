@@ -10,13 +10,13 @@
 #' @param baseline \code{(currently unavailable)}
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".
 #' @param ignore List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.
-#' @param startat0 Should the y-axis start at 0? \code{TRUE} or \code{False}. Defaults to \code{TRUE}.
+#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
-#' @param axis.tick \code{(will be made available with the next update)}
-#' @param axis.show \code{(will be made available with the next update)}
+#' @param axis.tick,axis.show These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.
+# @param axis.show \code{(will be made available with the next update)}
 #' @param stats.show \code{(will be made available with the next update)}
 #' @param stats.days \code{(will be made available with the next update)}
 #' @param stats.ignore \code{(will be made available with the next update)}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/KOSMOStimeplot.R
 \name{KOSMOStimeplot}
 \alias{KOSMOStimeplot}
-\title{BROHANNES, CAN YOU SEE ME?? Function to plot a timeline graph across sampling days}
+\title{Function to plot a timeline graph across sampling days}
 \usage{
 KOSMOStimeplot(
   dataset = KOSMOStestdata,
@@ -40,7 +40,7 @@ KOSMOStimeplot(
 
 \item{ylabel}{The y-axis label to be printed. Defaults to the same value as \code{parameter}.}
 
-\item{xlabel}{The x-axis label to be printed. Defaults to "Experiment day".}
+\item{xlabel}{The x-axis label to be printed. Defaults to \code{"Experiment day"}.}
 
 \item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"}
 
@@ -56,7 +56,7 @@ KOSMOStimeplot(
 
 \item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.}
 
-\item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
+\item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
 
 \item{xlimit}{Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.}
 
@@ -84,7 +84,7 @@ KOSMOStimeplot(
 
 \item{new.plot}{If set to \code{FALSE}, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.}
 
-\item{...}{Further arguments of the base-R \code{plot}-function can be passed on, such as setting a title or background to the plot.}
+\item{...}{Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].}
 }
 \value{
 Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.

@@ -1,11 +1,11 @@
-#' @title BROHANNES, CAN YOU SEE ME?? Function to plot a timeline graph across sampling days
+#' @title Function to plot a timeline graph across sampling days
 #'
 #' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
-#' @param xlabel The x-axis label to be printed. Defaults to "Experiment day".
+#' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.
 #' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
 #' @param baseline \code{(currently unavailable)}
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".
@@ -13,7 +13,7 @@
 #' @param startat0 Should the y-axis start at 0? \code{TRUE} or \code{False}. Defaults to \code{TRUE}.
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
-#' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
+#' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
 #' @param axis.tick \code{(will be made available with the next update)}
 #' @param axis.show \code{(will be made available with the next update)}
@@ -27,7 +27,7 @@
 #' @param copepod.draw \code{(outdated, unavailable)}
 #' @param copepod.position \code{(outdated, unavailable)}
 #' @param new.plot If set to \code{FALSE}, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.
-#' @param ... Further arguments of the base-R \code{plot}-function can be passed on, such as setting a title or background to the plot.
+#' @param ... Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].
 #'
 #' @return Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.
 #'

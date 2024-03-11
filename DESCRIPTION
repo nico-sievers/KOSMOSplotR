@@ -1,4 +1,4 @@
-Package: KOSMOSplotsR
+Package: KOSMOSplotR
 Type: Package
 Title: Create plots directly from the a standardised KOSMOS data sheet in a uniform layout
 Version: 1.0.4
@@ -6,8 +6,8 @@ License: All rights reserved
 Author: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
 Maintainer: Nico Sievers <nico.sievers@gmx.net>
 Description: Simplifies the creation of the most commonly used plots from data that is available in the layout of a typical KOSMOS datasheet. Style and layout will automatically follow the decided standard.
-URL: https://github.com/nico-sievers/KOSMOSplotsR
-BugReports: https://github.com/nico-sievers/KOSMOSplotsR
+URL: https://github.com/nico-sievers/KOSMOSplotR
+BugReports: https://github.com/nico-sievers/KOSMOSplotR
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1

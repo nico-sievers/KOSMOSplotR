@@ -1,5 +1,5 @@
 library(testthat)             # load testthat package
-library(KOSMOSplotsR)         # load our package
+library(KOSMOSplotR)         # load our package
 
 
 KOSMOStimeplot(KOSMOStestdata,"Parameter")

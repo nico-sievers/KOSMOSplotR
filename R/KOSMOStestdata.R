@@ -1,4 +1,4 @@
-#' Artificial dataset to showcase the functions within the KOSMOSplotsR package
+#' Artificial dataset to showcase the functions within the KOSMOSplotR package
 #'
 #' @docType data
 #'

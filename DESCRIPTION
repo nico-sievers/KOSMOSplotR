@@ -5,7 +5,7 @@ Version: 1.0.2
 License: All rights reserved
 Author: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
 Maintainer: Nico Sievers <nico.sievers@gmx.net>
-Description: Simplifies the creation of the most commenly used plots from data that is available in the layout of a typical KOSMOS datasheet. Style and layout will automatically follow the decided standard.
+Description: Simplifies the creation of the most commonly used plots from data that is available in the layout of a typical KOSMOS datasheet. Style and layout will automatically follow the decided standard.
 URL: https://github.com/nico-sievers/KOSMOSplotsR
 BugReports: https://github.com/nico-sievers/KOSMOSplotsR
 Encoding: UTF-8
@@ -13,4 +13,4 @@ LazyData: true
 RoxygenNote: 7.3.1
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Depends: R (>= 2.10), graphics (>= 4.3.2), stats (>= 4.3.2)
+Depends: R (>= 2.10), graphics (>= 3.0.0), stats (>= 3.0.0)

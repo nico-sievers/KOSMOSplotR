@@ -116,7 +116,7 @@
 
 
 <dt>startat0</dt>
-<dd><p>Should the y-axis start at 0? <code>TRUE</code> or <code>False</code>. Defaults to <code>TRUE</code>.</p></dd>
+<dd><p>Should the y-axis start at 0? Can be <code>TRUE</code> (the default) or <code>False</code>.</p></dd>
 
 
 <dt>headspace</dt>
@@ -135,12 +135,8 @@
 <dd><p>Set a fixed range for the x-axis following the pattern <code>c("lower end", "upper end")</code>.  If set to <code>FALSE</code> (the default), the range will include all sampling days for which there is data in the table.</p></dd>
 
 
-<dt>axis.tick</dt>
-<dd><p><code>(will be made available with the next update)</code></p></dd>
-
-
-<dt>axis.show</dt>
-<dd><p><code>(will be made available with the next update)</code></p></dd>
+<dt>axis.tick, axis.show</dt>
+<dd><p>These options control whether axis ticks and/or labels are displayed. Each can be set to <code>NA</code> ("show for none"), <code>"x"</code> ("show for only the x-axis"), <code>"y"</code> ("show for only the y-axis"), or <code>"xy"</code> (show for both; the default option). If only <code>axis.tick</code> is set for an axis the tick marks appear without labels, if both <code>axis.tick</code> and <code>axis.label</code> labels are printed next to the ticks.</p></dd>
 
 
 <dt>stats.show</dt>

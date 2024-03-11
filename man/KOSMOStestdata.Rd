@@ -3,7 +3,7 @@
 \docType{data}
 \name{KOSMOStestdata}
 \alias{KOSMOStestdata}
-\title{Artificial dataset to showcase the functions within the KOSMOSplotsR package}
+\title{Artificial dataset to showcase the functions within the KOSMOSplotR package}
 \format{
 An object of class \code{"data.frame"} as if loaded from a standard KOSMOS excel data sheet
 \describe{
@@ -14,7 +14,7 @@ An object of class \code{"data.frame"} as if loaded from a standard KOSMOS excel
 KOSMOStestdata
 }
 \description{
-Artificial dataset to showcase the functions within the KOSMOSplotsR package
+Artificial dataset to showcase the functions within the KOSMOSplotR package
 }
 \examples{
 

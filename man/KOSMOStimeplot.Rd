@@ -2,7 +2,7 @@
 % Please edit documentation in R/KOSMOStimeplot.R
 \name{KOSMOStimeplot}
 \alias{KOSMOStimeplot}
-\title{Function to plot a timeline graph across sampling days}
+\title{BROHANNES, CAN YOU SEE ME?? Function to plot a timeline graph across sampling days}
 \usage{
 KOSMOStimeplot(
   dataset = KOSMOStestdata,

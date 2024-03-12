@@ -26,10 +26,10 @@
 #' @param stats.doublespecial \code{(don}'\code{t ask...)}
 #' @param copepod.draw \code{(outdated, unavailable)}
 #' @param copepod.position \code{(outdated, unavailable)}
-#' @param new.plot If set to \code{FALSE}, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.
+#' @param new.plot If set to \code{FALSE}, the plot will be plotted on-top of an existing, open plot rather than creating a new one. One can use this option to plot data sets on-top of each other, or to set up a plot window independently of the limitations of this function before adding in the data lines. Created for experimentation primarily, his option is rather unstable and prone to unexpected results.
 #' @param ... Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].
 #'
-#' @return Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.
+#' @return Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 #'
 #' @examples
 #' KOSMOStimeplot()
@@ -39,17 +39,19 @@
 #' @importFrom stats anova lm
 
 
-KOSMOStimeplot=function(dataset=KOSMOStestdata,parameter=dimnames(dataset)[[2]][ncol(dataset)],ylabel=parameter,xlabel="Experiment day",
-                      control="Fjord",baseline=FALSE,treatment.abline=FALSE,ignore=FALSE,
-                      startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
-                      xlimit=FALSE,
-                      axis.tick="xy",axis.show="xy",
-                      stats.show=FALSE,stats.days=FALSE,stats.ignore=FALSE,
-                      stats.digits=FALSE,stats.location="bottom",
-                      stats.meanlabel=c("below","above"),stats.doublespecial=FALSE,
-                      copepod.draw=FALSE,copepod.position="top",
-                      new.plot=TRUE,
-                      ...){
+KOSMOStimeplot=function(dataset=KOSMOStestdata,
+                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
+                        ylabel=parameter,xlabel="Experiment day",
+                        control="Fjord",baseline=FALSE,treatment.abline=FALSE,ignore=FALSE,
+                        startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
+                        xlimit=FALSE,
+                        axis.tick="xy",axis.show="xy",
+                        stats.show=FALSE,stats.days=FALSE,stats.ignore=FALSE,
+                        stats.digits=FALSE,stats.location="bottom",
+                        stats.meanlabel=c("below","above"),stats.doublespecial=FALSE,
+                        copepod.draw=FALSE,copepod.position="top",
+                        new.plot=TRUE,
+                        ...){
 
   par("font"=11)
 

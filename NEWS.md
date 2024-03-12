@@ -1,3 +1,7 @@
+# KOSMOSplotR 1.1.0
+* Regression plot and p-value functions added. Prepared for first sharing with the group.
+
+---
 # KOSMOSplotR 1.0.5
 * Package renamed.
 

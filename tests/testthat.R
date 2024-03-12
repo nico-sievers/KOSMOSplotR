@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(KOSMOSplotsR)
+library(KOSMOSplotR)
 
-test_check("KOSMOSplotsR")
+test_check("KOSMOSplotR")

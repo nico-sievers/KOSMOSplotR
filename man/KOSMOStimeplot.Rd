@@ -80,12 +80,12 @@ KOSMOStimeplot(
 
 \item{copepod.position}{\code{(outdated, unavailable)}}
 
-\item{new.plot}{If set to \code{FALSE}, the plot will be plotted ontop of an existing, open plot rather than creating a new one. This is rather unstable prone to unexpected results.}
+\item{new.plot}{If set to \code{FALSE}, the plot will be plotted on-top of an existing, open plot rather than creating a new one. One can use this option to plot data sets on-top of each other, or to set up a plot window independently of the limitations of this function before adding in the data lines. Created for experimentation primarily, his option is rather unstable and prone to unexpected results.}
 
 \item{...}{Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].}
 }
 \value{
-Directly outputs the plot, either to the plot window or another graphics device (e.g. a .png file) if a connection has been opened.
+Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 }
 \description{
 Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.

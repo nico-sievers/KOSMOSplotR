@@ -34,7 +34,7 @@ KOSMOStimeplot(
 )
 }
 \arguments{
-\item{dataset}{A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.}
+\item{dataset}{A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.}
 
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 

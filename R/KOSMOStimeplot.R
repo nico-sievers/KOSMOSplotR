@@ -42,7 +42,7 @@
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         parameter=dimnames(dataset)[[2]][ncol(dataset)],
                         ylabel=parameter,xlabel="Experiment day",
-                        control="Fjord",baseline=FALSE,treatment.abline=FALSE,ignore=FALSE,
+                        control="Fjord",baseline=FALSE,treatment.abline=TRUE,ignore=FALSE,
                         startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
                         xlimit=FALSE,
                         axis.tick="xy",axis.show="xy",
@@ -52,8 +52,6 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         copepod.draw=FALSE,copepod.position="top",
                         new.plot=TRUE,
                         ...){
-
-  par("font"=11)
 
   dataset=as.data.frame(dataset[,c("Day","Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)])
   dataset$Day=as.integer(dataset$Day)
@@ -172,7 +170,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   #abline the treatment day
   if(treatment.abline){
     ### XXX move this value
-    abline(v=2,col=statscols[1],lty="longdash",lwd=0.75)
+    abline(v=c(4,6),col="red",lty="longdash",lwd=0.75)
   }
 
   #draw the baseline control line
@@ -208,6 +206,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
 
   #draw shapes of control
+  par("font"=11)
   if(any(dataset$Treat_Meso==control)){
     ycontrol=dataset[dataset$Treat_Meso==control,]
     points(days,ycontrol[[parameter]],
@@ -230,6 +229,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
              cex=1.5)
     }
   }
+  par("font"=1)
 
   if(stats.show){
     if(is.logical(stats.days) && stats.days==FALSE){

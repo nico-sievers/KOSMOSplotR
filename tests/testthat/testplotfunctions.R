@@ -1,7 +1,7 @@
 library(testthat)
 library(KOSMOSplotR)
 
-KOSMOStimeplot(KOSMOStestdata,"Parameter")
+KOSMOStimeplot()
 KOSMOStimeplot(KOSMOStestdata,"Parameter",control="Fjord")
 KOSMOStimeplot(KOSMOStestdata,"Parameter",control="Fjord",ignore = 1)
 KOSMOStimeplot(KOSMOStestdata,"Parameter",control="Fjord",ylabel = "Parameter [fantasy unit]",xlabel = "Timeline - Experiment day")

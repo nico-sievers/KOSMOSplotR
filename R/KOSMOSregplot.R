@@ -83,7 +83,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   if(xlabel=="default"){xlabel="Added alkalinity"}
   if(new.plot){
-    par(pty = "s")
+    #par(pty = "s")
     plot(x=0,y=0,col="white",
          xlim=c(min(Delta_TA)-0.1,max(Delta_TA)+0.1),
          ylim=ylimit,
@@ -144,6 +144,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
   legend(x=daylabellocation,legend=legendtext,bty="n",x.intersp=0)
 
+  par("font"=11)
   for(meso in mesos){
     data_meso=dataset[dataset$Treat_Meso==meso,]
     #data_meso=data_meso[[parameter]]
@@ -154,5 +155,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
            pch=style[["shapelist"]],
            cex=1.5)
   }
+  par("font"=1)
 }
 

@@ -11,7 +11,7 @@ KOSMOStimeplot(
   xlabel = "Experiment day",
   control = "Fjord",
   baseline = FALSE,
-  treatment.abline = FALSE,
+  treatment.abline = TRUE,
   ignore = FALSE,
   startat0 = TRUE,
   headspace = 0,

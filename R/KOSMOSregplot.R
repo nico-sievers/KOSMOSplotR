@@ -2,7 +2,7 @@
 #'
 #' @description Creates a regression plot over the alkalinity gradient with a line per mineral treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'
-#' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.
+#' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param day Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
 #' @param ignore List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design in linear regression!

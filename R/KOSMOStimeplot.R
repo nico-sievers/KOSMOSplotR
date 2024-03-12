@@ -2,7 +2,7 @@
 #'
 #' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'
-#' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function.
+#' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.

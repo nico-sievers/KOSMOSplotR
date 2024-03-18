@@ -12,7 +12,8 @@ KOSMOStimeplot(
   control = "Fjord",
   baseline = FALSE,
   treatment.abline = TRUE,
-  ignore = FALSE,
+  exclude_meso = FALSE,
+  exclude_day = FALSE,
   startat0 = TRUE,
   headspace = 0,
   includeThisInYlimit = FALSE,
@@ -22,7 +23,7 @@ KOSMOStimeplot(
   axis.show = "xy",
   stats.show = FALSE,
   stats.days = FALSE,
-  stats.ignore = FALSE,
+  stats.exclude_meso = FALSE,
   stats.digits = FALSE,
   stats.location = "bottom",
   stats.meanlabel = c("below", "above"),
@@ -48,7 +49,7 @@ KOSMOStimeplot(
 
 \item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".}
 
-\item{ignore}{List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.}
+\item{exclude_meso, exclude_day}{List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.}
 
 \item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.}
 
@@ -66,7 +67,7 @@ KOSMOStimeplot(
 
 \item{stats.days}{\code{(will be made available with the next update)}}
 
-\item{stats.ignore}{\code{(will be made available with the next update)}}
+\item{stats.exclude_meso}{\code{(will be made available with the next update)}}
 
 \item{stats.digits}{\code{(will be made available with the next update)}}
 

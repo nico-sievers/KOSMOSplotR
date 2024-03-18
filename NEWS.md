@@ -1,3 +1,7 @@
+# KOSMOSplotR 1.1.2
+* Added the option to exclude days from the timeline graph
+
+---
 # KOSMOSplotR 1.1.1
 * Fixed two errors in the documentation
 

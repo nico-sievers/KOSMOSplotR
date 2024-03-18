@@ -9,7 +9,7 @@
 #' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
 #' @param baseline \code{(currently unavailable)}
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".
-#' @param ignore List one or multiple mesocosm numbers to exclude those from the plot, i.e. \code{c(1,3,10)}.
+#' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
@@ -19,7 +19,7 @@
 # @param axis.show \code{(will be made available with the next update)}
 #' @param stats.show \code{(will be made available with the next update)}
 #' @param stats.days \code{(will be made available with the next update)}
-#' @param stats.ignore \code{(will be made available with the next update)}
+#' @param stats.exclude_meso \code{(will be made available with the next update)}
 #' @param stats.digits \code{(will be made available with the next update)}
 #' @param stats.location \code{(will be made available with the next update)}
 #' @param stats.meanlabel \code{(will be made available with the next update)}
@@ -42,11 +42,12 @@
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         parameter=dimnames(dataset)[[2]][ncol(dataset)],
                         ylabel=parameter,xlabel="Experiment day",
-                        control="Fjord",baseline=FALSE,treatment.abline=TRUE,ignore=FALSE,
+                        control="Fjord",baseline=FALSE,treatment.abline=TRUE,
+                        exclude_meso=FALSE,exclude_day=FALSE,
                         startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
                         xlimit=FALSE,
                         axis.tick="xy",axis.show="xy",
-                        stats.show=FALSE,stats.days=FALSE,stats.ignore=FALSE,
+                        stats.show=FALSE,stats.days=FALSE,stats.exclude_meso=FALSE,
                         stats.digits=FALSE,stats.location="bottom",
                         stats.meanlabel=c("below","above"),stats.doublespecial=FALSE,
                         copepod.draw=FALSE,copepod.position="top",
@@ -61,10 +62,9 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
 
 
   datasetwithall=dataset
-  if(!is.logical(ignore)){
-    dataset=dataset[!((dataset$Mesocosm %in% ignore) | (dataset$Treat_Meso %in% ignore) |
-                        (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
-  }
+#  if(!is.logical(exclude_meso)){
+    dataset=dataset[!((dataset$Day %in% exclude_day) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
+#  }
 
   if(!is.logical(baseline)){
     days=unique(dataset$Day[!(dataset$Treat_Meso %in% baseline | dataset$Mesocosm %in% baseline)])
@@ -241,7 +241,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     #  statsdays=min(days)
     #}
 
-    statsdata=dataset[dataset$Day %in% statsdays & dataset$Treat_Meso!=control & !((dataset$Treat_Meso %in% stats.ignore) | (dataset$Mesocosm %in% stats.ignore)),]
+    statsdata=dataset[dataset$Day %in% statsdays & dataset$Treat_Meso!=control & !((dataset$Treat_Meso %in% stats.exclude_meso) | (dataset$Mesocosm %in% stats.exclude_meso)),]
     statsmatch=unlist(statsdata[statsdata$Mineral=="match",parameter])
     statsmis=unlist(statsdata[statsdata$Mineral=="mismatch",parameter])
     interactionmodel=lm(statsdata[[parameter]]~statsdata$Delta_TA*statsdata$Mineral)

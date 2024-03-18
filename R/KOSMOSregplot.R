@@ -4,7 +4,7 @@
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
-#' @param day Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
+#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
 #' @param ignore List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design in linear regression!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
@@ -31,7 +31,7 @@
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
-                       day=FALSE,ignore=FALSE,
+                       days=FALSE,ignore=FALSE,
                        ylabel=parameter,xlabel="default",
                        startat0=TRUE,headspace=0.3,includeThisInYlimit=FALSE,
                        ylimit=FALSE,
@@ -42,12 +42,12 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset$Day=as.integer(dataset$Day)
   dataset=dataset[order(dataset$Day),]
 
-  if(is.logical(day)){
-    day=max(dataset$Day)
+  if(is.logical(days)){
+    days=max(dataset$Day)
   }
 
-#  dataset=dataset[(dataset$Day %in% day) & !is.na(dataset$Delta_TA),c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
-  dataset=dataset[(dataset$Day %in% day) & !is.na(dataset$Delta_TA) & dataset$Delta_TA!="NA",c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
+#  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA),c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
+  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA) & dataset$Delta_TA!="NA",c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
   dataset$Delta_TA=as.numeric(dataset$Delta_TA)
   dataset$Mineral=as.factor(dataset$Mineral)
 
@@ -136,11 +136,11 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   for(i in 1:3){text(x-strwidth(" = 0.000"),y[i],KOSMOSformatPvalues(aimp[i]),pos=4,cex=0.75)}
   text(x-strwidth(" = 0.000"),y[4],paste("= ",format(round(sim$adj.r.squared,roundto),nsmall=3),sep=""),pos=4,cex=0.75)
 
-  if(length(day)>1){
-    legendtext=paste("Mean of T",paste(day[c(1,length(day))],collapse="-"),sep="")
-    #legendtext=paste("T",paste(day[c(1,length(day))],collapse="-"),sep="")
+  if(length(days)>1){
+    legendtext=paste("Mean of T",paste(days[c(1,length(days))],collapse="-"),sep="")
+    #legendtext=paste("T",paste(days[c(1,length(days))],collapse="-"),sep="")
   }else{
-    legendtext=paste("T",day,sep="")
+    legendtext=paste("T",days,sep="")
   }
   legend(x=daylabellocation,legend=legendtext,bty="n",x.intersp=0)
 

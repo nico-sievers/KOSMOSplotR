@@ -7,7 +7,7 @@
 KOSMOSregplot(
   dataset = KOSMOStestdata,
   parameter = dimnames(dataset)[[2]][ncol(dataset)],
-  day = FALSE,
+  days = FALSE,
   ignore = FALSE,
   ylabel = parameter,
   xlabel = "default",
@@ -28,7 +28,7 @@ KOSMOSregplot(
 
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
-\item{day}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
+\item{days}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
 
 \item{ignore}{List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design in linear regression!}
 

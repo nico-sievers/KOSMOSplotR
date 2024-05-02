@@ -92,7 +92,7 @@ devtools::install_github("nico-sievers/KOSMOSplotR")
 # and perform a first test:
 
 library(KOSMOSplotR)
-KOSMOStimeplot()
+KOSMOStimeplot(main="just a quick testplot")
 
 # Did it plot an example timeline plot? Fabulous!
 # If not, please head over to my office...

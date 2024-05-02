@@ -14,9 +14,6 @@
 #' KOSMOSformatPvalues(0.0000013)
 #
 #' @export
-# @importFrom graphics abline axis lines par points text title
-# @importFrom stats anova lm
-
 
 KOSMOSformatPvalues <- function(p_value) {
   if (is.na(p_value)) {

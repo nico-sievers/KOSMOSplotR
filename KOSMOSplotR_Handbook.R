@@ -40,9 +40,7 @@
 # errors and unexpected results, notify me of
 # any bugs encountered during usage, support me with
 # suggestions, and ask for help should you encounter
-# difficulties. Please do not distribute this code
-# beyond the team of the current KOSMOS Kiel spring
-# 2024 campaign.
+# difficulties.
 
 
 ### Installation
@@ -149,59 +147,15 @@ library(KOSMOSplotR)
 
 # Find the documentation of the package at
 help(package="KOSMOSplotR")
-# and that of the two central functions at
+# and that of the four central functions at
 ?KOSMOStimeplot()
-# and
 ?KOSMOSregplot()
+?KOSMOSadjustColumnames()
+# and
+?KOSMOSselect()
 # There, I detailed all parameters and options.
 
-
-# Below is a list of all current parameters.
-# please read their explanation in the documentation!
-
-KOSMOStimeplot(
-  dataset = KOSMOStestdata,
-  parameter = "Parameter",
-  ylabel = "Parameter",
-  xlabel = "Experiment day",
-  control = "Fjord",
-  treatment.abline = TRUE,
-  ignore = FALSE,
-  startat0 = TRUE,
-  headspace = 0,
-  includeThisInYlimit = FALSE,
-  ylimit = FALSE,
-  xlimit = FALSE,
-  axis.tick = "xy",
-  axis.show = "xy",
-  stats.show = FALSE,
-  stats.days = FALSE,
-  stats.ignore = FALSE,
-  stats.digits = FALSE,
-  stats.location = "bottom",
-  stats.meanlabel = c("below", "above"),
-  stats.doublespecial = FALSE,
-  new.plot = TRUE)
-
-KOSMOSregplot(
-  dataset = KOSMOStestdata,
-  parameter = "Parameter",
-  day = 7,
-  ignore = FALSE,
-  ylabel = "Parameter",
-  xlabel = "Added alkalinity",
-  startat0 = TRUE,
-  headspace = 0.3,
-  includeThisInYlimit = FALSE,
-  ylimit = FALSE,
-  axis.tick = "xy",
-  axis.show = "xy",
-  statsblocklocation = "topleft",
-  daylabellocation = "topright",
-  new.plot = TRUE)
-
-
-# Run the functions without parameters to see example
+# Run the plotting functions without parameters to see example
 # plots based an artificial test data set I included:
 KOSMOStimeplot()
 KOSMOSregplot()
@@ -223,6 +177,33 @@ library(readxl)
 mydata = read_excel(path = "C:/path/to/my/Data.xlsx",
                     sheet = "Main table")
 
+# select the campaign that your data stems from to
+# load the correct style template:
+KOSMOSselect(experiment="kiel")
+# Currently, choose between 'KOSMOS2024Kiel',
+# 'KOSMOS2023Helgoland', and 'KOSMOS2022Bergen'.
+# You can use shorthands! See the documentation
+# of
+?KOSMOSselect()
+# to see which variables it sets and how you can
+# overwrite them manually to design the plot to
+# your needs, and how to change further aspects
+# such as the controls and abline lines globally.
+
+
+# My scripts require the supplied data to match
+# the data sheet template of the respective
+# campaign, but has functions to handle minor
+# mismatches. You can first of all go ahead and try
+# plotting and only come back here if there is an
+# issue reported. If you want to be on the save
+# side or encountered issues, run
+mydata=KOSMOSadjustColumnames(mydata)
+# to have the script modify and report on your
+# columnnames.
+
+
+# Now, to the actual plotting!
 
 # (1) If your data set contains exactly one entry per
 # day and mesocosm, plot ahead!
@@ -235,9 +216,9 @@ KOSMOSregplot(dataset = mydata, parameter = "Other parameter", day = c(5,7))
 
 
 # (2) If your data set contains multiple entries per
-# day and mesocosm, such as "Populations" defined via
-# flow cytometry, consider looping through them for
-# rapid batch plotting:
+# day and mesocosm, such as e.g."Populations" defined
+# via flow cytometry, consider looping through them
+# for rapid batch plotting:
 
 # iterate through the populations according to the
 # respective column
@@ -270,3 +251,9 @@ KOSMOSregplot(dataset = mydata, parameter = "Other parameter")
 
 # close the connection and thereby create the file
 dev.off()
+
+
+########################################
+# That's it with the short introduction!
+# I hope it all works fine for you and
+# please let me know if not!

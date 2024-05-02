@@ -1,11 +1,11 @@
 #' @title Function to plot a regression line per treatment group
 #'
-#' @description Creates a regression plot over the alkalinity gradient with a line per mineral treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+#' @description Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
-#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
-#' @param ignore List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design in linear regression!
+#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
+#' @param exclude_meso List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
 # @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
@@ -28,10 +28,12 @@
 #' @importFrom graphics abline axis legend lines par points strwidth text title
 #' @importFrom stats anova lm
 
+# for debugging
+#dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];days=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.tick="xy";axis.show="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
-                       days=FALSE,ignore=FALSE,
+                       days=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
                        startat0=TRUE,headspace=0.3,includeThisInYlimit=FALSE,
                        ylimit=FALSE,
@@ -39,25 +41,27 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
                        statsblocklocation="topleft",daylabellocation="topright",
                        new.plot=TRUE,...){
 
-  dataset$Day=as.integer(dataset$Day)
+  dataset=KOSMOSadjustColumnames(dataset)
+
+  dataset$Day=as.integer(gsub("\\D", "", as.character(dataset$Day)))
   dataset=dataset[order(dataset$Day),]
 
   if(is.logical(days)){
     days=max(dataset$Day)
+  } else if(is.numeric(days) & length(days)==2){
+    days=days[1]:days[2]
   }
 
-#  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA),c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
-  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA) & dataset$Delta_TA!="NA",c("Mesocosm","Mineral","Delta_TA","Treat_Meso",parameter)]
-  dataset$Delta_TA=as.numeric(dataset$Delta_TA)
-  dataset$Mineral=as.factor(dataset$Mineral)
+  dataset$Delta_TA=suppressWarnings(as.numeric(dataset$Delta_TA))
+  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA) & dataset$Delta_TA!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso",parameter)]
+  dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
 
-  if(!is.logical(ignore)){
-    dataset=dataset[!((dataset$Mesocosm %in% ignore) | (dataset$Treat_Meso %in% ignore)),-1]
+  if(!is.logical(exclude_meso)){
+    dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),-1]
   }
 
   mesos=unique(dataset$Treat_Meso)
   Delta_TA=unique(dataset$Delta_TA)
-
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL
@@ -107,26 +111,26 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   #stats from here
-  interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA*dataset$Mineral)
+  interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA*dataset[[KOSMOScurrentCategoricalVar]])
 
-  slopematch=interactionmodel$coefficients[["dataset$Delta_TA"]]
-  interceptmatch=interactionmodel$coefficients[["(Intercept)"]]
-  abline(interceptmatch,slopematch,col=KOSMOScurrentStatscols[1],lwd=2.5,lty=KOSMOScurrentStatslty)
+  slopelvlA=interactionmodel$coefficients[["dataset$Delta_TA"]]
+  interceptlvlA=interactionmodel$coefficients[["(Intercept)"]]
+  abline(interceptlvlA,slopelvlA,col=KOSMOScurrentStatscols[1],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
 
-  slopemismatch=slopematch+interactionmodel$coefficients[["dataset$Delta_TA:dataset$MineralMg(OH)2"]]
-  interceptmismatch=interceptmatch+interactionmodel$coefficients[["dataset$MineralMg(OH)2"]]
-  abline(interceptmismatch,slopemismatch,col=KOSMOScurrentStatscols[2],lwd=2.5,lty=KOSMOScurrentStatslty)
+  slopelvlB=slopelvlA+interactionmodel$coefficients[[4]]
+  interceptlvlB=interceptlvlA+interactionmodel$coefficients[[3]]
+  abline(interceptlvlB,slopelvlB,col=KOSMOScurrentStatscols[2],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
 
   sim=summary(interactionmodel)
   aimp=anova(interactionmodel)$`Pr(>F)`
   roundto=3
-  statsblock=legend(x=statsblocklocation,
-                    legend=rep("",4),
-                    text.width = strwidth(expression(paste("Delta_TA \u00D7 Mineral    p = 0.000")),cex = 0.75),
-                    cex=0.75,bty="n",
-                    x.intersp=0)
-  text(statsblock$rect$left, statsblock$text$y[1:3], pos=4, cex=0.75,
-       c("Delta_TA","Mineral",expression(paste("Delta_TA \u00D7 Mineral"))))
+  statsblock=legend(x=statsblocklocation,legend=rep("",4),
+                    text.width = strwidth(bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
+                    cex=0.75,bty="n",x.intersp=0)
+  text(statsblock$rect$left, statsblock$text$y[c(1,2)], pos=4, cex=0.75,
+       c("Delta TA",KOSMOScurrentCategoricalVar))
+  text(statsblock$rect$left, statsblock$text$y[3], pos=4, cex=0.75,
+       bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar))))
   text(statsblock$rect$left, statsblock$text$y[4], pos=4, cex=0.75,
        expression(paste("Adj. ",italic(R)^2)))
 
@@ -144,17 +148,44 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
   legend(x=daylabellocation,legend=legendtext,bty="n",x.intersp=0)
 
+  # draw the shapes
+  origfont=par("font")
   par("font"=11)
+
+  usedstyles=rep(NA,length(mesos)) # workaround to avoid double-use of style entries
+  stylefailcounter=0 # for reporting non-matching styles
+
   for(meso in mesos){
     data_meso=dataset[dataset$Treat_Meso==meso,]
-    #data_meso=data_meso[[parameter]]
-    style=KOSMOScurrentStyletable[KOSMOScurrentStyletable[,"mesolist"]==meso,c("colourlist","shapelist")]
+
+    # increase the chance of finding the right style info from the template
+    tmp=unlist(strsplit(meso, " |-|/"))
+    tmp=tmp[tmp!=""]
+    tmp=sub("(","\\(",tmp,fixed=T)
+    tmp=sub(")","\\)",tmp,fixed=T)
+    tmp=paste("(?=.*",tmp,")",sep="",collapse="")
+
+    whichstyle=grep(tmp,KOSMOScurrentStyletable[,"mesolist"],perl=T,ignore.case=T)
+    style=KOSMOScurrentStyletable[whichstyle,c("colourlist","ltylist","shapelist")]
     points(mean(na.rm=T,data_meso$Delta_TA),mean(na.rm=T,data_meso[[parameter]]),
            col=style[["colourlist"]],
            bg=style[["colourlist"]],
            pch=style[["shapelist"]],
            cex=1.5)
+
+    # take note if you can't match the style for something
+    if(nrow(style)==0){stylefailcounter=stylefailcounter+1}
+
+    # workaround to avoid double-use of style entries
+    if(!is.na(usedstyles[whichstyle])){
+      stop(paste0("Nico's algorithm accidentally assigns the same style from the template to at least two different mesocosm identifiers, namely '",usedstyles[whichstyle],"' and '",meso,"'. Please ask Nico to have a look at this!"))
+    } else {
+      usedstyles[whichstyle]=meso
+    }
   }
-  par("font"=1)
+  # report if some style wasn't matched
+  if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control data, and if so, can be ignored.")}
+
+  par("font"=origfont)
 }
 

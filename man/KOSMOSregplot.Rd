@@ -8,7 +8,7 @@ KOSMOSregplot(
   dataset = KOSMOStestdata,
   parameter = dimnames(dataset)[[2]][ncol(dataset)],
   days = FALSE,
-  ignore = FALSE,
+  exclude_meso = FALSE,
   ylabel = parameter,
   xlabel = "default",
   startat0 = TRUE,
@@ -28,9 +28,9 @@ KOSMOSregplot(
 
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
-\item{days}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector (\code{c(5,7,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
+\item{days}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
 
-\item{ignore}{List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design in linear regression!}
+\item{exclude_meso}{List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!}
 
 \item{ylabel}{The y-axis label to be printed. Defaults to the same value as \code{parameter}.}
 
@@ -56,7 +56,7 @@ KOSMOSregplot(
 Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 }
 \description{
-Creates a regression plot over the alkalinity gradient with a line per mineral treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
 }
 \examples{
 KOSMOSregplot()

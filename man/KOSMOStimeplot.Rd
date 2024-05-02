@@ -43,7 +43,7 @@ KOSMOStimeplot(
 
 \item{xlabel}{The x-axis label to be printed. Defaults to \code{"Experiment day"}.}
 
-\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"}
+\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord".}
 
 \item{baseline}{\code{(currently unavailable)}}
 
@@ -63,17 +63,17 @@ KOSMOStimeplot(
 
 \item{axis.tick, axis.show}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.}
 
-\item{stats.show}{\code{(will be made available with the next update)}}
+\item{stats.show}{Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default).}
 
-\item{stats.days}{\code{(will be made available with the next update)}}
+\item{stats.days}{Data from which day or days should be included in the stats analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
 
-\item{stats.exclude_meso}{\code{(will be made available with the next update)}}
+\item{stats.exclude_meso}{List one or multiple mesocosms to exclude those from the stats analysis, i.e. \code{c(1,3,10)}. Mesocosms excluded from the plot via \code{exclude_meso} are anyway excluded.}
 
-\item{stats.digits}{\code{(will be made available with the next update)}}
+\item{stats.digits}{The number of digits of the displayed values.}
 
-\item{stats.location}{\code{(will be made available with the next update)}}
+\item{stats.location}{Position of the stats text given as \code{"top"}, \code{"centre"}, or \code{"bottom"} (the default)}
 
-\item{stats.meanlabel}{\code{(will be made available with the next update)}}
+\item{stats.meanlabel}{Indicate whether the label of a factor level's mean value should be displayed \code{above} or \code{below} the mark, in the format \code{c([lower value],[higher value])}. Defaults to \code{c("below","above")}.}
 
 \item{stats.doublespecial}{\code{(don}'\code{t ask...)}}
 

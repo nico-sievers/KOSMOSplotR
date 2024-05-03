@@ -169,7 +169,7 @@ KOSMOSregplot()
 dtupdate::github_update(T,F)
 library(KOSMOSplotR)
 
-# load (and potentially install this package to read
+# load (and potentially install) this package to read
 # excel files
 library(readxl)
 
@@ -177,8 +177,10 @@ library(readxl)
 mydata = read_excel(path = "C:/path/to/my/Data.xlsx",
                     sheet = "Main table")
 
-# select the campaign that your data stems from to
-# load the correct style template:
+
+### Select the campaign ###
+# that your data stems from to load the correct
+# style template:
 KOSMOSselect(experiment="kiel")
 # Currently, choose between 'KOSMOS2024Kiel',
 # 'KOSMOS2023Helgoland', and 'KOSMOS2022Bergen'.
@@ -191,6 +193,7 @@ KOSMOSselect(experiment="kiel")
 # such as the controls and abline lines globally.
 
 
+### Match the colmun names ###
 # My scripts require the supplied data to match
 # the data sheet template of the respective
 # campaign, but has functions to handle minor
@@ -203,19 +206,19 @@ mydata=KOSMOSadjustColumnames(mydata)
 # columnnames.
 
 
-# Now, to the actual plotting!
+### Now, to the actual plotting! ###
 
-# (1) If your data set contains exactly one entry per
+### (1) If your data set contains exactly one entry per
 # day and mesocosm, plot ahead!
 
 KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", treatment.abline = FALSE)
 
-KOSMOStimeplot(dataset = mydata, parameter = "Other parameter", ignore = c(2,6), startat0 = FALSE)
+KOSMOStimeplot(dataset = mydata, parameter = "Other parameter", exclude_meso = c(2,6), startat0 = FALSE)
 
-KOSMOSregplot(dataset = mydata, parameter = "Other parameter", day = c(5,7))
+KOSMOSregplot(dataset = mydata, parameter = "Other parameter", days = c(5,7))
 
 
-# (2) If your data set contains multiple entries per
+### (2) If your data set contains multiple entries per
 # day and mesocosm, such as e.g."Populations" defined
 # via flow cytometry, consider looping through them
 # for rapid batch plotting:
@@ -236,7 +239,7 @@ for(population in unique(mydata$population)){
 }
 
 
-# (3) Print a plot directly to a file:
+### (3) Print a plot directly to a file:
 
 # open a connection, e.g. to a .png file
 png(units = "in", res = 200,
@@ -257,3 +260,4 @@ dev.off()
 # That's it with the short introduction!
 # I hope it all works fine for you and
 # please let me know if not!
+########################################

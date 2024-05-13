@@ -21,7 +21,7 @@
 # plotting time line graphs and regression plots
 # directly from data sets in the format commonly used
 # during KOSMOS campaigns. It automatically
-# implements the current colour scheme of the ongoing
+# implements the current colour scheme of the selected
 # campaign. The design mirrors that of the plots you
 # have seen me use for my master's thesis and the
 # flow cytometry update. The package is supposed to
@@ -40,7 +40,10 @@
 # errors and unexpected results, notify me of
 # any bugs encountered during usage, support me with
 # suggestions, and ask for help should you encounter
-# difficulties.
+# difficulties. Please consider crediting the package
+# as
+citation("KOSMOSplotR")
+# should you use it for your work.
 
 
 ### Installation
@@ -127,7 +130,7 @@ dtupdate::github_update(T)
 # my patches (which there might be quite a few of
 # especially in the beginning), include this line of
 # code in the top section of every script that uses
-# my package and run it at least once per day!
+# my package and run it before you plot ahead!
 dtupdate::github_update(T,F)
 
 

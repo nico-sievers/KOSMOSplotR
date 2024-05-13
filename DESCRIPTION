@@ -5,7 +5,7 @@ Version: 2.0.0
 License: GPL
 Authors@R: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
 Maintainer: Nico Sievers <nico.sievers@gmx.net>
-Year: 2023
+Date: 2024-03-12
 Description: Simplifies the creation of the most commonly used plots from data that is available in the layout of a typical KOSMOS datasheet. Style and layout will automatically follow the decided standard.
 URL: https://github.com/nico-sievers/KOSMOSplotR
 BugReports: https://github.com/nico-sievers/KOSMOSplotR
@@ -14,4 +14,4 @@ LazyData: true
 RoxygenNote: 7.3.1
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Depends: R (>= 3.5.0), graphics (>= 3.0.0), stats (>= 3.0.0), utils (>= 3.0.0)
+Depends: R (>= 3.5.0), graphics (>= 3.0.0), stats (>= 3.0.0), utils (>= 3.0.0), dplyr (>= 1.1.0), readr (>= 2.1.0), openxlsx (>= 4.2.5.2), readxl (>= 1.4.0)

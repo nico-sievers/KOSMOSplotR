@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.1.0
+* Cleaned the repository by moving functions under development to the new R2HU package. Adjusted some minor mistakes in the documentation
+
+---
 # KOSMOSplotR 2.0.0
 * Introduced the KOSMOSselect() function and more style templates to allow plotting of data from the Bergen and Helgoland campaigns. Furthermore, introduced the KOSMOSadjustColumnnames() function in combination with further modifications to drastically enhance the ability of the code to process data sets that don't follow exactly the template data sheet. Also added many warning and info outputs to increase transparency of operations to the user.
 

@@ -206,10 +206,11 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     if(any(dataset$Treat_Meso==control | dataset$Mesocosm==control)){
       foundcontrol=T
       ycontrol=dataset[dataset$Treat_Meso==control | dataset$Mesocosm==control,]
-      lines(days,ycontrol[[parameter]],
+      lines(ycontrol$Day,ycontrol[[parameter]],
             col=KOSMOSdesignfeatures[["controlcol"]],
             lty=KOSMOSdesignfeatures[["controllty"]],
             lwd=1.5)
+      if(length(ycontrol$Day)>length(days)){warning("More than one data point per sampling day was plotted for the control!")}
     } else {
       foundcontrol=F
       warning(paste0("No control under the name of '",control,"' found in the data set!\nSet 'control = FALSE' if you don't wish to plot one."))
@@ -221,10 +222,12 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   #draw lines
   usedstyles=rep(NA,length(mesos)) # workaround to avoid double-use of style entries
   stylefailcounter=0 # for reporting non-matching styles
+  multipleentriescheck=F # for warning if there is more than one data point per day and meso
   for(meso in mesos){
     data_meso=dataset[dataset$Treat_Meso==meso,]
     data_meso=data_meso[!is.na(data_meso[,parameter]),]
     tmp_days=data_meso$Day
+    if(length(tmp_days)>length(days)){multipleentriescheck=T}
     data_meso=data_meso[[parameter]]
 
     # increase the chance of finding the right style info from the template
@@ -253,6 +256,9 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
   # report if some style wasn't matched
   if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control if it wasn't recognised correctly.")}
+  # report if multiple entries per meso and day
+  if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted!")}
+
 
   #change font for plotting the symbold only
   origfont=par("font")

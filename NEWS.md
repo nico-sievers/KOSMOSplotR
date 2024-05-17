@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.1.1
+* fixed a bug if multiple entries per day and meso where present, and added a warning if such a situation occurs
+
+---
 # KOSMOSplotR 2.1.0
 * Cleaned the repository by moving functions under development to the new R2HU package. Adjusted some minor mistakes in the documentation
 

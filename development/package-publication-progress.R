@@ -14,12 +14,12 @@ check_gitignore() checks whether .gitignore contains standard files.
 check_version() ensures that you update your package version (might be good to run as the last step)
 
 
-evtools::check_win_devel()
+devtools::check_win_devel()
 usethis:::use_github_action_check_standard()
 
 
 
-devtools::build_manual
+devtools::build_manual()
 
 
 #die seite ist noch nicht zu finden, sondern glaub ich irgendwie nur lokal

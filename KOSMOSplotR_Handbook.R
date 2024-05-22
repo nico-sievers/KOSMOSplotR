@@ -220,25 +220,26 @@ KOSMOStimeplot(dataset = mydata, parameter = "Other parameter", exclude_meso = c
 
 KOSMOSregplot(dataset = mydata, parameter = "Other parameter", days = c(5,7))
 
+# In the function documentations you will find all
+# parameters described in detail, so that you can
+# customise the plot to your needs.
 
 ### (2) If your data set contains multiple entries per
 # day and mesocosm, such as e.g."Populations" defined
-# via flow cytometry, consider looping through them
-# for rapid batch plotting:
+# via flow cytometry, you should define how to subset
+# the data:
 
-# iterate through the populations according to the
-# respective column
-for(population in unique(mydata$population)){
+KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Population="Synnechococcus",Setting="Small"))
 
-  # subset the data set
-  thispopulation = mydata[mydata$population==mydata,]
+# consider looping through them for rapid batch
+# plotting:
 
-  # plot this population from the subset data
-  KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1")
+for(thispopulation in unique(mydata$Population)){
 
+  KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Population=thispopulation,Setting="Small"))
   # set a title to label each plot with the
   # population
-  title(main = population)
+  title(main = thispopulation)
 }
 
 

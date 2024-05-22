@@ -1,20 +1,21 @@
 #' @title Function to plot a timeline graph across sampling days
 #'
-#' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+#' @description Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet roughly following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors.
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
+#' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot.
+#' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
+#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}.
+#' @param baseline \code{(currently unavailable)}
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.
-#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord".
-#' @param baseline \code{(currently unavailable)}
-#' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".
-#' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
-#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.
+#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{FALSE}, which sets it to the lowest value in the data (which may be negative).
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
+#' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.
 #' @param axis.tick,axis.show These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.
 # @param axis.show \code{(will be made available with the next update)}
 #' @param stats.show Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default).
@@ -40,17 +41,18 @@
 
 # for debugging
 # dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)]
-# ylabel=parameter;xlabel="Experiment day";control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=FALSE;ylimit=FALSE;xlimit=FALSE;axis.tick="xy";axis.show="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE
+# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=FALSE;ylimit=FALSE;xlimit=FALSE;axis.tick="xy";axis.show="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE
 
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         parameter=dimnames(dataset)[[2]][ncol(dataset)],
+                        subset_data=FALSE,exclude_meso=FALSE,exclude_day=FALSE,
+                        control="Fjord",baseline=FALSE,
                         ylabel=parameter,xlabel="Experiment day",
-                        control="Fjord",baseline=FALSE,treatment.abline=TRUE,
-                        exclude_meso=FALSE,exclude_day=FALSE,
                         startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
                         xlimit=FALSE,
+                        treatment.abline=TRUE,
                         axis.tick="xy",axis.show="xy",
                         stats.show=FALSE,stats.days=FALSE,stats.exclude_meso=FALSE,
                         stats.digits=FALSE,stats.location="bottom",
@@ -59,6 +61,22 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         new.plot=TRUE,
                         ...){
 
+  # potentially subset the dataset according to the user parameter
+  if(is.list(subset_data) & !is.null(subset_data)){
+    not_operator="^not_"
+    if(!all(sub(not_operator,"",names(subset_data)) %in% names(dataset))){
+      stop("Not all column names given to 'subset_data' where found in the data table!")
+    }
+    # iterate through given column names
+    for(i in names(subset_data)){
+      # if it starts in a "!", remove those entries rather than keeping them!
+      if(grepl(not_operator,i)){
+        dataset=dataset[!(dataset[[sub(not_operator,"",i)]] %in% subset_data[[i]]),]
+      } else {
+        dataset=dataset[dataset[[i]] %in% subset_data[[i]],]
+      }
+    }
+  }
 
   if(stats.show){
     required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")
@@ -74,11 +92,9 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   dataset=dataset[order(dataset$Day),]
   #dataset$Mesocosm=as.integer(dataset$Mesocosm)
 
-
+  # get rid of all excluded mesos and days and the baseline, but keep a backup
   datasetwithall=dataset
-#  if(!is.logical(exclude_meso)){
-    dataset=dataset[!((dataset$Day %in% exclude_day) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
-#  }
+  dataset=dataset[!((dataset$Day %in% exclude_day) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
 
   if(!is.logical(baseline)){
     days=unique(dataset$Day[!(dataset$Treat_Meso %in% baseline | dataset$Mesocosm %in% baseline)])
@@ -211,6 +227,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
             lty=KOSMOSdesignfeatures[["controllty"]],
             lwd=1.5)
       if(length(ycontrol$Day)>length(days)){warning("More than one data point per sampling day was plotted for the control!")}
+      if(length(unique(ycontrol$Day))<length(days)){warning(paste0("Missing data point(s) in the control: ",paste("T",setdiff(days,unique(ycontrol$Day)),sep="",collapse=", ")))}
     } else {
       foundcontrol=F
       warning(paste0("No control under the name of '",control,"' found in the data set!\nSet 'control = FALSE' if you don't wish to plot one."))
@@ -223,12 +240,14 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   usedstyles=rep(NA,length(mesos)) # workaround to avoid double-use of style entries
   stylefailcounter=0 # for reporting non-matching styles
   multipleentriescheck=F # for warning if there is more than one data point per day and meso
+  missingdatapoints=NULL
   for(meso in mesos){
     data_meso=dataset[dataset$Treat_Meso==meso,]
     data_meso=data_meso[!is.na(data_meso[,parameter]),]
     tmp_days=data_meso$Day
     if(length(tmp_days)>length(days)){multipleentriescheck=T}
     data_meso=data_meso[[parameter]]
+    if(length(unique(tmp_days))<length(days)){missingdatapoints[length(missingdatapoints)+1]=paste0(meso,": ",paste("T",setdiff(days,unique(tmp_days)),sep="",collapse=", "))} # collect missing data points
 
     # increase the chance of finding the right style info from the template
     tmp=unlist(strsplit(meso, " |-|/"))
@@ -258,16 +277,19 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control if it wasn't recognised correctly.")}
   # report if multiple entries per meso and day
   if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted!")}
+  # report missing data points
+  if(length(missingdatapoints)>0){warning(paste0("Missing data point(s) in the set:\n",paste(missingdatapoints,sep="",collapse="\n")))}
 
 
-  #change font for plotting the symbold only
+
+  #change font for plotting the symbol only
   origfont=par("font")
   par("font"=11)
 
   #draw shapes of control
   if(drawcontrol){
     if(foundcontrol){
-      points(days,ycontrol[[parameter]],
+      points(ycontrol$Day,ycontrol[[parameter]],
              col=KOSMOSdesignfeatures[["controlcol"]],
              bg=KOSMOSdesignfeatures[["controlcol"]],
              pch=KOSMOSdesignfeatures[["controlshape"]],

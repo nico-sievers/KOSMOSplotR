@@ -7,18 +7,19 @@
 KOSMOStimeplot(
   dataset = KOSMOStestdata,
   parameter = dimnames(dataset)[[2]][ncol(dataset)],
-  ylabel = parameter,
-  xlabel = "Experiment day",
-  control = "Fjord",
-  baseline = FALSE,
-  treatment.abline = TRUE,
+  subset_data = FALSE,
   exclude_meso = FALSE,
   exclude_day = FALSE,
+  control = "Fjord",
+  baseline = FALSE,
+  ylabel = parameter,
+  xlabel = "Experiment day",
   startat0 = TRUE,
   headspace = 0,
   includeThisInYlimit = FALSE,
   ylimit = FALSE,
   xlimit = FALSE,
+  treatment.abline = TRUE,
   axis.tick = "xy",
   axis.show = "xy",
   stats.show = FALSE,
@@ -39,19 +40,19 @@ KOSMOStimeplot(
 
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
+\item{subset_data}{Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot.}
+
+\item{exclude_meso, exclude_day}{List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.}
+
+\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}.}
+
+\item{baseline}{\code{(currently unavailable)}}
+
 \item{ylabel}{The y-axis label to be printed. Defaults to the same value as \code{parameter}.}
 
 \item{xlabel}{The x-axis label to be printed. Defaults to \code{"Experiment day"}.}
 
-\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord".}
-
-\item{baseline}{\code{(currently unavailable)}}
-
-\item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} or \code{False}. Defaults to \code{TRUE}, which means "yes".}
-
-\item{exclude_meso, exclude_day}{List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.}
-
-\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.}
+\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{FALSE}, which sets it to the lowest value in the data (which may be negative).}
 
 \item{headspace}{More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.}
 
@@ -60,6 +61,8 @@ KOSMOStimeplot(
 \item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
 
 \item{xlimit}{Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.}
+
+\item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.}
 
 \item{axis.tick, axis.show}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.}
 
@@ -89,7 +92,7 @@ KOSMOStimeplot(
 Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 }
 \description{
-Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet roughly following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors.
 }
 \examples{
 KOSMOStimeplot()

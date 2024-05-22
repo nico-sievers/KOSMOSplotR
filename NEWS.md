@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.2.0
+* added in the option to subset the data by any column and value before plotting
+
+---
 # KOSMOSplotR 2.1.1
 * fixed a bug if multiple entries per day and meso where present, and added a warning if such a situation occurs
 

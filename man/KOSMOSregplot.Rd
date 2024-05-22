@@ -8,6 +8,7 @@ KOSMOSregplot(
   dataset = KOSMOStestdata,
   parameter = dimnames(dataset)[[2]][ncol(dataset)],
   days = FALSE,
+  subset_data = FALSE,
   exclude_meso = FALSE,
   ylabel = parameter,
   xlabel = "default",
@@ -28,7 +29,9 @@ KOSMOSregplot(
 
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
-\item{days}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
+\item{days}{Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day to be included in the calculation (\code{c(5,9)}). If set to \code{FALSE} (the default), the very last sampling day in the data set is plotted.}
+
+\item{subset_data}{Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} is a more convenient parameter to exclude mesocosms from the plot.}
 
 \item{exclude_meso}{List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!}
 
@@ -36,7 +39,7 @@ KOSMOSregplot(
 
 \item{xlabel}{The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.}
 
-\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.}
+\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}, which sets it to the lowest value in the data (which may be negative).}
 
 \item{headspace}{More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.}
 
@@ -56,7 +59,10 @@ KOSMOSregplot(
 Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 }
 \description{
-Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet roughly following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors.
+}
+\details{
+Warning: This function currently does not warn you should there be more than one data point per mesocosm and day in the table. Best check your data by plotting a \code{KOSMOStimelineplot()} first!
 }
 \examples{
 KOSMOSregplot()

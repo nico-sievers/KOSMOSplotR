@@ -1,15 +1,18 @@
 #' @title Function to plot a regression line per treatment group
 #'
-#' @description Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors. The current version is limited to work with the KOSMOS Kiel spring 2024 campaign.
+#' @description Creates a regression plot over the alkalinity gradient with a line per treatment group. It works on an excel datasheet roughly following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors.
+#'
+#'@details  Warning: This function currently does not warn you should there be more than one data point per mesocosm and day in the table. Best check your data by plotting a \code{KOSMOStimelineplot()} first!
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
-#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
+#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day to be included in the calculation (\code{c(5,9)}). If set to \code{FALSE} (the default), the very last sampling day in the data set is plotted.
+#' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} is a more convenient parameter to exclude mesocosms from the plot.
 #' @param exclude_meso List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
 # @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
-#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}.
+#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}, which sets it to the lowest value in the data (which may be negative).
 #' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
@@ -29,17 +32,35 @@
 #' @importFrom stats anova lm
 
 # for debugging
-#dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];days=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.tick="xy";axis.show="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
+#dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.tick="xy";axis.show="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
-                       days=FALSE,exclude_meso=FALSE,
+                       days=FALSE,
+                       subset_data=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
                        startat0=TRUE,headspace=0.3,includeThisInYlimit=FALSE,
                        ylimit=FALSE,
                        axis.tick="xy",axis.show="xy",
                        statsblocklocation="topleft",daylabellocation="topright",
                        new.plot=TRUE,...){
+
+  # potentially subset the dataset according to the user parameter
+  if(is.list(subset_data) & !is.null(subset_data)){
+    not_operator="^not_"
+    if(!all(sub(not_operator,"",names(subset_data)) %in% names(dataset))){
+      stop("Not all column names given to 'subset_data' where found in the data table!")
+    }
+    # iterate through given column names
+    for(i in names(subset_data)){
+      # if it starts in a "!", remove those entries rather than keeping them!
+      if(grepl(not_operator,i)){
+        dataset=dataset[!(dataset[[sub(not_operator,"",i)]] %in% subset_data[[i]]),]
+      } else {
+        dataset=dataset[dataset[[i]] %in% subset_data[[i]],]
+      }
+    }
+  }
 
   dataset=KOSMOSadjustColumnames(dataset)
 

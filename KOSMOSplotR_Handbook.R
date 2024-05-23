@@ -271,8 +271,17 @@ KOSMOSregplot(dataset = mydata, parameter = "Parameter 1")
 dev.off()
 
 
-########################################
-# That's it with the short introduction!
+#########################################
+# That's it with the short introduction.
 # I hope it all works fine for you and
 # please let me know if not!
+#
+# P.S.: I have further tools and
+# functions in a package called "R2HU",
+# mostly surrounding Flow Cytometry, but
+# also for some general data handling
+# tasks. Feel free to contact me and we
+# can have a look whether I have (or can
+# create something) to make your data-
+# processing-life easier.
 ########################################

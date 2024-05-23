@@ -1,5 +1,13 @@
+# KOSMOSplotR 2.3.1
+* fixed a bug in the line plot stats module where only one group would be drawn
+
+---
+# KOSMOSplotR 2.3.0
+* added the option to plot the two treatment groups side by side in two sub-plots for the timeline plot
+
+---
 # KOSMOSplotR 2.2.0
-* added in the option to subset the data by any column and value before plotting
+* added the option to subset the data by any column and value before plotting
 
 ---
 # KOSMOSplotR 2.1.1

@@ -16,8 +16,8 @@ KOSMOSregplot(
   headspace = 0.3,
   includeThisInYlimit = FALSE,
   ylimit = FALSE,
-  axis.tick = "xy",
-  axis.show = "xy",
+  axis.ticks = "xy",
+  axis.values = "xy",
   statsblocklocation = "topleft",
   daylabellocation = "topright",
   new.plot = TRUE,
@@ -47,7 +47,7 @@ KOSMOSregplot(
 
 \item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
 
-\item{axis.tick, axis.show}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.}
+\item{axis.ticks, axis.values}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.label} labels are printed next to the ticks.}
 
 \item{statsblocklocation, daylabellocation}{These define where in the plot the little stats table and the label for the displayed sampling day(s) are placed so that they don't collide with the data. The values default to \code{topleft} and \code{topright}, and each can be replaced with any of \code{left, right, top, bottom,} a combination of those, or \code{center} (see [graphics::legend()]). Consider using these options in combination with \code{headspace} to create a clean-looking arrangement.}
 

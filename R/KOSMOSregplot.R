@@ -16,8 +16,8 @@
 #' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
-#' @param axis.tick,axis.show These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.
-# @param axis.show \code{(will be made available with the next update)}
+#' @param axis.ticks,axis.values These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.label} labels are printed next to the ticks.
+# @param axis.values \code{(will be made available with the next update)}
 #' @param statsblocklocation,daylabellocation These define where in the plot the little stats table and the label for the displayed sampling day(s) are placed so that they don't collide with the data. The values default to \code{topleft} and \code{topright}, and each can be replaced with any of \code{left, right, top, bottom,} a combination of those, or \code{center} (see [graphics::legend()]). Consider using these options in combination with \code{headspace} to create a clean-looking arrangement.
 #' @param new.plot If set to \code{FALSE}, the plot will be plotted on-top of an existing, open plot rather than creating a new one. One can use this option to plot data sets on-top of each other, or to set up a plot window independently of the limitations of this function before adding in the data lines. Created for experimentation primarily, his option is rather unstable and prone to unexpected results.
 #' @param ... Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].
@@ -32,7 +32,7 @@
 #' @importFrom stats anova lm
 
 # for debugging
-#dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.tick="xy";axis.show="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
+#dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
@@ -41,7 +41,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
                        ylabel=parameter,xlabel="default",
                        startat0=TRUE,headspace=0.3,includeThisInYlimit=FALSE,
                        ylimit=FALSE,
-                       axis.tick="xy",axis.show="xy",
+                       axis.ticks="xy",axis.values="xy",
                        statsblocklocation="topleft",daylabellocation="topright",
                        new.plot=TRUE,...){
 
@@ -113,17 +113,17 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
          xlim=c(min(Delta_TA)-0.1,max(Delta_TA)+0.1),
          ylim=ylimit,
          xlab="",ylab="",xaxt="n",yaxt="n",...)
-    if(grepl("x",axis.tick)){
+    if(grepl("x",axis.ticks)){
       xticklabels=F
-      if(grepl("x",axis.show)){
+      if(grepl("x",axis.values)){
         xticklabels=T
         title(xlab=xlabel, line=2.3)
       }
       axis(1,at=Delta_TA,labels=xticklabels)
     }
-    if(grepl("y",axis.tick)){
+    if(grepl("y",axis.ticks)){
       yticklabels=F
-      if(grepl("y",axis.show)){
+      if(grepl("y",axis.values)){
         yticklabels=T
         title(ylab=ylabel, line=2.3)
       }

@@ -159,7 +159,7 @@ help(package="KOSMOSplotR")
 # There, I detailed all parameters and options.
 
 # Run the plotting functions without parameters to see example
-# plots based an artificial test data set I included:
+# plots based on an artificial test data set I included:
 KOSMOStimeplot()
 KOSMOSregplot()
 
@@ -172,11 +172,11 @@ KOSMOSregplot()
 dtupdate::github_update(T,F)
 library(KOSMOSplotR)
 
-# load (and potentially install) this package to read
-# excel files
+# load (and potentially install) the readxl
+# package to read excel files
 library(readxl)
 
-# Load your excel data sheet
+# Load your excel KOSMOS data sheet
 mydata = read_excel(path = "C:/path/to/my/Data.xlsx",
                     sheet = "Main table")
 
@@ -214,29 +214,39 @@ mydata=KOSMOSadjustColumnames(mydata)
 ### (1) If your data set contains exactly one entry per
 # day and mesocosm, plot ahead!
 
-KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", treatment.abline = FALSE)
+KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1")
+KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", exclude_meso = 2, exclude_day = c(1,33), control = "Fjord", treatmentgroups_sidebyside = TRUE, ylabel = "Parameter [unit]", startat0 = FALSE, headspace = 0.25, axis.show = "x", treatment.abline = FALSE, stats.show = TRUE, stats.days = c(7,15), stats.meanlabel = c("above","above"))
 
-KOSMOStimeplot(dataset = mydata, parameter = "Other parameter", exclude_meso = c(2,6), startat0 = FALSE)
-
-KOSMOSregplot(dataset = mydata, parameter = "Other parameter", days = c(5,7))
+KOSMOSregplot(dataset = mydata, parameter = "Parameter 1")
+KOSMOSregplot(dataset = mydata, parameter = "Parameter 1", days = c(5,7), exclude_meso = c(2,5), xlabel = "OAE", statsblocklocation = "bottomleft", daylabellocation = "bottomright")
 
 # In the function documentations you will find all
 # parameters described in detail, so that you can
-# customise the plot to your needs.
+# customise the plots to your needs.
+# In short, You can subset the data; exclude certain
+# mesocosms or days; adjust the axes range, labels,
+# or hide them, and control the location of stats
+# reports.
+# For the timeline plot you can furthermore:
+# Choose a control like a fjord sample; choose to plot
+# all treatments in one or split them into two panels;
+# choose to highlight the time point of treatment
+# addition; and calculate and display certain statistics.
+
 
 ### (2) If your data set contains multiple entries per
-# day and mesocosm, such as e.g."Populations" defined
-# via flow cytometry, you should define how to subset
+# day and mesocosm, such as e.g. species defined
+# via Microscopy, you should define how to subset
 # the data:
 
-KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Population="Synnechococcus",Setting="Small"))
+KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Species="E. hux",Size_class=c("small","medium")))
 
 # consider looping through them for rapid batch
 # plotting:
 
 for(thispopulation in unique(mydata$Population)){
 
-  KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Population=thispopulation,Setting="Small"))
+  KOSMOStimeplot(dataset = mydata, parameter = "Parameter 1", subset_data = list(Population=thispopulation))
   # set a title to label each plot with the
   # population
   title(main = thispopulation)
@@ -251,10 +261,11 @@ png(units = "in", res = 200,
     width = 3.4, height = 3.74)
 
 # set up the layout of the plotting window
-par(mar = c(3.1, 4.0, 1.6, 0.6), pty = "s", cex = 0.8)
+par(mar = c(3.1, 4.0, 1.6, 0.6),
+    pty = "s", cex = 0.8)
 
 # commit the plot
-KOSMOSregplot(dataset = mydata, parameter = "Other parameter")
+KOSMOSregplot(dataset = mydata, parameter = "Parameter 1")
 
 # close the connection and thereby create the file
 dev.off()

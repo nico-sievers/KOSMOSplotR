@@ -11,7 +11,7 @@ KOSMOStimeplot(
   exclude_meso = FALSE,
   exclude_day = FALSE,
   control = "Fjord",
-  baseline = FALSE,
+  treatmentgroups_sidebyside = FALSE,
   ylabel = parameter,
   xlabel = "Experiment day",
   startat0 = TRUE,
@@ -20,8 +20,8 @@ KOSMOStimeplot(
   ylimit = FALSE,
   xlimit = FALSE,
   treatment.abline = TRUE,
-  axis.tick = "xy",
-  axis.show = "xy",
+  axis.ticks = "xy",
+  axis.values = "xy",
   stats.show = FALSE,
   stats.days = FALSE,
   stats.exclude_meso = FALSE,
@@ -32,6 +32,7 @@ KOSMOStimeplot(
   copepod.draw = FALSE,
   copepod.position = "top",
   new.plot = TRUE,
+  baseline = FALSE,
   ...
 )
 }
@@ -46,7 +47,7 @@ KOSMOStimeplot(
 
 \item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}.}
 
-\item{baseline}{\code{(currently unavailable)}}
+\item{treatmentgroups_sidebyside}{Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!}
 
 \item{ylabel}{The y-axis label to be printed. Defaults to the same value as \code{parameter}.}
 
@@ -64,7 +65,7 @@ KOSMOStimeplot(
 
 \item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.}
 
-\item{axis.tick, axis.show}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.tick} is set for an axis the tick marks appear without labels, if both \code{axis.tick} and \code{axis.label} labels are printed next to the ticks.}
+\item{axis.ticks, axis.values}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.values} labels are printed next to the ticks.}
 
 \item{stats.show}{Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default).}
 
@@ -85,6 +86,8 @@ KOSMOStimeplot(
 \item{copepod.position}{\code{(outdated, unavailable)}}
 
 \item{new.plot}{If set to \code{FALSE}, the plot will be plotted on-top of an existing, open plot rather than creating a new one. One can use this option to plot data sets on-top of each other, or to set up a plot window independently of the limitations of this function before adding in the data lines. Created for experimentation primarily, his option is rather unstable and prone to unexpected results.}
+
+\item{baseline}{\code{(currently unavailable)}}
 
 \item{...}{Some arguments of the base-R \code{plot}-function can be passed on, such as setting a title or the aspect ratio, as well as further graphics parameters. Please check [base::plot()] and [graphics::par()].}
 }

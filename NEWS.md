@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.3.2
+* if line plots show treatment groups side-by-side, then the 0dTA controls are depicted in both panels now
+
+---
 # KOSMOSplotR 2.3.1
 * fixed a bug in the line plot stats module where only one group would be drawn
 

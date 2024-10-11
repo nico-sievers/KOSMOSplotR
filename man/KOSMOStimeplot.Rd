@@ -14,9 +14,9 @@ KOSMOStimeplot(
   treatmentgroups_sidebyside = FALSE,
   ylabel = parameter,
   xlabel = "Experiment day",
-  startat0 = TRUE,
+  startat0 = FALSE,
   headspace = 0,
-  includeThisInYlimit = FALSE,
+  includeThisInYlimit = 0,
   ylimit = FALSE,
   xlimit = FALSE,
   treatment.abline = TRUE,
@@ -53,11 +53,11 @@ KOSMOStimeplot(
 
 \item{xlabel}{The x-axis label to be printed. Defaults to \code{"Experiment day"}.}
 
-\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{FALSE}, which sets it to the lowest value in the data (which may be negative).}
+\item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).}
 
 \item{headspace}{More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.}
 
-\item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.}
+\item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).}
 
 \item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
 

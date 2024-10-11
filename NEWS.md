@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.3.3
+* 1) plotting groups side-by-side now actually displays 0dTA controls, the functionality was not correctly implemented before...
+* 2) the defaults for customising y-limits as well as the headspace parameter were optimised in order to better deal with data sets containing negative values
+
+---
 # KOSMOSplotR 2.3.2
 * if line plots show treatment groups side-by-side, then the 0dTA controls are depicted in both panels now
 

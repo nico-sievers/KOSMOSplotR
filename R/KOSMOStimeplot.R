@@ -10,9 +10,9 @@
 #' @param treatmentgroups_sidebyside Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.
-#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{FALSE}, which sets it to the lowest value in the data (which may be negative).
+#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
-#' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
+#' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.
@@ -52,7 +52,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         control="Fjord",
                         treatmentgroups_sidebyside=FALSE,
                         ylabel=parameter,xlabel="Experiment day",
-                        startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
+                        startat0=FALSE,headspace=0,includeThisInYlimit=0,ylimit=FALSE,
                         xlimit=FALSE,
                         treatment.abline=TRUE,
                         axis.ticks="xy",axis.values="xy",
@@ -80,10 +80,10 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     }
   }
 
-  if(stats.show){
+  if(stats.show | treatmentgroups_sidebyside){
     required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")
-  } else if (treatmentgroups_sidebyside){
-    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
+#  } else if (treatmentgroups_sidebyside){
+#    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
   } else {
     required_columns=c("Day","Mesocosm","Treat_Meso")
   }
@@ -126,13 +126,12 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       yrange=dataset[,parameter]
     }
     yrange=yrange[!is.na(yrange)]
-    ##ymax=max(yrange)+headspace*(max(yrange)-min(yrange))
     if(startat0){
       ylimit=c(0,max(yrange))
     } else {
       ylimit=c(min(yrange),max(yrange))
     }
-    ylimit[2]=ylimit[2]+headspace*(ylimit[2]-ylimit[1])
+    ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 
   if(is.logical(xlimit) && xlimit==FALSE){
@@ -152,10 +151,16 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
 
   ######################## plotting
 
-  # if the user chose to plot side-by-side, the do everything below twice - i think
+  # if the user choses to plot side-by-side, the do everything below twice - i think
   categorycounter=0;for(thiscategory in categories){
     categorycounter=categorycounter+1
-    thisisothercategory=dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter]
+
+    # this is only needed so that there is no error in case deltaTA is not included
+    if(treatmentgroups_sidebyside){
+      thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter] & dataset$Delta_TA!=0)
+    } else {
+      thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter])
+    }
 #    if(!is.null(thisisothercategory)){
     if(length(thisisothercategory)>0){
       thisisothercategory[is.na(thisisothercategory)]=F

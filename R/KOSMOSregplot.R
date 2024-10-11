@@ -12,9 +12,9 @@
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
 # @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
-#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} (the default) or \code{False}, which sets it to the lowest value in the data (which may be negative).
+#' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
 #' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.
-#' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values.
+#' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param axis.ticks,axis.values These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.label} labels are printed next to the ticks.
 # @param axis.values \code{(will be made available with the next update)}
@@ -39,7 +39,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
                        days=FALSE,
                        subset_data=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
-                       startat0=TRUE,headspace=0.3,includeThisInYlimit=FALSE,
+                       startat0=FALSE,headspace=0.3,includeThisInYlimit=0,
                        ylimit=FALSE,
                        axis.ticks="xy",axis.values="xy",
                        statsblocklocation="topleft",daylabellocation="topright",
@@ -97,13 +97,12 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
       yrange=c(yrange,includeThisInYlimit)
     }
     yrange=yrange[!is.na(yrange)]
-    ##ymax=max(yrange,na.rm = T)+headspace*(max(yrange,na.rm = T)-min(yrange,na.rm = T))
     if(startat0){
       ylimit=c(0,max(yrange))
     } else {
       ylimit=c(min(yrange),max(yrange))
     }
-    ylimit[2]=ylimit[2]+headspace*(ylimit[2]-ylimit[1])
+    ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 
   if(xlabel=="default"){xlabel="Added alkalinity"}

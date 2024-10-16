@@ -196,7 +196,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     }
     globalcex=par(no.readonly = T)$cex
 
-    if(treatmentgroups_sidebyside){title(main=thiscategory,cex=0.8)}
+    if(treatmentgroups_sidebyside){title(main=thiscategory,cex.main=0.7)}
 
     if(copepod.draw){
       # #calc position of copepod image
@@ -312,7 +312,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       }
     }
     # report if some style wasn't matched
-    if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control if it wasn't recognised correctly.")}
+    if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control if it wasn't recognised correctly or if you decided not to plot it.")}
     # report if multiple entries per meso and day
     if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted!")}
     # report missing data points
@@ -441,5 +441,10 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       }
     }
   }
-  par(mfrow=c(1,1))
+
+
+  # if side-by-side plotting is on return the two-plot layout back to normal
+  if(treatmentgroups_sidebyside){
+    par(mfrow=c(1,1))
+  }
 }

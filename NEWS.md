@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.3.4
+* 1) the user can now choose whether during side-by-side plotting, 0dTA controls are plotted in both panels or just one via "showControlsBothTimes"
+* 2) should the data table contain trailing sampling day rows that dont have data yet, these will not be included in the x-axis nor will they trigger warning messages
+
+---
 # KOSMOSplotR 2.3.3
 * 1) plotting groups side-by-side now actually displays 0dTA controls, the functionality was not correctly implemented before...
 * 2) the defaults for customising y-limits as well as the headspace parameter were optimised in order to better deal with data sets containing negative values

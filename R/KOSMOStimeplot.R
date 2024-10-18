@@ -8,6 +8,7 @@
 #' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
 #' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}.
 #' @param treatmentgroups_sidebyside Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!
+#' @param showControlsBothTimes If (\code{treatmentgroups_sidebyside="TRUE"}), by default, those control-mesocosms without added alkalinity are plotted in all panels (\code{"TRUE"}), rather than just with their group (\code{"FALSE"}).
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
@@ -50,7 +51,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         parameter=dimnames(dataset)[[2]][ncol(dataset)],
                         subset_data=FALSE,exclude_meso=FALSE,exclude_day=FALSE,
                         control="Fjord",
-                        treatmentgroups_sidebyside=FALSE,
+                        treatmentgroups_sidebyside=FALSE,showControlsBothTimes=TRUE,
                         ylabel=parameter,xlabel="Experiment day",
                         startat0=FALSE,headspace=0,includeThisInYlimit=0,ylimit=FALSE,
                         xlimit=FALSE,
@@ -80,10 +81,10 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     }
   }
 
-  if(stats.show | treatmentgroups_sidebyside){
+  if(stats.show | (treatmentgroups_sidebyside & showControlsBothTimes)){
     required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")
-#  } else if (treatmentgroups_sidebyside){
-#    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
+  } else if (treatmentgroups_sidebyside){
+    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
   } else {
     required_columns=c("Day","Mesocosm","Treat_Meso")
   }
@@ -112,11 +113,13 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       categories_inverted=NA
     }
 
+  # when assigning days to be plotted kick all empty lines if i.e. future sampling days are already prepared in the sheet
+  usedays=dataset[!is.na(dataset[,parameter]),]
   if(!is.logical(baseline)){
-    days=unique(dataset$Day[!(dataset$Treat_Meso %in% baseline | dataset$Mesocosm %in% baseline)])
+    days=unique(usedays$Day[!(usedays$Treat_Meso %in% baseline | usedays$Mesocosm %in% baseline)])
     #days=days$Day
   }else{
-    days=unique(dataset$Day)
+    days=unique(usedays$Day)
   }
 
   if(is.logical(ylimit) && ylimit==FALSE){
@@ -156,7 +159,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     categorycounter=categorycounter+1
 
     # this is only needed so that there is no error in case deltaTA is not included
-    if(treatmentgroups_sidebyside){
+    if(treatmentgroups_sidebyside & showControlsBothTimes){
       thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter] & dataset$Delta_TA!=0)
     } else {
       thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter])
@@ -305,7 +308,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       # workaround to avoid double-use of style entries
       #if(is.numeric(whichstyle)){
         if(!is.na(usedstyles[whichstyle])){
-          stop(paste0("Nico's algorithm accidentally assigns the same style from the template to at least two different mesocosm identifiers, namely '",usedstyles[whichstyle],"' and '",meso,"'. Please ask Nico to have a look at this!"))
+          stop(paste0("Nico's algorithm accidentally assigned the same style from the template to at least two different mesocosm identifiers, namely '",usedstyles[whichstyle],"' and '",meso,"'. Please ask Nico to have a look at this!"))
         } else {
           usedstyles[whichstyle]=meso
         }

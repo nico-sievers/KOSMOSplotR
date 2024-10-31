@@ -98,3 +98,44 @@ KOSMOScolumntable=matrix(c("day","Day",
                            "(?=.*d)(?=.*ta)","Delta_TA",
                            "(?=.*treat)(?=.*meso)","Treat_Meso"),
                          ncol=2,byrow=T)
+
+
+
+#################################################
+# quartz kiel side experiment
+
+KOSMOS2024KielQuartzSideExperimentStyletable=KOSMOS2024KielQuartzSideExperimentStyletable[1:6,]
+KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("750 / SiO2 / M3","300 / SiO2 / M4","0 / SiO2 / M6","150 / SiO2 / M7","600 / SiO2 / M10","450 / SiO2 / M11")
+KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=sort(KOSMOS2024KielQuartzSideExperimentStyletable$mesolist)
+
+#col=KOSMOS2024KielQuartzSideExperimentStyletable$colourlist
+#barplot(1:8, col = c("saddlebrown", "sienna", "chocolate4", "deeppink4", "brown", "brown4", "rosybrown4", "tan4"))
+#col=colorRampPalette(c("moccasin","#E7B690","darkred"));col=col(6)
+col=colorRampPalette(c("moccasin","#D99A7A","deeppink4"));col=col(6)
+plot(1:6,rep(0,6),col=col,bg=col,pch=KOSMOS2024KielQuartzSideExperimentStyletable$shapelist,cex=3)
+
+KOSMOS2024KielQuartzSideExperimentStyletable$colourlist=col
+
+save(KOSMOS2024KielQuartzSideExperimentStyletable,file="data/KOSMOS2024KielQuartzSideExperimentStyletable.rda")
+
+
+
+
+############################################
+# create legend for any style
+
+KOSMOScurrentStyletable=rbind(KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable)
+
+data=FlowCytometry[FlowCytometry$Set=="Synechococcus" & FlowCytometry$Day %in% 1:3,1:9]
+data=data[order(data$Day,data$Treat_Meso,decreasing=T),]
+data$Count=rep(1:6,3)
+
+ggplot(data,aes(Day,Count,col=Treat_Meso,fill=Treat_Meso,shape=Treat_Meso)) +
+  geom_point(shape=rev(KOSMOScurrentStyletable$shapelist)) +
+  geom_line(linetype=KOSMOScurrentStyletable$ltylist) +
+  scale_color_discrete(type=KOSMOScurrentStyletable$colourlist) +
+  scale_fill_discrete(type=KOSMOScurrentStyletable$colourlist) +
+  theme_minimal() +
+  theme(panel.grid=element_blank())
+  #scale_shape_discrete(name=NULL,KOSMOScurrentStyletable$shapelist)
+KOSMOScurrentStyletable$colourlist

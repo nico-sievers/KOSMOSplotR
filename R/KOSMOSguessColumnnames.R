@@ -12,10 +12,11 @@
 #' @export
 #' @importFrom utils head
 
-KOSMOSguessColumnames=function(dataset=KOSMOStestdata,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")){
+KOSMOSguessColumnames=function(dataset=KOSMOStestdata,
+                               required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")){
 
   tmpcolumntable=KOSMOScolumntable[KOSMOScolumntable$Names %in% required_columns,]
-  # this searches for exact matches
+  # this searches for exact matches ### THIS DOES ALWAYS PRINT, SO SOMETHING DOESN'T WORK
   tmp=unlist(lapply(tmpcolumntable$Names,grep,names(dataset)))
   if(length(tmp)==nrow(tmpcolumntable)){
     fit="perfect"

@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.4.0
+* A new style template has been added for KOSMOSsetup: "KOSMOS2024KielQuartzSideExperiment"
+* Trying to implement more flexibility towards experimental designs in the coming patches. Currently, regressionplots and stats-calculation in lineplots is not yet working for the Quartz experiment.
+
+---
 # KOSMOSplotR 2.3.4
 * 1) the user can now choose whether during side-by-side plotting, 0dTA controls are plotted in both panels or just one via "showControlsBothTimes"
 * 2) should the data table contain trailing sampling day rows that dont have data yet, these will not be included in the x-axis nor will they trigger warning messages

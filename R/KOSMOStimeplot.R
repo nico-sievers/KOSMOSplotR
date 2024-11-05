@@ -14,6 +14,7 @@
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).
+#' @param excludeThisFromYlimit Just opposite to above, here you can exclude some data from the axis limits calculation. For example, if you see a strong outlier that causes the rest of the data to be hard to see, you can list it here by its \code{Mesocosm} or \code{Treat_Meso} identifier (also if it is the control you want to exclude). Different to \code{exclude_meso} or \code{exclude_day}, the data will still be plotted but can exceed the axis boundary, so that it is clear that some data is not shown, rather than hiding it completely.
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.
@@ -43,7 +44,7 @@
 
 # for debugging
 # dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)]
-# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=FALSE;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE
+# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE
 
 
 
@@ -53,7 +54,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         control="Fjord",
                         treatmentgroups_sidebyside=FALSE,showControlsBothTimes=TRUE,
                         ylabel=parameter,xlabel="Experiment day",
-                        startat0=FALSE,headspace=0,includeThisInYlimit=0,ylimit=FALSE,
+                        startat0=FALSE,headspace=0,includeThisInYlimit=0,excludeThisFromYlimit=FALSE,ylimit=FALSE,
                         xlimit=FALSE,
                         treatment.abline=TRUE,
                         axis.ticks="xy",axis.values="xy",
@@ -123,17 +124,25 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
 
   if(is.logical(ylimit) && ylimit==FALSE){
-    if(!is.logical(includeThisInYlimit)){
-      yrange=c(unlist(dataset[,parameter],use.names = FALSE),includeThisInYlimit)
+
+    if(!is.logical(excludeThisFromYlimit)){
+      yrange=unlist(dataset[(!(dataset$Mesocosm %in% excludeThisFromYlimit) & !(dataset$Treat_Meso %in% excludeThisFromYlimit)),parameter],use.names=F)
     } else {
-      yrange=dataset[,parameter]
+      yrange=unlist(dataset[,parameter],use.names=F)
     }
+
+    if(!is.logical(includeThisInYlimit)){
+      yrange=c(yrange,includeThisInYlimit)
+    }
+
     yrange=yrange[!is.na(yrange)]
+
     if(startat0){
       ylimit=c(0,max(yrange))
     } else {
       ylimit=c(min(yrange),max(yrange))
     }
+
     ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 
@@ -241,7 +250,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     #abline the treatment day
     if(treatment.abline){
       ### XXX move this value
-      abline(v=c(4,6),col=KOSMOSdesignfeatures[["treatmentablinecol"]],lty=KOSMOSdesignfeatures[["treatmentablinelty"]],lwd=0.75)
+      abline(v=KOSMOScurrentTreatmentSchedule[1,],col=KOSMOScurrentTreatmentSchedule[2,],lty=KOSMOSdesignfeatures[["treatmentablinelty"]],lwd=0.75)
     }
 
     #draw the baseline control line
@@ -267,7 +276,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
               col=KOSMOSdesignfeatures[["controlcol"]],
               lty=KOSMOSdesignfeatures[["controllty"]],
               lwd=1.5)
-        if(length(ycontrol$Day)>length(days)){warning("More than one data point per sampling day was plotted for the control!")}
+        if(length(ycontrol$Day)>length(days)){warning(paste0("More data points than one per sampling day was plotted for the control. Could there be a duplicate entry at ",paste("T",setdiff(unique(ycontrol$Day),days),sep="",collapse=", "),"?"))}
         if(length(unique(ycontrol$Day))<length(days)){warning(paste0("Missing data point(s) in the control: ",paste("T",setdiff(days,unique(ycontrol$Day)),sep="",collapse=", ")))}
       } else {
         foundcontrol=F
@@ -317,7 +326,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     # report if some style wasn't matched
     if(stylefailcounter>1){warning(paste0(stylefailcounter," mesocosm identifiers in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nmake sure the column contains a string of the added alkalinity, the ",KOSMOScurrentCategoricalVar,", and the mesocosm number, in any order, separated by either a whitespace, '-', or '/'."))} else if(stylefailcounter==1){warning("One mesocosm identifier in dataset$Treat_Meso (or equivalent) could not be matched to an entry in the style template!\nThis could be the control if it wasn't recognised correctly or if you decided not to plot it.")}
     # report if multiple entries per meso and day
-    if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted!")}
+    if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted! Please check for duplicate entries")}
     # report missing data points
     if(length(missingdatapoints)>0){warning(paste0("Missing data point(s) in the set:\n",paste(missingdatapoints,sep="",collapse="\n")))}
 

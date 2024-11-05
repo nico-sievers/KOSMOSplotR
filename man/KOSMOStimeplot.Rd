@@ -18,6 +18,7 @@ KOSMOStimeplot(
   startat0 = FALSE,
   headspace = 0,
   includeThisInYlimit = 0,
+  excludeThisFromYlimit = FALSE,
   ylimit = FALSE,
   xlimit = FALSE,
   treatment.abline = TRUE,
@@ -61,6 +62,8 @@ KOSMOStimeplot(
 \item{headspace}{More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.}
 
 \item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).}
+
+\item{excludeThisFromYlimit}{Just opposite to above, here you can exclude some data from the axis limits calculation. For example, if you see a strong outlier that causes the rest of the data to be hard to see, you can list it here by its \code{Mesocosm} or \code{Treat_Meso} identifier (also if it is the control you want to exclude). Different to \code{exclude_meso} or \code{exclude_day}, the data will still be plotted but can exceed the axis boundary, so that it is clear that some data is not shown, rather than hiding it completely.}
 
 \item{ylimit}{Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.}
 

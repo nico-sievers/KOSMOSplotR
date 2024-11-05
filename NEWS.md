@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.4.1
+* The treatment abline is now based on a campaign-specific list in "KOSMOScurrentTreatmentSchedule"
+* Prepared a flexible "KOSMOScurrentContinuousVar" to be implemented in the coming patches
+
+---
 # KOSMOSplotR 2.4.0
 * A new style template has been added for KOSMOSsetup: "KOSMOS2024KielQuartzSideExperiment"
 * Trying to implement more flexibility towards experimental designs in the coming patches. Currently, regressionplots and stats-calculation in lineplots is not yet working for the Quartz experiment.

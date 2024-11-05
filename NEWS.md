@@ -1,6 +1,7 @@
 # KOSMOSplotR 2.4.1
 * The treatment abline is now based on a campaign-specific list in "KOSMOScurrentTreatmentSchedule"
 * Prepared a flexible "KOSMOScurrentContinuousVar" to be implemented in the coming patches
+* Added the "excludeThisFromYlimit" parameter
 
 ---
 # KOSMOSplotR 2.4.0

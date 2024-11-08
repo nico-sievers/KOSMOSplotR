@@ -148,8 +148,10 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   for(i in 1:length(categories)){
-    intercept=sum(interactionmodel$coefficients[(1:i)*2-1])
-    slope=sum(interactionmodel$coefficients[(1:i)*2])
+    intercept=interactionmodel$coefficients[[i]]
+    slope=interactionmodel$coefficients[[i+1]]
+    slope=interactionmodel$coefficients[[i]]
+    intercept=interactionmodel$coefficients[[i+1]]
     abline(intercept,slope,col=KOSMOScurrentStatscols[i],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
   }
 
@@ -157,7 +159,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   aimp=anova(interactionmodel)$`Pr(>F)`
   roundto=3
 
-  statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),
+  statsblock=legend(x=statsblocklocation,legend=rep("",4),
                     text.width = strwidth(bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
                     cex=0.75,bty="n",x.intersp=0)
   x=statsblock$rect$left
@@ -170,7 +172,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
   text(statsblock$rect$left, y[statstablelength], pos=4, cex=0.75,expression(paste("Adj. ",italic(R)^2)))
 
-  text(x+statsblock$rect$w-strwidth("0.000"),y[1:(statstablelength-1)],pos=2,cex=0.75,rep("p ",statstablelength-1))
+  text(x+statsblock$rect$w-strwidth("0.000"),y,pos=2,cex=0.75,c(rep("p ",statstablelength-1),""))
   for(i in 1:(statstablelength-1)){text(x+statsblock$rect$w-strwidth(" = 0.000"),y[i],KOSMOSformatPvalues(aimp[i]),pos=4,cex=0.75)}
   text(x+statsblock$rect$w-strwidth(" = 0.000"),y[statstablelength],paste("= ",format(round(sim$adj.r.squared,roundto),nsmall=3),sep=""),pos=4,cex=0.75)
 

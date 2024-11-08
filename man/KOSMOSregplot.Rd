@@ -6,7 +6,7 @@
 \usage{
 KOSMOSregplot(
   dataset = KOSMOStestdata,
-  parameter = dimnames(dataset)[[2]][ncol(dataset)],
+  parameter = names(dataset)[ncol(dataset)],
   days = FALSE,
   subset_data = FALSE,
   exclude_meso = FALSE,

@@ -44,12 +44,11 @@
 
 # for debugging
 # dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)]
-# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE
-
+# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE;excludeThisFromYlimit
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
-                        parameter=dimnames(dataset)[[2]][ncol(dataset)],
+                        parameter=tail(names(dataset),1),
                         subset_data=FALSE,exclude_meso=FALSE,exclude_day=FALSE,
                         control="Fjord",
                         treatmentgroups_sidebyside=FALSE,showControlsBothTimes=TRUE,

@@ -36,8 +36,6 @@
 
 # library(readxl);dataset=read_excel("../../KOSMOS_2024_Kiel_Quartz-experiment_FlowCytometry/KOSMOS_Kiel_2024_Quartz-side-experiment_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count"
 
-#library(readxl);dataset=read_excel("../../KOSMOS_2024_autumn_Kiel_FlowCytometry/KOSMOS_Kiel_autumn_2024_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count"
-
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=names(dataset)[ncol(dataset)],
@@ -137,42 +135,38 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   #stats from here
 
-  categories=levels(dataset[[KOSMOScurrentCategoricalVar]])
-
-  if(length(categories)>1){
+  if(length(levels(dataset[[KOSMOScurrentCategoricalVar]]))>1){
     interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA*dataset[[KOSMOScurrentCategoricalVar]])
-    statstablelength=4
   }else{
     interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA)
-    statstablelength=2
   }
 
-  for(i in 1:length(categories)){
-    intercept=sum(interactionmodel$coefficients[(1:i)*2-1])
-    slope=sum(interactionmodel$coefficients[(1:i)*2])
-    abline(intercept,slope,col=KOSMOScurrentStatscols[i],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
-  }
+  slopelvlA=interactionmodel$coefficients[["dataset$Delta_TA"]]
+  interceptlvlA=interactionmodel$coefficients[["(Intercept)"]]
+  abline(interceptlvlA,slopelvlA,col=KOSMOScurrentStatscols[1],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
+
+  slopelvlB=slopelvlA+interactionmodel$coefficients[[4]]
+  interceptlvlB=interceptlvlA+interactionmodel$coefficients[[3]]
+  abline(interceptlvlB,slopelvlB,col=KOSMOScurrentStatscols[2],lwd=2.5,lty=KOSMOSdesignfeatures[["statslty"]])
 
   sim=summary(interactionmodel)
   aimp=anova(interactionmodel)$`Pr(>F)`
   roundto=3
-
-  statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),
+  statsblock=legend(x=statsblocklocation,legend=rep("",4),
                     text.width = strwidth(bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
                     cex=0.75,bty="n",x.intersp=0)
-  x=statsblock$rect$left
+  text(statsblock$rect$left, statsblock$text$y[c(1,2)], pos=4, cex=0.75,
+       c("Delta TA",KOSMOScurrentCategoricalVar))
+  text(statsblock$rect$left, statsblock$text$y[3], pos=4, cex=0.75,
+       bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar))))
+  text(statsblock$rect$left, statsblock$text$y[4], pos=4, cex=0.75,
+       expression(paste("Adj. ",italic(R)^2)))
+
+  x=statsblock$rect$left+statsblock$rect$w
   y=statsblock$text$y
-
-  text(statsblock$rect$left, y[1], pos=4, cex=0.75,"Delta TA")
-  if(length(categories)>1){
-    text(statsblock$rect$left, y[2], pos=4, cex=0.75,KOSMOScurrentCategoricalVar)
-    text(statsblock$rect$left, y[3], pos=4, cex=0.75,bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar))))
-  }
-  text(statsblock$rect$left, y[statstablelength], pos=4, cex=0.75,expression(paste("Adj. ",italic(R)^2)))
-
-  text(x+statsblock$rect$w-strwidth("0.000"),y[1:(statstablelength-1)],pos=2,cex=0.75,rep("p ",statstablelength-1))
-  for(i in 1:(statstablelength-1)){text(x+statsblock$rect$w-strwidth(" = 0.000"),y[i],KOSMOSformatPvalues(aimp[i]),pos=4,cex=0.75)}
-  text(x+statsblock$rect$w-strwidth(" = 0.000"),y[statstablelength],paste("= ",format(round(sim$adj.r.squared,roundto),nsmall=3),sep=""),pos=4,cex=0.75)
+  text(x-strwidth("0.000"),y,pos=2,cex=0.75,c("p ","p ","p ",""))
+  for(i in 1:3){text(x-strwidth(" = 0.000"),y[i],KOSMOSformatPvalues(aimp[i]),pos=4,cex=0.75)}
+  text(x-strwidth(" = 0.000"),y[4],paste("= ",format(round(sim$adj.r.squared,roundto),nsmall=3),sep=""),pos=4,cex=0.75)
 
   if(length(days)>1){
     legendtext=paste("Mean of T",paste(days[c(1,length(days))],collapse="-"),sep="")

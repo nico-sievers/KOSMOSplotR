@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.4.2
+* Now, the regression plot also works for one-category datasets.
+
+---
 # KOSMOSplotR 2.4.1
 * The treatment abline is now based on a campaign-specific list in "KOSMOScurrentTreatmentSchedule"
 * Prepared a flexible "KOSMOScurrentContinuousVar" to be implemented in the coming patches

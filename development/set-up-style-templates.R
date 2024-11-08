@@ -111,8 +111,10 @@ KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=sort(KOSMOS2024KielQuartzS
 #col=KOSMOS2024KielQuartzSideExperimentStyletable$colourlist
 #barplot(1:8, col = c("saddlebrown", "sienna", "chocolate4", "deeppink4", "brown", "brown4", "rosybrown4", "tan4"))
 #col=colorRampPalette(c("moccasin","#E7B690","darkred"));col=col(6)
-col=colorRampPalette(c("moccasin","#D99A7A","deeppink4"));col=col(6)
-plot(1:6,rep(0,6),col=col,bg=col,pch=KOSMOS2024KielQuartzSideExperimentStyletable$shapelist,cex=3)
+#col=colorRampPalette(c("moccasin","#D99A7A","deeppink4"));col=col(6)
+#plot(1:6,rep(0,6),col=col,bg=col,pch=KOSMOS2024KielQuartzSideExperimentStyletable$shapelist,cex=3)
+# colourblind optimised by chatGPT:
+col=c("#FFD8A8","#F4A883","#E17671","#CC4C6C","#AD285B","#800037")
 
 KOSMOS2024KielQuartzSideExperimentStyletable$colourlist=col
 

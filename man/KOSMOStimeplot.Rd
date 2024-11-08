@@ -6,7 +6,7 @@
 \usage{
 KOSMOStimeplot(
   dataset = KOSMOStestdata,
-  parameter = dimnames(dataset)[[2]][ncol(dataset)],
+  parameter = tail(names(dataset), 1),
   subset_data = FALSE,
   exclude_meso = FALSE,
   exclude_day = FALSE,

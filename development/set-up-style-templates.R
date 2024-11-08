@@ -104,9 +104,10 @@ KOSMOScolumntable=matrix(c("day","Day",
 #################################################
 # quartz kiel side experiment
 
-KOSMOS2024KielQuartzSideExperimentStyletable=KOSMOS2024KielQuartzSideExperimentStyletable[1:6,]
-KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("750 / SiO2 / M3","300 / SiO2 / M4","0 / SiO2 / M6","150 / SiO2 / M7","600 / SiO2 / M10","450 / SiO2 / M11")
+#KOSMOS2024KielQuartzSideExperimentStyletable=KOSMOS2024KielQuartzSideExperimentStyletable[1:6,]
+KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("350 / SiO2 / M3","140 / SiO2 / M4","0 / SiO2 / M6","70 / SiO2 / M7","280 / SiO2 / M10","210 / SiO2 / M11")
 KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=sort(KOSMOS2024KielQuartzSideExperimentStyletable$mesolist)
+KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=KOSMOS2024KielQuartzSideExperimentStyletable$mesolist[c(1,6,2:5)]
 
 #col=KOSMOS2024KielQuartzSideExperimentStyletable$colourlist
 #barplot(1:8, col = c("saddlebrown", "sienna", "chocolate4", "deeppink4", "brown", "brown4", "rosybrown4", "tan4"))

@@ -105,7 +105,8 @@ KOSMOScolumntable=matrix(c("day","Day",
 # quartz kiel side experiment
 
 #KOSMOS2024KielQuartzSideExperimentStyletable=KOSMOS2024KielQuartzSideExperimentStyletable[1:6,]
-KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("350 / SiO2 / M3","140 / SiO2 / M4","0 / SiO2 / M6","70 / SiO2 / M7","280 / SiO2 / M10","210 / SiO2 / M11")
+#KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("350 / SiO2 / M3","140 / SiO2 / M4","0 / SiO2 / M6","70 / SiO2 / M7","280 / SiO2 / M10","210 / SiO2 / M11")
+KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=c("45 / SiO2 / M3","18 / SiO2 / M4","0 / SiO2 / M6","9 / SiO2 / M7","36 / SiO2 / M10","27 / SiO2 / M11")
 KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=sort(KOSMOS2024KielQuartzSideExperimentStyletable$mesolist)
 KOSMOS2024KielQuartzSideExperimentStyletable$mesolist=KOSMOS2024KielQuartzSideExperimentStyletable$mesolist[c(1,6,2:5)]
 

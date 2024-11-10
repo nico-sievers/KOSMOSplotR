@@ -82,7 +82,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
 
   if(stats.show | (treatmentgroups_sidebyside & showControlsBothTimes)){
-    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")
+    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso")
   } else if (treatmentgroups_sidebyside){
     required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
   } else {
@@ -166,9 +166,9 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   categorycounter=0;for(thiscategory in categories){
     categorycounter=categorycounter+1
 
-    # this is only needed so that there is no error in case deltaTA is not included
+    # this is only needed so that there is no error in case KOSMOScurrentContinuousVar is not included
     if(treatmentgroups_sidebyside & showControlsBothTimes){
-      thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter] & dataset$Delta_TA!=0)
+      thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter] & dataset[[KOSMOScurrentContinuousVar]]!=0)
     } else {
       thisisothercategory=(dataset[[KOSMOScurrentCategoricalVar]]==categories_inverted[categorycounter])
     }
@@ -386,7 +386,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       statsdata=dataset[dataset$Day %in% statsdays & dataset$Treat_Meso!=control & !((dataset$Treat_Meso %in% stats.exclude_meso) | (dataset$Mesocosm %in% stats.exclude_meso)),]
       statsone=unlist(statsdata[statsdata[[KOSMOScurrentCategoricalVar]]==unique(statsdata[[KOSMOScurrentCategoricalVar]][1]),parameter])
       statstwo=unlist(statsdata[statsdata[[KOSMOScurrentCategoricalVar]]==unique(statsdata[[KOSMOScurrentCategoricalVar]][2]),parameter])
-      interactionmodel=lm(statsdata[[parameter]]~statsdata$Delta_TA*statsdata[[KOSMOScurrentCategoricalVar]])
+      interactionmodel=lm(statsdata[[parameter]]~statsdata[[KOSMOScurrentContinuousVar]]*statsdata[[KOSMOScurrentCategoricalVar]])
       aimp=anova(interactionmodel)$`Pr(>F)`
       statsmeans=c(mean(statsone,na.rm = T),mean(statstwo,na.rm = T))
 

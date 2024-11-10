@@ -5,7 +5,7 @@
 \alias{KOSMOScolumntable}
 \title{Definition essential columns of an applicable data set and patterns to recognise them by}
 \format{
-An object of class \code{data.frame} with 6 rows and 3 columns.
+An object of class \code{data.frame} with 7 rows and 5 columns.
 }
 \usage{
 KOSMOScolumntable

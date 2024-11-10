@@ -24,7 +24,7 @@
 KOSMOSselect=function(experiment="kiel"){
   options=c("KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen")
   catvars=c("Mineral","Mineral","Dilution","Mineral")
-  convars=c("Mineral added","Delta_TA","Delta_TA","Delta_TA")
+  convars=c("Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA")
   treatments=list(matrix(c(6,"lightblue3"),nrow=2),
                   matrix(c(4,"red",6,"red"),nrow=2),
                   matrix(c(1.5,"white"),nrow=2),

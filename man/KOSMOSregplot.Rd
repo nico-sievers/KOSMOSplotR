@@ -13,7 +13,7 @@ KOSMOSregplot(
   ylabel = parameter,
   xlabel = "default",
   startat0 = FALSE,
-  headspace = 0.3,
+  headspace = "default",
   includeThisInYlimit = 0,
   ylimit = FALSE,
   axis.ticks = "xy",
@@ -41,7 +41,7 @@ KOSMOSregplot(
 
 \item{startat0}{Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).}
 
-\item{headspace}{More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.}
+\item{headspace}{More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor, i.e. \code{0.3}, by setting the upper axis limit to \code{130\%} of the original value. The default value is dependent on the number of columns in the stats info box.}
 
 \item{includeThisInYlimit}{Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).}
 

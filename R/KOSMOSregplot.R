@@ -13,7 +13,7 @@
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
 # @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
-#' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.3}, the dafault) by setting the upper axis limit to \code{130\%} of the original value.
+#' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor, i.e. \code{0.3}, by setting the upper axis limit to \code{130\%} of the original value. The default value is dependent on the number of columns in the stats info box.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param axis.ticks,axis.values These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.label} labels are printed next to the ticks.
@@ -44,7 +44,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
                        days=FALSE,
                        subset_data=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
-                       startat0=FALSE,headspace=0.3,includeThisInYlimit=0,
+                       startat0=FALSE,headspace="default",includeThisInYlimit=0,
                        ylimit=FALSE,
                        axis.ticks="xy",axis.values="xy",
                        statsblocklocation="topleft",daylabellocation="topright",
@@ -78,8 +78,8 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     days=days[1]:days[2]
   }
 
-  dataset$Delta_TA=suppressWarnings(as.numeric(dataset$Delta_TA))
-  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset$Delta_TA) & dataset$Delta_TA!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso",parameter)]
+  dataset[[KOSMOScurrentContinuousVar]]=suppressWarnings(as.numeric(dataset[[KOSMOScurrentContinuousVar]]))
+  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
   dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(!is.logical(exclude_meso)){
@@ -87,7 +87,8 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   mesos=unique(dataset$Treat_Meso)
-  Delta_TA=unique(dataset$Delta_TA)
+  contvar=unique(dataset[[KOSMOScurrentContinuousVar]])
+  categories=levels(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL
@@ -107,14 +108,15 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     } else {
       ylimit=c(min(yrange),max(yrange))
     }
+    if(length(categories)==1){headspace=0.15}else{headspace=0.3}
     ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 
-  if(xlabel=="default"){xlabel="Added alkalinity"}
+  if(xlabel=="default"){xlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]}
   if(new.plot){
     #par(pty = "s")
     plot(x=0,y=0,col="white",
-         xlim=c(min(Delta_TA)-0.1,max(Delta_TA)+0.1),
+         xlim=c(min(contvar),max(contvar)),
          ylim=ylimit,
          xlab="",ylab="",xaxt="n",yaxt="n",...)
     if(grepl("x",axis.ticks)){
@@ -123,7 +125,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
         xticklabels=T
         title(xlab=xlabel, line=2.3)
       }
-      axis(1,at=Delta_TA,labels=xticklabels)
+      axis(1,at=contvar,labels=xticklabels)
     }
     if(grepl("y",axis.ticks)){
       yticklabels=F
@@ -137,13 +139,11 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   #stats from here
 
-  categories=levels(dataset[[KOSMOScurrentCategoricalVar]])
-
   if(length(categories)>1){
-    interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA*dataset[[KOSMOScurrentCategoricalVar]])
+    interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]]*dataset[[KOSMOScurrentCategoricalVar]])
     statstablelength=4
   }else{
-    interactionmodel=lm(dataset[[parameter]]~dataset$Delta_TA)
+    interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]])
     statstablelength=2
   }
 
@@ -158,15 +158,15 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   roundto=3
 
   statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),
-                    text.width = strwidth(bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
+                    text.width = strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
                     cex=0.75,bty="n",x.intersp=0)
   x=statsblock$rect$left
   y=statsblock$text$y
 
-  text(statsblock$rect$left, y[1], pos=4, cex=0.75,"Delta TA")
+  text(statsblock$rect$left, y[1], pos=4, cex=0.75,KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])
   if(length(categories)>1){
     text(statsblock$rect$left, y[2], pos=4, cex=0.75,KOSMOScurrentCategoricalVar)
-    text(statsblock$rect$left, y[3], pos=4, cex=0.75,bquote(paste("Delta TA \u00D7 ",.(KOSMOScurrentCategoricalVar))))
+    text(statsblock$rect$left, y[3], pos=4, cex=0.75,bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar))))
   }
   text(statsblock$rect$left, y[statstablelength], pos=4, cex=0.75,expression(paste("Adj. ",italic(R)^2)))
 
@@ -201,7 +201,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
     whichstyle=grep(tmp,KOSMOScurrentStyletable[,"mesolist"],perl=T,ignore.case=T)
     style=KOSMOScurrentStyletable[whichstyle,c("colourlist","ltylist","shapelist")]
-    points(mean(na.rm=T,data_meso$Delta_TA),mean(na.rm=T,data_meso[[parameter]]),
+    points(mean(na.rm=T,data_meso[[KOSMOScurrentContinuousVar]]),mean(na.rm=T,data_meso[[parameter]]),
            col=style[["colourlist"]],
            bg=style[["colourlist"]],
            pch=style[["shapelist"]],

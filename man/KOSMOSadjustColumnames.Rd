@@ -21,6 +21,3 @@ The same data set with (potentially) modified column names.
 \description{
 Called by either the user or the plotting functions directly, this tool tries to guess the names of the required columns and thereby trys to make the package work even on data tables that deviate from the official template sheet.
 }
-\examples{
-KOSMOSadjustColumnames(KOSMOStestdata)
-}

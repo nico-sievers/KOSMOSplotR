@@ -7,8 +7,9 @@
 #'
 #' @return The same data set with (potentially) modified column names.
 #'
-#' @examples
-#' KOSMOSadjustColumnames(KOSMOStestdata)
+# @examples
+# KOSMOSadjustColumnames(KOSMOStestdata)
+#'
 #' @export
 
 KOSMOSadjustColumnames=function(dataset,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")){

@@ -21,6 +21,3 @@ Returns an info value on how well the found columns matched the original, and th
 \description{
 Called by the plotting functions directly, this tool tries to guess the names of the required columns.
 }
-\examples{
-KOSMOSguessColumnames(KOSMOStestdata)
-}

@@ -24,8 +24,8 @@
 #'
 #' @return Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 #'
-#' @examples
-#' KOSMOSregplot()
+# @examples
+# KOSMOSregplot()
 #'
 #' @export
 #' @importFrom graphics abline axis legend lines par points strwidth text title

@@ -15,14 +15,6 @@ Returns \code{KOSMOScurrentStyletable} as the style template for the selected ex
 \description{
 Select the campaign you are working on to automatically apply the suitable style template.
 }
-\examples{
-KOSMOSselect("kiel")
-
-KOSMOScurrentStyletable
-KOSMOScurrentCategoricalVar
-KOSMOScurrentStatscols
-
-}
 \seealso{
 To overwrite any of these values manually simply assign a new value to them: \code{KOSMOScurrenStyletable[6,2]="red"}. There are further general design features of the plots (such as colour and symbol of the control) saved in \code{KOSMOSdesignfeatures}, that you can access and overwrite if needed.
 }

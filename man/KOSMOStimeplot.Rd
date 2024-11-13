@@ -103,7 +103,3 @@ Directly outputs the plot, either to the plot window or another graphics device 
 \description{
 Creates a timeline plot over the sampled days with a line per mesocosm. It works on an excel datasheet roughly following the common KOSMOS layout, assuming a continuous independent variable and a categorical variable with two factors.
 }
-\examples{
-KOSMOStimeplot()
-
-}

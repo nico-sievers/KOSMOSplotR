@@ -35,8 +35,8 @@
 #'
 #' @return Directly outputs the plot, either to the plot window or another graphics device (e.g. a \code{.png} file) if a connection has been opened.
 #'
-#' @examples
-#' KOSMOStimeplot()
+# @examples
+# KOSMOStimeplot()
 #'
 #' @export
 #' @importFrom graphics abline axis clip lines par points rasterImage text title

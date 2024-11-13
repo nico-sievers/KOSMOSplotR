@@ -64,7 +64,3 @@ Creates a regression plot over the alkalinity gradient with a line per treatment
 \details{
 Warning: This function currently does not warn you should there be more than one data point per mesocosm and day in the table. Best check your data by plotting a \code{KOSMOStimelineplot()} first!
 }
-\examples{
-KOSMOSregplot()
-
-}

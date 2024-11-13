@@ -7,8 +7,9 @@
 #'
 #' @return Returns an info value on how well the found columns matched the original, and the column numbers of the matches, and a boiled down version of the \code{KOSMOScolumntable} for internal use by \code{KOSMOSadjustColumnnames}.
 #'
-#' @examples
-#' KOSMOSguessColumnames(KOSMOStestdata)
+# @examples
+# KOSMOSguessColumnames(KOSMOStestdata)
+#'
 #' @export
 #' @importFrom utils head
 

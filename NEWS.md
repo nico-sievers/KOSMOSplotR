@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.4.3
+* Changed the start-up routine to load the pre-set style template more conveniently.
+
+---
 # KOSMOSplotR 2.4.2
 * Now, the regression plot also works for one-category datasets.
 

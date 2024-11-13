@@ -73,7 +73,7 @@ KOSMOStimeplot(
 
 \item{axis.ticks, axis.values}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.values} labels are printed next to the ticks.}
 
-\item{stats.show}{Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default).}
+\item{stats.show}{Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default). Note that this currently only works if the categorical variable has at least two levels!}
 
 \item{stats.days}{Data from which day or days should be included in the stats analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.}
 

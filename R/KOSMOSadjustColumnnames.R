@@ -8,13 +8,13 @@
 #' @return The same data set with (potentially) modified column names.
 #'
 # @examples
-# KOSMOSadjustColumnames(KOSMOStestdata)
+# KOSMOSadjustColumnnames(KOSMOStestdata)
 #'
 #' @export
 
-KOSMOSadjustColumnames=function(dataset,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")){
+KOSMOSadjustColumnnames=function(dataset,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso")){
 
-  tmp=KOSMOSguessColumnames(dataset,required_columns)
+  tmp=KOSMOSguessColumnnames(dataset,required_columns)
   if(tmp[[1]]!="perfect"){
     if(length(tmp[[2]])==nrow(tmp[[3]])){
       names(dataset)[tmp[[2]]]=tmp[[3]]$Names

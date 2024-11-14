@@ -67,7 +67,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     }
   }
 
-  dataset=KOSMOSadjustColumnames(dataset)
+  dataset=KOSMOSadjustColumnnames(dataset)
 
   dataset$Day=as.integer(gsub("\\D", "", as.character(dataset$Day)))
   dataset=dataset[order(dataset$Day),]

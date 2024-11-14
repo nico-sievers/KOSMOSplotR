@@ -90,7 +90,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
 
   #dataset=as.data.frame(dataset)
-  dataset=KOSMOSadjustColumnames(dataset,required_columns)
+  dataset=KOSMOSadjustColumnnames(dataset,required_columns)
 
   dataset=dataset[,c(required_columns,parameter)]
   dataset$Day=as.integer(dataset$Day)

@@ -8,13 +8,13 @@
 #' @return Returns an info value on how well the found columns matched the original, and the column numbers of the matches, and a boiled down version of the \code{KOSMOScolumntable} for internal use by \code{KOSMOSadjustColumnnames}.
 #'
 # @examples
-# KOSMOSguessColumnames(KOSMOStestdata)
+# KOSMOSguessColumnnames(KOSMOStestdata)
 #'
 #' @export
-#' @importFrom utils head
+#' @importFrom utils head tail
 
-KOSMOSguessColumnames=function(dataset=KOSMOStestdata,
-                               required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Delta_TA","Treat_Meso")){
+KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
+                               required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso")){
 
   tmpcolumntable=KOSMOScolumntable[KOSMOScolumntable$Names %in% required_columns,]
   # this searches for exact matches ### THIS DOES ALWAYS PRINT, SO SOMETHING DOESN'T WORK

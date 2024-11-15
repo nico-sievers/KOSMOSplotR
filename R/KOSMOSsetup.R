@@ -46,7 +46,7 @@ KOSMOSselect=function(experiment="kiel"){
     nmesos=nrow(KOSMOScurrentStyletable)
     if(numcategories[chosen]==2){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[c(nmesos/2-1,nmesos-1),"colourlist"],envir=.GlobalEnv)}
     else if(numcategories[chosen]==1){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[nmesos-1,"colourlist"],envir=.GlobalEnv)}
-    message(paste0("Style template '",options[chosen],"' selected."))
+    packageStartupMessage(paste0("Style template '",options[chosen],"' selected."))
   } else {
     stop("No matching style template found!")
   }

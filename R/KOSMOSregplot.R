@@ -115,15 +115,16 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   if(xlabel=="default"){xlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]}
   if(new.plot){
     #par(pty = "s")
+    xenlargment=0.08*abs(max(contvar)-min(contvar))
     plot(x=0,y=0,col="white",
-         xlim=c(min(contvar),max(contvar)),
+         xlim=c(min(contvar)-xenlargment,max(contvar)+xenlargment),
          ylim=ylimit,
          xlab="",ylab="",xaxt="n",yaxt="n",...)
     if(grepl("x",axis.ticks)){
       xticklabels=F
       if(grepl("x",axis.values)){
         xticklabels=T
-        title(xlab=xlabel, line=2.3)
+        title(xlab=parse(text=xlabel), line=2.3)
       }
       axis(1,at=contvar,labels=xticklabels)
     }
@@ -142,9 +143,11 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   if(length(categories)>1){
     interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]]*dataset[[KOSMOScurrentCategoricalVar]])
     statstablelength=4
+    longesttextwidth=strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75)
   }else{
     interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]])
     statstablelength=2
+    longesttextwidth=strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]),"    p = 0.000")),cex = 0.75)
   }
 
   for(i in 1:length(categories)){
@@ -157,9 +160,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   aimp=anova(interactionmodel)$`Pr(>F)`
   roundto=3
 
-  statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),
-                    text.width = strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75),
-                    cex=0.75,bty="n",x.intersp=0)
+  statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),text.width = longesttextwidth,cex=0.75,bty="n",x.intersp=0)
   x=statsblock$rect$left
   y=statsblock$text$y
 

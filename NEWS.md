@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.4.4
+* Fixed several minor details around displaying the regression plot with different numbers of levels in the categorical variable
+
+---
 # KOSMOSplotR 2.4.3
 * Changed the start-up routine to load the pre-set style template more conveniently.
 

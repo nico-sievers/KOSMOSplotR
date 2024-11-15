@@ -1,4 +1,4 @@
 .onAttach=function(libname, pkgname) {
-  message("Welcome to KOSMOSplotR!")
+  packageStartupMessage("Welcome to KOSMOSplotR!")
   KOSMOSselect("Kiel")
 }

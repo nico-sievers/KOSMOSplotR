@@ -18,7 +18,8 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
 
   tmpcolumntable=KOSMOScolumntable[KOSMOScolumntable$Names %in% required_columns,]
   # this searches for exact matches ### THIS DOES ALWAYS PRINT, SO SOMETHING DOESN'T WORK
-  tmp=unlist(lapply(tmpcolumntable$Names,grep,names(dataset)))
+  # tmp=unlist(lapply(tmpcolumntable$Names,grep,names(dataset),fixed=T))
+  tmp=which(names(dataset) %in% tmpcolumntable$Names)
   if(length(tmp)==nrow(tmpcolumntable)){
     fit="perfect"
   } else {
@@ -26,6 +27,7 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
     tmp=lapply(tmpcolumntable$Patterns,grep,names(dataset),ignore.case=T,perl=T)
     nottmp=lapply(tmpcolumntable$NotMatch,grep,names(dataset),ignore.case=T,perl=T)
     tmp=Map(setdiff,tmp,nottmp)
+    # here i always use the first match of each, assuming that later occurances are something different
     tmp=unique(unlist(lapply(tmp,head,1)))
 
 

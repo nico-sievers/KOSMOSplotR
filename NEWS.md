@@ -1,5 +1,6 @@
 # KOSMOSplotR 2.4.4
-* Fixed several minor details around displaying the regression plot with different numbers of levels in the categorical variable
+* Fixed several minor details around displaying the regression plot with different numbers of levels in the categorical variable.
+* Improved the column guessing algorithm
 
 ---
 # KOSMOSplotR 2.4.3

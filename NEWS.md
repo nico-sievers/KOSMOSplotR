@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.4.5
+* Updated the treatment addition schedule for the Bergen campaign
+* Added the option to display the inside-cleaning day, so for only for the Helgoland campaign
+
+---
 # KOSMOSplotR 2.4.4
 * Fixed several minor details around displaying the regression plot with different numbers of levels in the categorical variable.
 * Improved the column guessing algorithm

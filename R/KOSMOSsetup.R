@@ -27,10 +27,16 @@ KOSMOSselect=function(experiment="kiel"){
   convars=c("Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA")
   treatments=list(matrix(c(6,"lightblue3",10.5,"red"),nrow=2),
                   matrix(c(4,"red",6,"red"),nrow=2),
+                  matrix(c(4,"red",6,"darkorange"),nrow=2),
+                  matrix(c(6,"red"),nrow=2))
+  cleanings=list(matrix(c(1.5,"white"),nrow=2),
                   matrix(c(1.5,"white"),nrow=2),
+                  matrix(c(10,"lightblue3",18,"lightblue3",22,"lightblue3",26,"lightblue3",32,"lightblue3",38,"lightblue3"),nrow=2),
                   matrix(c(1.5,"white"),nrow=2))
+
   numcategories=c(1,2,2,2)
   chosen=grepl(experiment,options,ignore.case=T)
+
   # because the kiel ones are not truly unique make a negative selection of the side experiment one if there is no quartz or side experiment in the query
   if(chosen[1] & !grepl("quar|side",experiment,ignore.case=T)){chosen[1]=F}
 
@@ -43,6 +49,7 @@ KOSMOSselect=function(experiment="kiel"){
     assign("KOSMOScurrentCategoricalVar",catvars[chosen],envir=.GlobalEnv)
     assign("KOSMOScurrentContinuousVar",convars[chosen],envir=.GlobalEnv)
     assign("KOSMOScurrentTreatmentSchedule",treatments[[selected]],envir=.GlobalEnv)
+    assign("KOSMOScurrentCleaningSchedule",cleanings[[selected]],envir=.GlobalEnv)
     nmesos=nrow(KOSMOScurrentStyletable)
     if(numcategories[chosen]==2){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[c(nmesos/2-1,nmesos-1),"colourlist"],envir=.GlobalEnv)}
     else if(numcategories[chosen]==1){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[nmesos-1,"colourlist"],envir=.GlobalEnv)}

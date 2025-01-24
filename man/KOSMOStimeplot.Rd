@@ -22,6 +22,7 @@ KOSMOStimeplot(
   ylimit = FALSE,
   xlimit = FALSE,
   treatment.abline = TRUE,
+  cleaning.abline = FALSE,
   axis.ticks = "xy",
   axis.values = "xy",
   stats.show = FALSE,
@@ -70,6 +71,8 @@ KOSMOStimeplot(
 \item{xlimit}{Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.}
 
 \item{treatment.abline}{Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.}
+
+\item{cleaning.abline}{Should the days of inside-cleaning of the mesocosms be marked with vertical lines? These could for example have impacted sediment parameters. \code{TRUE} or \code{False} (the default).}
 
 \item{axis.ticks, axis.values}{These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.values} labels are printed next to the ticks.}
 

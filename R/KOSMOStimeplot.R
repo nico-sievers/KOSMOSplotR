@@ -18,6 +18,7 @@
 #' @param ylimit Set a fixed range for the y-axis following the pattern \code{c("lower end", "upper end")}, i.e. \code{c(1,3)}. This overwrites \code{startat0}, \code{headspace}, and \code{includeThisInYlimit}. If set to \code{FALSE} (the default), the range will be defined based on the range of data values.
 #' @param xlimit Set a fixed range for the x-axis following the pattern \code{c("lower end", "upper end")}.  If set to \code{FALSE} (the default), the range will include all sampling days for which there is data in the table.
 #' @param treatment.abline Should treatment additions be marked with vertical lines? \code{TRUE} (the default) or \code{False}.
+#' @param cleaning.abline Should the days of inside-cleaning of the mesocosms be marked with vertical lines? These could for example have impacted sediment parameters. \code{TRUE} or \code{False} (the default).
 #' @param axis.ticks,axis.values These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.values} labels are printed next to the ticks.
 # @param axis.values \code{(will be made available with the next update)}
 #' @param stats.show Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default). Note that this currently only works if the categorical variable has at least two levels!
@@ -44,7 +45,7 @@
 
 # for debugging
 # dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)]
-# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE;excludeThisFromYlimit
+# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE;excludeThisFromYlimit;cleaning.abline=F
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
@@ -55,7 +56,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         ylabel=parameter,xlabel="Experiment day",
                         startat0=FALSE,headspace=0,includeThisInYlimit=0,excludeThisFromYlimit=FALSE,ylimit=FALSE,
                         xlimit=FALSE,
-                        treatment.abline=TRUE,
+                        treatment.abline=TRUE,cleaning.abline=FALSE,
                         axis.ticks="xy",axis.values="xy",
                         stats.show=FALSE,stats.days=FALSE,stats.exclude_meso=FALSE,
                         stats.digits=FALSE,stats.location="bottom",
@@ -246,11 +247,15 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       # rasterImage(copepic,copewidth[1],copeheight[1],copewidth[2],copeheight[2],copeangle)
     }
 
-    #abline the treatment day
+    #abline the treatment days
     if(treatment.abline){
-      ### XXX move this value
       abline(v=KOSMOScurrentTreatmentSchedule[1,],col=KOSMOScurrentTreatmentSchedule[2,],lty=KOSMOSdesignfeatures[["treatmentablinelty"]],lwd=0.75)
     }
+    #abline the cleaning days
+    if(cleaning.abline){
+      abline(v=KOSMOScurrentCleaningSchedule[1,],col=KOSMOScurrentCleaningSchedule[2,],lty=KOSMOSdesignfeatures[["treatmentablinelty"]],lwd=0.6)
+    }
+
 
     #draw the baseline control line
     if(!is.logical(baseline)){

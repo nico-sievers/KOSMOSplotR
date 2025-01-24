@@ -31,7 +31,7 @@ KOSMOSselect=function(experiment="kiel"){
                   matrix(c(6,"red"),nrow=2))
   cleanings=list(matrix(c(1.5,"white"),nrow=2),
                   matrix(c(1.5,"white"),nrow=2),
-                  matrix(c(10,"lightblue3",18,"lightblue3",22,"lightblue3",26,"lightblue3",32,"lightblue3",38,"lightblue3"),nrow=2),
+                  matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),
                   matrix(c(1.5,"white"),nrow=2))
 
   numcategories=c(1,2,2,2)

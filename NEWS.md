@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.5.0
+* Fixed a major flaw in the calculation of the linear model in the regression plot: Sampling days were not truly averaged but treated in like replicates, affecting the outcome of p and R^2 values. Please revisit all regression plots created with KOSMOSregplot() to this date!
+* The optional stats calculation within KOSMOStimeplot() will be adjusted accordingly ASAP.
+
+---
 # KOSMOSplotR 2.4.5
 * Updated the treatment addition schedule for the Bergen campaign
 * Added the option to display the inside-cleaning day, so for only for the Helgoland campaign

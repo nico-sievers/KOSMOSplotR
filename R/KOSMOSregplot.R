@@ -30,7 +30,7 @@
 #' @export
 #' @importFrom graphics abline axis legend lines par points strwidth text title
 #' @importFrom stats anova lm
-#' @importFrom dplyr group_by summarize
+#' @importFrom dplyr %>% group_by summarise
 
 # for debugging
 #library(KOSMOSplotR);library(dplyr);dataset=KOSMOStestdata;parameter=names(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
@@ -87,7 +87,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(!is.logical(exclude_meso)){
-    dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),-1]
+    dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),]
   }
 
   mesos=unique(dataset$Treat_Meso)
@@ -98,11 +98,21 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset=dataset %>%
     group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),get(KOSMOScurrentContinuousVar),Treat_Meso) %>%
     summarise(average=mean(get(parameter)),.groups="drop") #across(everything(),first),
-    #mutate(average=mean(get(parameter)))
+  #mutate(average=mean(get(parameter)))
   names(dataset)[names(dataset)=="average"]=parameter
   names(dataset)[names(dataset)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
   names(dataset)[names(dataset)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
-  if(nrow(dataset)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm, so something went wrong in the subsetting of the data set or the averaging!")}
+  if(nrow(dataset)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
+
+  # now get averages between the days
+  # test=dataset %>%
+  #   group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),get(KOSMOScurrentContinuousVar),Treat_Meso) %>%
+  #   summarise(average=mean(get(parameter)),.groups="drop") #across(everything(),first),
+  # #mutate(average=mean(get(parameter)))
+  # names(test)[names(test)=="average"]=parameter
+  # names(test)[names(test)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
+  # names(test)[names(test)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
+  # if(nrow(test)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL

@@ -7,6 +7,9 @@ utils::globalVariables(c("KOSMOStestdata",
                          "KOSMOScurrentStatscols",
                          "KOSMOSdesignfeatures",
                          "KOSMOScurrentCategoricalVar",
-                         "KOSMOScolumntable"
+                         "KOSMOScurrentContinuousVar",
+                         "KOSMOScolumntable",
+                         "KOSMOScurrentTreatmentSchedule",
+                         "KOSMOScurrentCleaningSchedule"
                          #"copepic"
 ))

@@ -21,7 +21,7 @@
 #' @param cleaning.abline Should the days of inside-cleaning of the mesocosms be marked with vertical lines? These could for example have impacted sediment parameters. \code{TRUE} or \code{False} (the default).
 #' @param axis.ticks,axis.values These options control whether axis ticks and/or labels are displayed. Each can be set to \code{NA} ("show for none"), \code{"x"} ("show for only the x-axis"), \code{"y"} ("show for only the y-axis"), or \code{"xy"} (show for both; the default option). If only \code{axis.ticks} is set for an axis the tick marks appear without labels, if both \code{axis.ticks} and \code{axis.values} labels are printed next to the ticks.
 # @param axis.values \code{(will be made available with the next update)}
-#' @param stats.show Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default). Note that this currently only works if the categorical variable has at least two levels!
+#' @param stats.show [\code{TEMPORARILY DISABLED}] Choose whether a linear model shall be calculated and the mean values and p-value for the categorical variable displayed (\code{TRUE} or \code{TRUE}, the default). Note that this currently only works if the categorical variable has at least two levels!
 #' @param stats.days Data from which day or days should be included in the stats analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day (\code{c(5,9)}). If set to \code{FALSE} (the default), the last sampling day is plotted.
 #' @param stats.exclude_meso List one or multiple mesocosms to exclude those from the stats analysis, i.e. \code{c(1,3,10)}. Mesocosms excluded from the plot via \code{exclude_meso} are anyway excluded.
 #' @param stats.digits The number of digits of the displayed values.
@@ -64,6 +64,9 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         copepod.draw=FALSE,copepod.position="top",
                         new.plot=TRUE,baseline=FALSE,
                         ...){
+
+  ### TMP
+  stats.show=FALSE
 
   # potentially subset the dataset according to the user parameter
   if(is.list(subset_data) & !is.null(subset_data)){

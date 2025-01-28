@@ -36,6 +36,6 @@ KOSMOSregplot(dataset=KOSMOStestdata,
               axis.ticks="xy",axis.values="xy",
               statsblocklocation="topleft",daylabellocation="topright",
               new.plot=TRUE)
-KOSMOSregplot(days=c(3,4,5),exclude_meso=5,startat0=F,headspace=0.25,includeThisInYlimit=40,axis.ticks="x",axis.values="",statsblocklocation="center",daylabellocation="bottomright")
+KOSMOSregplot(days=c(3,4,5))#,exclude_meso=5)#,startat0=F,headspace=0.25,includeThisInYlimit=40,axis.ticks="x",axis.values="",statsblocklocation="center",daylabellocation="bottomright")
 KOSMOSregplot(ylimit=c(c(5,40)))
 

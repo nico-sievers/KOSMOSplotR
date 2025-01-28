@@ -33,7 +33,7 @@
 #' @importFrom dplyr group_by summarize
 
 # for debugging
-#library(KOSMOSplotR);dataset=KOSMOStestdata;parameter=names(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
+#library(KOSMOSplotR);library(dplyr);dataset=KOSMOStestdata;parameter=names(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
 
 # library(readxl);dataset=read_excel("../../KOSMOS_2024_Kiel_Quartz-experiment_FlowCytometry/KOSMOS_Kiel_2024_Quartz-side-experiment_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count"
 
@@ -83,8 +83,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   dataset[[KOSMOScurrentContinuousVar]]=suppressWarnings(as.numeric(dataset[[KOSMOScurrentContinuousVar]]))
-  #dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
-  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA",c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
+  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
   dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(!is.logical(exclude_meso)){
@@ -97,9 +96,12 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   # now get averages between the days
   dataset=dataset %>%
-    group_by(Mesocosm,Treat_Meso) %>%
-    summarise(average=mean(get(parameter)),.groups="drop")
+    group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),get(KOSMOScurrentContinuousVar),Treat_Meso) %>%
+    summarise(average=mean(get(parameter)),.groups="drop") #across(everything(),first),
+    #mutate(average=mean(get(parameter)))
   names(dataset)[names(dataset)=="average"]=parameter
+  names(dataset)[names(dataset)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
+  names(dataset)[names(dataset)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
   if(nrow(dataset)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm, so something went wrong in the subsetting of the data set or the averaging!")}
 
   if(is.logical(ylimit) && ylimit==FALSE){

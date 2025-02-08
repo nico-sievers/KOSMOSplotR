@@ -7,13 +7,16 @@
 KOSMOSadjustColumnnames(
   dataset,
   required_columns = c("Day", "Mesocosm", KOSMOScurrentCategoricalVar,
-    KOSMOScurrentContinuousVar, "Treat_Meso")
+    KOSMOScurrentContinuousVar, "Treat_Meso"),
+  minimal_requirement = c("Day", "Mesocosm")
 )
 }
 \arguments{
 \item{dataset}{A data set object roughly following the common KOSMOS layout for which the column names shall be adjusted to fit the template.}
 
 \item{required_columns}{Vector of those columns to be matched, all others are left untouched. Defaults to all potentially required columns for the available plot functions. This argument is supplied by the plotting function if this function is called automatically, so that only strictly necessary ones are marked as required.}
+
+\item{minimal_requirement}{Vector of those columns that essential for plotting KOSMOS data and can't be derived from others.}
 }
 \value{
 The same data set with (potentially) modified column names.

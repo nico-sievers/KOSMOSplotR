@@ -5,7 +5,7 @@
 \alias{KOSMOS2023HelgolandStyletable}
 \title{Definition of the colour and style template to be used for plotting}
 \format{
-An object of class \code{data.frame} with 12 rows and 4 columns.
+An object of class \code{data.frame} with 12 rows and 7 columns.
 }
 \usage{
 KOSMOS2023HelgolandStyletable

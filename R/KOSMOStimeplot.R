@@ -68,6 +68,20 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   ### TMP
   stats.show=FALSE
 
+
+  # figure out which columns are needed, which ones are there, and which ones need to be created
+  if(stats.show | (treatmentgroups_sidebyside & showControlsBothTimes)){
+    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso")
+  } else if (treatmentgroups_sidebyside){
+    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
+  } else {
+    required_columns=c("Day","Mesocosm","Treat_Meso")
+  }
+  dataset=KOSMOSadjustColumnnames(dataset,required_columns)
+  # structuring
+  dataset$Day=as.integer(dataset$Day)
+  dataset=dataset[order(dataset$Day),]
+
   # potentially subset the dataset according to the user parameter
   if(is.list(subset_data) & !is.null(subset_data)){
     not_operator="^not_"
@@ -85,21 +99,8 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     }
   }
 
-  if(stats.show | (treatmentgroups_sidebyside & showControlsBothTimes)){
-    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso")
-  } else if (treatmentgroups_sidebyside){
-    required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,"Treat_Meso")
-  } else {
-    required_columns=c("Day","Mesocosm","Treat_Meso")
-  }
-
-  #dataset=as.data.frame(dataset)
-  dataset=KOSMOSadjustColumnnames(dataset,required_columns)
-
+  # only then kick all columns not urgently needed
   dataset=dataset[,c(required_columns,parameter)]
-  dataset$Day=as.integer(dataset$Day)
-  dataset=dataset[order(dataset$Day),]
-  #dataset$Mesocosm=as.integer(dataset$Mesocosm)
 
   # get rid of all excluded mesos and days and the baseline, but keep a backup
   datasetwithall=dataset
@@ -312,7 +313,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       tmp=sub("(","\\(",tmp,fixed=T)
       tmp=sub(")","\\)",tmp,fixed=T)
       tmp=paste("(?=.*",tmp,")",sep="",collapse="")
-      whichstyle=grep(tmp,KOSMOScurrentStyletable[,"mesolist"],perl=T,ignore.case=T)
+      whichstyle=grep(tmp,KOSMOScurrentStyletable[,"Treat_Meso"],perl=T,ignore.case=T)
       style=KOSMOScurrentStyletable[whichstyle,c("colourlist","ltylist","shapelist")]
       lines(tmp_days,data_meso,
             col=style[["colourlist"]],
@@ -355,8 +356,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     }
     #draw shapes
     for(meso in mesos){
-      if(meso==control){}
-      else{
+      if(meso!=control){
         data_meso=thiscategorydataset[thiscategorydataset$Treat_Meso==meso,]
         data_meso=data_meso[!is.na(data_meso[,parameter]),]
         tmp_days=data_meso$Day
@@ -369,7 +369,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
         tmp=sub(")","\\)",tmp,fixed=T)
         tmp=paste("(?=.*",tmp,")",sep="",collapse="")
 
-        style=KOSMOScurrentStyletable[grep(tmp,KOSMOScurrentStyletable[,"mesolist"],perl=T,ignore.case=T),c("colourlist","ltylist","shapelist")]
+        style=KOSMOScurrentStyletable[grep(tmp,KOSMOScurrentStyletable[,"Treat_Meso"],perl=T,ignore.case=T),c("colourlist","ltylist","shapelist")]
         points(tmp_days,data_meso,
                col=style[["colourlist"]],
                bg=style[["colourlist"]],

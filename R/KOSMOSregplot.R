@@ -224,7 +224,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     tmp=sub(")","\\)",tmp,fixed=T)
     tmp=paste("(?=.*",tmp,")",sep="",collapse="")
 
-    whichstyle=grep(tmp,KOSMOScurrentStyletable[,"mesolist"],perl=T,ignore.case=T)
+    whichstyle=grep(tmp,KOSMOScurrentStyletable[,"Treat_Meso"],perl=T,ignore.case=T)
     style=KOSMOScurrentStyletable[whichstyle,c("colourlist","ltylist","shapelist")]
     points(mean(na.rm=T,data_meso[[KOSMOScurrentContinuousVar]]),mean(na.rm=T,data_meso[[parameter]]),
            col=style[["colourlist"]],

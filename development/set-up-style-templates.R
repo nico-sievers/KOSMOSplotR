@@ -1,3 +1,60 @@
+# here im retrospectively adding in the other columns to be added to the user's data frame
+
+######
+
+#############################
+candidate=KOSMOS2024KielStyletable
+candidate=KOSMOS2024KielQuartzSideExperimentStyletable
+Treat_Meso=candidate$mesolist
+tmp=strsplit(Treat_Meso," / ")
+tmp1=lapply(tmp,"[",1)
+tmp2=lapply(tmp,"[",2)
+tmp3=lapply(tmp,"[",3)
+Mesocosm=as.numeric(sub(pattern="m",replacement="",tmp3,ignore.case=T))
+Mineral=unlist(tmp2)
+Delta_TA=as.numeric(tmp1)
+tmp0=data.frame(Mesocosm,Mineral,Delta_TA,Treat_Meso,stringsAsFactors=F)
+candidate=merge(tmp0,candidate,by.x="Treat_Meso",by.y="mesolist")[,c(2:4,1,5:7)]
+candidate
+KOSMOS2024KielStyletable=candidate
+save(KOSMOS2024KielStyletable,file="./data/KOSMOS2024KielStyletable.rda")
+save(KOSMOS2024KielQuartzSideExperimentStyletable,file="./data/KOSMOS2024KielQuartzSideExperimentStyletable.rda")
+#############################
+candidate=KOSMOS2022BergenStyletable
+Treat_Meso=candidate$mesolist
+tmp=strsplit(Treat_Meso," ")
+tmp1=lapply(tmp,"[",1)
+tmp2=lapply(tmp,"[",2)
+tmp3=lapply(tmp,"[",4)
+Mesocosm=as.numeric(sub(pattern="m",replacement="",tmp3,ignore.case=T))
+Mineral=unlist(tmp1)
+Delta_TA=as.numeric(tmp2)
+tmp0=data.frame(Mesocosm,Mineral,Delta_TA,Treat_Meso,stringsAsFactors=F)
+candidate=merge(tmp0,candidate,by.x="Treat_Meso",by.y="mesolist")[,c(2:4,1,5:7)]
+candidate
+KOSMOS2022BergenStyletable=candidate
+save(KOSMOS2022BergenStyletable,file="./data/KOSMOS2022BergenStyletable.rda")
+#############################
+candidate=KOSMOS2023HelgolandStyletable
+Treat_Meso=candidate$mesolist
+tmp=strsplit(Treat_Meso," ")
+tmp1=lapply(tmp,"[",1)
+tmp2=lapply(tmp,"[",2)
+tmp3=lapply(tmp,"[",4)
+Mesocosm=as.numeric(sub(pattern="m",replacement="",tmp3,ignore.case=T))
+Dilution=unlist(tmp1)
+Delta_TA=as.numeric(tmp2)
+tmp0=data.frame(Mesocosm,Dilution,Delta_TA,Treat_Meso,stringsAsFactors=F)
+candidate=merge(tmp0,candidate,by.x="Treat_Meso",by.y="mesolist")[,c(2:4,1,5:7)]
+candidate
+KOSMOS2023HelgolandStyletable=candidate
+save(KOSMOS2023HelgolandStyletable,file="./data/KOSMOS2023HelgolandStyletable.rda")
+#############################
+
+######
+
+
+
 ################
 # Kiel spring
 
@@ -17,6 +74,7 @@ shapelist=rep(c(15,25,23,19,17,42),2)
 
 KOSMOS2024KielStyletable=data.frame(cbind(mesolist,colourlist,ltylist,shapelist))
 KOSMOS2024KielStyletable[,"shapelist"]=as.numeric(KOSMOS2024KielStyletable[,"shapelist"])
+
 
 save(KOSMOS2024KielStyletable,file="./data/KOSMOS2024KielStyletable.rda")
 rm(mesoarray,minerallist,TAlist,mesolist,blues,greens,colourlist,ltylist,shapelist)

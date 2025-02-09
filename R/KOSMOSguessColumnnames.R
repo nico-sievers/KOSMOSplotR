@@ -12,7 +12,7 @@
 # KOSMOSguessColumnnames(KOSMOStestdata)
 #'
 #' @export
-#' @importFrom utils head tail
+#' @importFrom dplyr first
 
 KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
                                required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso"),
@@ -20,10 +20,13 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
 
   # set export variables as empty
   fit=NA
-  guessed_columns=character(0)
-  guessed_columns_positions=NA
+  perfect_matches_columns=character(0)
+  #guessed_columns=character(0)
+  #guessed_columns_positions=NA
   #create_columns=character(0)
-  essentials_position=character(0)
+  guessed_columns_ideal_names=character(0)
+  guessed_columns_current_names=character(0)
+  #essentials_position=character(0)
   meso_position=character(0)
   missing_cols_guessed=character(0)
   # prepare error message
@@ -45,7 +48,7 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
     nottmp=lapply(tmpcolumntable$NotMatch,grep,names(dataset),ignore.case=T,perl=T) # this is the patters to exclude
     tmp=Map(setdiff,yestmp,nottmp) # they ore brought together for the final decision which columns match and which dont
     guessed_columns_ideal_names_position=unlist(lapply(tmp,function(x) length(x)>0))
-    guessed_columns_positions=unique(unlist(lapply(tmp,head,1))) # here i always use the first match of each, assuming that later occurrences are something different. also i exclude duplicates, so if two patterns were matched on the same column name thats also excluded here
+    guessed_columns_positions=unique(unlist(lapply(tmp,first))) # here i always use the first match of each, assuming that later occurrences are something different. also i exclude duplicates, so if two patterns were matched on the same column name thats also excluded here
 
     guessed_columns_current_names=setdiff(names(dataset)[guessed_columns_positions],required_columns)
     guessed_columns_ideal_names_full=tmpcolumntable$Names[guessed_columns_ideal_names_position]

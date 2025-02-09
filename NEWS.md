@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.6.0
+* The package is now capable of plotting from a data frame that contains only Day and Mesocosm (or some typo of that) - no need for further columns like Treat_meso anymore. This should make data preparation even easier!
+
+---
 # KOSMOSplotR 2.5.0
 * Fixed a major flaw in the calculation of the linear model in the regression plot: Sampling days were not truly averaged but treated in like replicates, affecting the outcome of p and R^2 values. Please revisit all regression plots created with KOSMOSregplot() to this date!
 * The optional stats calculation within KOSMOStimeplot() will be adjusted accordingly ASAP.

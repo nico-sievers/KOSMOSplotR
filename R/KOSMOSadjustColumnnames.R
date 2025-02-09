@@ -20,7 +20,7 @@ KOSMOSadjustColumnnames=function(dataset,required_columns=c("Day","Mesocosm",KOS
   tmp=KOSMOSguessColumnnames(dataset,required_columns,minimal_requirement)
 
   if(tmp[[1]]=="perfect"){
-    message("All essential columns were found by names, let's go ahead")
+    message("All essential columns were found by names, let's go ahead!")
   } else {
     # if it wasn't a perfect fit, jump into fixing action
 

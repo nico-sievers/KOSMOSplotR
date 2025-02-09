@@ -1,7 +1,7 @@
 Package: KOSMOSplotR
 Type: Package
 Title: Create plots directly from a standardised KOSMOS data sheet in a uniform layout
-Version: 2.5.0
+Version: 2.6.0
 License: GPL
 Authors@R: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
 Maintainer: Nico Sievers <nico.sievers@gmx.net>

@@ -6,10 +6,10 @@
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot.
 #' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
-#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}.
+#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}. If you don't wish to plot one set it to \code{FALSE} or \code{NULL}.
 #' @param treatmentgroups_sidebyside Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!
 #' @param showControlsBothTimes If (\code{treatmentgroups_sidebyside="TRUE"}), by default, those control-mesocosms without added alkalinity are plotted in all panels (\code{"TRUE"}), rather than just with their group (\code{"FALSE"}).
-#' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
+#' @param ylabel The y-axis label to be printed. Defaults to \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Defaults to \code{"Experiment day"}.
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
 #' @param headspace More space needed above the data lines to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor (i.e. \code{0.25}) by setting the upper axis limit to \code{125\%} of the original value. Defaults to \code{0}.
@@ -110,7 +110,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   if(treatmentgroups_sidebyside){
     categories=unique(dataset[[KOSMOScurrentCategoricalVar]])
     categories=categories[!is.na(categories) & categories!="NA" & categories!="" & !is.null(categories)]
-    if(length(categories)!=2){warning(paste0("The number of categories found in 'dataset$",KOSMOScurrentCategoricalVar,"' is not two, therefore the algorithm might be confused with splitting the data up into side-by-side panels."))}
+    if(length(categories)!=2){message(paste0("The number of categories found in 'dataset$",KOSMOScurrentCategoricalVar,"' is not two, therefore the algorithm might be confused with splitting the data up into side-by-side panels."))}
     par(mfrow=c(1,length(categories)))
     categories_inverted=rev(categories)
     } else {
@@ -270,9 +270,11 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       # do.call(clip,as.list(usr))
     }
 
-    drawcontrol=T
-    if(is.logical(control)){
-      if(!control){drawcontrol=F}
+    if(is.null(control) | is.na(control)){
+      control="completenonsensejusttomakesurethisdoesntactuallyfitanything"
+      drawcontrol=F
+    } else {
+      drawcontrol=T
     }
 
     #draw lines of control
@@ -285,10 +287,10 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
               lty=KOSMOSdesignfeatures[["controllty"]],
               lwd=1.5)
         if(length(ycontrol$Day)>length(days)){warning(paste0("More data points than one per sampling day was plotted for the control. Could there be a duplicate entry at ",paste("T",setdiff(unique(ycontrol$Day),days),sep="",collapse=", "),"?"))}
-        if(length(unique(ycontrol$Day))<length(days)){warning(paste0("Missing data point(s) in the control: ",paste("T",setdiff(days,unique(ycontrol$Day)),sep="",collapse=", ")))}
+        if(length(unique(ycontrol$Day))<length(days)){message(paste0("Missing data point(s) in the control: ",paste("T",setdiff(days,unique(ycontrol$Day)),sep="",collapse=", ")))}
       } else {
         foundcontrol=F
-        warning(paste0("No control under the name of '",control,"' found in the data set!\nSet 'control = FALSE' if you don't wish to plot one."))
+        message(paste0("No control under the name of '",control,"' found in the data set!\nSet 'control = FALSE' if you don't wish to plot one."))
       }
     }
 
@@ -336,7 +338,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     # report if multiple entries per meso and day
     if(multipleentriescheck){warning("More than one data point per sampling day and meso was plotted! Please check for duplicate entries")}
     # report missing data points
-    if(length(missingdatapoints)>0){warning(paste0("Missing data point(s) in the set:\n",paste(missingdatapoints,sep="",collapse="\n")))}
+    if(length(missingdatapoints)>0){message(paste0("Missing data point(s) in the set:\n",paste(missingdatapoints,sep="",collapse="\n")))}
 
 
 
@@ -467,3 +469,4 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     par(mfrow=c(1,1))
   }
 }
+

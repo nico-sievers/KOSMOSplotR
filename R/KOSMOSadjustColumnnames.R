@@ -20,7 +20,7 @@ KOSMOSadjustColumnnames=function(dataset,required_columns=c("Day","Mesocosm",KOS
   tmp=KOSMOSguessColumnnames(dataset,required_columns,minimal_requirement)
 
   if(tmp[[1]]=="perfect"){
-    message("All essential columns were found by names, let's go ahead!")
+    message("\n\nAll essential columns were found by names, let's go ahead!")
   } else {
     # if it wasn't a perfect fit, jump into fixing action
 
@@ -48,13 +48,14 @@ KOSMOSadjustColumnnames=function(dataset,required_columns=c("Day","Mesocosm",KOS
         select(Day,Mesocosm,everything()) %>%
         select(-tmp_meso)
 
-      message("Not all essential column were found by name, so they were created from the style template and added to your data set:")
+      message("\nNot all essential column were found by name, so they were created from the style template and added to your data set:")
       message(paste(tmp[[6]],collapse=" | "))
       message("Please check the treatment assigment!")
 
     }
-    message("These are the updated column names:")
+    message("\nThese are the updated column names:")
     print(names(dataset))
   }
+  message("")
   return(dataset)
 }

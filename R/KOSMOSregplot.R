@@ -102,7 +102,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   names(dataset)[names(dataset)=="average"]=parameter
   names(dataset)[names(dataset)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
   names(dataset)[names(dataset)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
-  if(nrow(dataset)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
+  if(nrow(dataset)!=length(mesos)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
 
   # now get averages between the days
   # test=dataset %>%
@@ -112,7 +112,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   # names(test)[names(test)=="average"]=parameter
   # names(test)[names(test)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
   # names(test)[names(test)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
-  # if(nrow(test)!=length(mesos)){warning("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
+  # if(nrow(test)!=length(mesos)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL
@@ -164,6 +164,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   #stats from here
 
+  # calculate the models and determine required space based on the number of categories
   if(length(categories)>1){
     interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]]*dataset[[KOSMOScurrentCategoricalVar]])
     statstablelength=4
@@ -174,6 +175,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     longesttextwidth=strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]),"    p = 0.000")),cex = 0.75)
   }
 
+  # draw the lines in the plot
   for(i in 1:length(categories)){
     intercept=sum(interactionmodel$coefficients[(1:i)*2-1])
     slope=sum(interactionmodel$coefficients[(1:i)*2])
@@ -184,10 +186,12 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   aimp=anova(interactionmodel)$`Pr(>F)`
   roundto=3
 
+  # draw an invisible table
   statsblock=legend(x=statsblocklocation,legend=rep("",statstablelength),text.width = longesttextwidth,cex=0.75,bty="n",x.intersp=0)
   x=statsblock$rect$left
   y=statsblock$text$y
 
+  # write the factors from the model
   text(statsblock$rect$left, y[1], pos=4, cex=0.75,KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])
   if(length(categories)>1){
     text(statsblock$rect$left, y[2], pos=4, cex=0.75,KOSMOScurrentCategoricalVar)
@@ -195,10 +199,23 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
   text(statsblock$rect$left, y[statstablelength], pos=4, cex=0.75,expression(paste("Adj. ",italic(R)^2)))
 
-  text(x+statsblock$rect$w-strwidth("0.000"),y[1:(statstablelength-1)],pos=2,cex=0.75,rep("p ",statstablelength-1))
-  for(i in 1:(statstablelength-1)){text(x+statsblock$rect$w-strwidth(" = 0.000"),y[i],KOSMOSformatPvalues(aimp[i]),pos=4,cex=0.75)}
-  text(x+statsblock$rect$w-strwidth(" = 0.000"),y[statstablelength],paste("= ",format(round(sim$adj.r.squared,roundto),nsmall=3),sep=""),pos=4,cex=0.75)
+  # write "p = " OLD external
+  # text(x+statsblock$rect$w-strwidth("0.000"),y[1:(statstablelength-1)],pos=2,cex=0.75,rep("p ",statstablelength-1))
 
+  # write the p-values
+  for(i in 1:(statstablelength-1)){
+    this_p=aimp[i]
+    if(this_p<=0.05){font=2}else{font=1}
+    text(x+statsblock$rect$w-strwidth("..MM"),y[i],pos=2,cex=0.75,"p ",font=font)
+    text(x+statsblock$rect$w-strwidth("= 0.000"),y[i],KOSMOSformatPvalues(this_p),pos=4,cex=0.75,font=font)
+    }
+
+  # write the R-squared
+  this_R2=round(sim$adj.r.squared,roundto)
+  if(this_R2>=0.5){font=2}else{font=1}
+  text(x+statsblock$rect$w-strwidth("= 0.000"),y[statstablelength],paste("= ",format(this_R2,nsmall=3),sep=""),pos=4,cex=0.75,font=font)
+
+  # and note down the day
   if(length(days)>1){
     legendtext=paste("Mean of T",paste(days[c(1,length(days))],collapse="-"),sep="")
     #legendtext=paste("T",paste(days[c(1,length(days))],collapse="-"),sep="")

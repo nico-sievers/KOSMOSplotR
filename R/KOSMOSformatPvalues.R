@@ -23,7 +23,7 @@ KOSMOSformatPvalues <- function(p_value) {
     formatted_value=sprintf("< %.3f", closest_larger_decimal)
   } else if (p_value < 0.0001) {
     exponent <- ceiling(log10(p_value))
-    formatted_value=bquote(paste("< ",10^.(exponent)))
+    formatted_value=bquote(bold("< " * 10^.(exponent)))#bquote(paste("< ",10^.(exponent)))
   } else {
     formatted_value=sprintf("= %.3f", p_value)
   }

@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.6.1
+* Added in the function to statically show p-values of 0.05 and lower, as well as R-sqaured values of 0.5 and higher in bolt. So far, though, it doesn't work for p-values displayed as exponents.
+* Fine-tuned info messages in several places
+
+---
 # KOSMOSplotR 2.6.0
 * The package is now capable of plotting from a data frame that contains only Day and Mesocosm (or some typo of that) - no need for further columns like Treat_meso anymore. This should make data preparation even easier!
 

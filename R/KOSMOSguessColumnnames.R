@@ -30,7 +30,7 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
   meso_position=character(0)
   missing_cols_guessed=character(0)
   # prepare error message
-  failed="Couldn't identify all essential columns in the data set!\nRequiring at least an equivalent of 'Day' and 'Mesocosm'."
+  failed="\nCouldn't identify all essential columns in the data set!\nRequiring at least an equivalent of 'Day' and 'Mesocosm'."
 
   # get the info on expected columns from the input and the table of campaign-specific names
   tmpcolumntable=KOSMOScolumntable[KOSMOScolumntable$Names %in% required_columns,]
@@ -61,7 +61,7 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
 
       if(length(guessed_columns_ideal_names)>0){
         # if you guessed some that are not anyway perfect fits
-      message("When scanning for the required columns, the following ones were identified to have slighlty different Names:")
+      message("\n\nWhen scanning for the required columns, the following ones were identified to have slighlty different Names:")
       message(paste(guessed_columns_current_names,collapse=" | "))
       }
 

@@ -22,19 +22,21 @@
 
 
 KOSMOSselect=function(experiment="kiel"){
-  options=c("KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen")
-  catvars=c("Mineral","Mineral","Dilution","Mineral")
-  convars=c("Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA")
+  options=c("KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen","OAEPIIP")
+  catvars=c("Mineral","Mineral","Dilution","Mineral","Replicate")
+  convars=c("Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA","Treatments")
   treatments=list(matrix(c(6,"lightblue3",10.5,"red"),nrow=2),
                   matrix(c(4,"red",6,"red"),nrow=2),
                   matrix(c(4,"red",6,"darkorange"),nrow=2),
-                  matrix(c(6,"red"),nrow=2))
+                  matrix(c(6,"red"),nrow=2),
+                  matrix(c(-10,"white"),nrow =2))
   cleanings=list(matrix(c(1.5,"white"),nrow=2),
-                  matrix(c(1.5,"white"),nrow=2),
-                  matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),
-                  matrix(c(1.5,"white"),nrow=2))
+                 matrix(c(1.5,"white"),nrow=2),
+                 matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),
+                 matrix(c(1.5,"white"),nrow=2),
+                 matrix(c(1.5,"white"),nrow=2))
 
-  numcategories=c(1,2,2,2)
+  numcategories=c(1,2,2,2,3)
   chosen=grepl(experiment,options,ignore.case=T)
 
   # because the kiel ones are not truly unique make a negative selection of the side experiment one if there is no quartz or side experiment in the query

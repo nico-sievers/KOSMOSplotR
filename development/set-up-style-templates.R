@@ -1,3 +1,21 @@
+### Now the new one for giulia for OAE-PIIP
+
+OAEPIIPStyletable=KOSMOS2024KielStyletable
+OAEPIIPStyletable=OAEPIIPStyletable[1:9,]
+
+names(OAEPIIPStyletable)[2:4]=c("Label","Treatments","Replicate")
+
+OAEPIIPStyletable$Mesocosm=paste0("M",1:9)
+treatments=rep(c("Control","NonEq","Eq"),each=3)
+OAEPIIPStyletable$Label=paste(treatments,1:3,sep="_")
+OAEPIIPStyletable$Treatments=treatments
+OAEPIIPStyletable$Replicate=rep(1:3,3) #c("A","B","C")
+
+OAEPIIPStyletable
+save(OAEPIIPStyletable,file="data/OAEPIIPStyletable.rda")
+
+
+
 # here im retrospectively adding in the other columns to be added to the user's data frame
 
 ######

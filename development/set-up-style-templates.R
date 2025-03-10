@@ -8,7 +8,8 @@ names(OAEPIIPStyletable)[2:4]=c("Label","Treatments","Replicate")
 OAEPIIPStyletable$Mesocosm=paste0("M",1:9)
 treatments=rep(c("Control","NonEq","Eq"),each=3)
 OAEPIIPStyletable$Label=paste(treatments,1:3,sep="_")
-OAEPIIPStyletable$Treatments=treatments
+OAEPIIPStyletable$Treatments=rep(c("Control","NaOH","NaOHCO3+NaHCO3"),each=3)
+#OAEPIIPStyletable$Treatments=treatments
 OAEPIIPStyletable$Replicate=rep(1:3,3) #c("A","B","C")
 
 OAEPIIPStyletable

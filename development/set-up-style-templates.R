@@ -4,9 +4,8 @@ OAEPIIPStyletable=KOSMOS2024KielStyletable
 OAEPIIPStyletable=OAEPIIPStyletable[1:9,]
 
 names(OAEPIIPStyletable)[2:4]=c("Label","Treatment","Replicate")
-names(OAEPIIPStyletable)[1]="Microcosm"
 
-OAEPIIPStyletable$Mesocosm=paste0("M",1:9)
+OAEPIIPStyletable$Mesocosm=1:9
 treatments=rep(c("Ctrl","NEq","Eq"),each=3)
 OAEPIIPStyletable$Label=paste(treatments,c("a","b","c"),sep="_")
 OAEPIIPStyletable$Treatment=rep(c("Control","NaOH","NaOHCO3_NaOH"),each=3)
@@ -17,6 +16,7 @@ OAEPIIPStyletable$ltylist=rep(c("solid","longdash","dotted"),3)
 OAEPIIPStyletable$shapelist=rep(15:17,3)
 
 OAEPIIPStyletable=OAEPIIPStyletable[,c(1,3,4,2,5:7)]
+names(OAEPIIPStyletable)[1]="Microcosm"
 
 OAEPIIPStyletable
 save(OAEPIIPStyletable,file="data/OAEPIIPStyletable.rda")

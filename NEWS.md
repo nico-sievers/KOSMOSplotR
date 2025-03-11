@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.7.0
+* Implemented a quite rudamentary function to automatically create daily regressions in a single plot panel. This will see refinements in the future.
+* Added support for the OAEPIIP experiment
+
+---
 # KOSMOSplotR 2.6.1
 * Added in the function to statically show p-values of 0.05 and lower, as well as R-sqaured values of 0.5 and higher in bolt. So far, though, it doesn't work for p-values displayed as exponents.
 * Fine-tuned info messages in several places

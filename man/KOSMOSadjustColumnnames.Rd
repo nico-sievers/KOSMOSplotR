@@ -5,7 +5,7 @@
 \title{Function to adjust data tables in a way that even slightly mismatching column names can be plotted correctly within this package.}
 \usage{
 KOSMOSadjustColumnnames(
-  dataset,
+  dataset = KOSMOStestdata,
   required_columns = c("Day", "Mesocosm", KOSMOScurrentCategoricalVar,
     KOSMOScurrentContinuousVar, "Treat_Meso"),
   minimal_requirement = c("Day", "Mesocosm")

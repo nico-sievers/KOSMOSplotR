@@ -14,7 +14,7 @@
 #' @importFrom dplyr select
 
 
-KOSMOSadjustColumnnames=function(dataset,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso"),minimal_requirement=c("Day","Mesocosm")){
+KOSMOSadjustColumnnames=function(dataset=KOSMOStestdata,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso"),minimal_requirement=c("Day","Mesocosm")){
 
   # run the function that does all of the pattern searches, then work based on its output
   tmp=KOSMOSguessColumnnames(dataset,required_columns,minimal_requirement)

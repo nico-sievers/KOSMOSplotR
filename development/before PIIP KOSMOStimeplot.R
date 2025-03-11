@@ -44,8 +44,8 @@
 #' @importFrom stats anova lm
 
 # for debugging
-# dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];subset_data=list(Settings="small",Set="Synechococcus")
-# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE;excludeThisFromYlimit=F;showControlsBothTimes=TRUE
+# dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)]
+# ylabel=parameter;xlabel="Experiment day";subset_data=FALSE;control="Fjord";baseline=FALSE;treatment.abline=TRUE;exclude_meso=FALSE;exclude_day=FALSE;treatmentgroups_sidebyside=FALSE;startat0=TRUE;headspace=0;includeThisInYlimit=0;excludeThisFromYlimit=F;ylimit=FALSE;xlimit=FALSE;axis.ticks="xy";axis.values="xy";stats.show=FALSE;stats.days=FALSE;stats.exclude_meso=FALSE;stats.digits=FALSE;stats.location="bottom";stats.meanlabel=c("below","above");stats.doublespecial=FALSE;copepod.draw=FALSE;copepod.position="top";new.plot=TRUE;excludeThisFromYlimit;cleaning.abline=F
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
@@ -104,10 +104,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
 
   # get rid of all excluded mesos and days and the baseline, but keep a backup
   datasetwithall=dataset
-  # dataset=dataset[!((dataset$Day %in% exclude_day) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
-  dataset <- dataset[!(
-    (if (!is.logical(exclude_day) || exclude_day) dataset$Day %in% exclude_day else FALSE) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)
-  ), ]
+  dataset=dataset[!((dataset$Day %in% exclude_day) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)),]
 
   # if side-by-side plotting is on
   if(treatmentgroups_sidebyside){
@@ -329,8 +326,8 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       if(nrow(style)==0){stylefailcounter=stylefailcounter+1} else {
       # workaround to avoid double-use of style entries
       #if(is.numeric(whichstyle)){
-        if(any(!is.na(usedstyles[whichstyle]))){
-          stop("Nico's algorithm accidentally assigned the same style from the template to at least two different mesocosm identifiers, namely '",usedstyles[whichstyle],"' and '",meso,"'. Please ask Nico to have a look at this!")
+        if(!is.na(usedstyles[whichstyle])){
+          stop(paste0("Nico's algorithm accidentally assigned the same style from the template to at least two different mesocosm identifiers, namely '",usedstyles[whichstyle],"' and '",meso,"'. Please ask Nico to have a look at this!"))
         } else {
           usedstyles[whichstyle]=meso
         }

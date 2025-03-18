@@ -1,7 +1,7 @@
 Package: KOSMOSplotR
 Type: Package
 Title: Create plots directly from a standardised KOSMOS data sheet in a uniform layout
-Version: 2.7.0
+Version: 2.7.1
 License: GPL
 Authors@R: person("Nico", "Sievers", email = "nico.sievers@gmx.net", role = c("cre","aut"))
 Maintainer: Nico Sievers <nico.sievers@gmx.net>
@@ -14,4 +14,4 @@ LazyData: true
 RoxygenNote: 7.3.2
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Depends: R (>= 3.5.0), graphics (>= 3.0.0), stats (>= 3.0.0), utils (>= 3.0.0), dplyr (>= 1.0.0)
+Depends: R (>= 3.5.0), graphics (>= 3.0.0), stats (>= 3.0.0), utils (>= 3.0.0), dplyr (>= 1.0.0), tidyselect (>= 1.2.0)

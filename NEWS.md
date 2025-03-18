@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.7.1
+* Minor bug fixes in KOSMOSdailyRegressionWrapper(), KOSMOSguessColumnnames(), and KOSMOSregplot()
+
+---
 # KOSMOSplotR 2.7.0
 * Implemented a quite rudamentary function to automatically create daily regressions in a single plot panel. This will see refinements in the future.
 * Added support for the OAEPIIP experiment

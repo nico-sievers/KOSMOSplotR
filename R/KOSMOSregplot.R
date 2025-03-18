@@ -83,12 +83,14 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   dataset[[KOSMOScurrentContinuousVar]]=suppressWarnings(as.numeric(dataset[[KOSMOScurrentContinuousVar]]))
-  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA",c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
+  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA" & !is.na(dataset[[parameter]]),c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
   dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(!is.logical(exclude_meso)){
     dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),]
   }
+
+  if(nrow(dataset)==0){stop("There is no data entries to plot. There either is missing values in the first place, or the chosen day range, subsetting, and / or excluded datapoints cause the data frame to end up empty.")}
 
   mesos=unique(dataset$Treat_Meso)
   contvar=unique(dataset[[KOSMOScurrentContinuousVar]])

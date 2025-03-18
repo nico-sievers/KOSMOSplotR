@@ -12,6 +12,7 @@
 # KOSMOSadjustColumnnames(KOSMOStestdata)
 #' @export
 #' @importFrom dplyr select
+#' @importFrom tidyselect everything
 
 
 KOSMOSadjustColumnnames=function(dataset=KOSMOStestdata,required_columns=c("Day","Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso"),minimal_requirement=c("Day","Mesocosm")){

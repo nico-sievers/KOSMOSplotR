@@ -49,6 +49,7 @@ KOSMOSguessColumnnames=function(dataset=KOSMOStestdata,
     tmp=Map(setdiff,yestmp,nottmp) # they ore brought together for the final decision which columns match and which dont
     guessed_columns_ideal_names_position=unlist(lapply(tmp,function(x) length(x)>0))
     guessed_columns_positions=unique(unlist(lapply(tmp,first))) # here i always use the first match of each, assuming that later occurrences are something different. also i exclude duplicates, so if two patterns were matched on the same column name thats also excluded here
+    guessed_columns_positions=guessed_columns_positions[!is.na(guessed_columns_positions)]
 
     guessed_columns_current_names=setdiff(names(dataset)[guessed_columns_positions],required_columns)
     guessed_columns_ideal_names_full=tmpcolumntable$Names[guessed_columns_ideal_names_position]

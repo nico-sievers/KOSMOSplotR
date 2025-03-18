@@ -9,7 +9,9 @@ KOSMOSdailyRegressionWrapper(
   dataset = KOSMOStestdata,
   parameter = last(names(dataset)),
   days = NULL,
+  sync_y_axis = F,
   target_ratio = NULL,
+  tolerance = 0.5,
   ...
 )
 }
@@ -22,10 +24,14 @@ KOSMOSdailyRegressionWrapper(
 
 \item{days}{Select a vector of sampling days to include in the plot pane. By default, all will be included.}
 
+\item{sync_y_axis}{If this is set to \code{TRUE} all sub-plots will share the same y-axis for better comparison, at the risk of overseeing signal in sampling days with smaller values. By default, each plot will have the best suitable axis range calculated independently.}
+
 \item{target_ratio}{Select the target aspect ratio for the panel grid. The algorith will try to create a rectangle slightly wider but as close to that as possible to that. By default, it will be \code{16:9} to fit common powerpoint slides.}
+
+\item{tolerance}{The percentage by which a gapless panel may diverge from the target ratio to still be preferred over a panel that contains empty spaces. The default is \code{0.5}.}
 
 \item{...}{forward any other arguments of \code{KOSMOSregplot} to customise the individual plots further.}
 }
 \description{
-Create a file containing a panel of regression plots for each (or a selection of) sampling days automatically. This function is still quite raw and will always create a .svg file.
+Create a file containing a panel of regression plots for each (or a selection of) sampling days automatically. This function is still quite raw and will always create an .svg file.
 }

@@ -42,6 +42,7 @@
 #' @export
 #' @importFrom graphics abline axis clip lines par points rasterImage text title
 #' @importFrom stats anova lm
+#' @importFrom dplyr last
 
 # for debugging
 # dataset=KOSMOStestdata;parameter=dimnames(dataset)[[2]][ncol(dataset)];subset_data=list(Settings="small",Set="Synechococcus")
@@ -49,7 +50,7 @@
 
 
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
-                        parameter=tail(names(dataset),1),
+                        parameter=last(names(dataset)),
                         subset_data=FALSE,exclude_meso=FALSE,exclude_day=FALSE,
                         control="Fjord",
                         treatmentgroups_sidebyside=FALSE,showControlsBothTimes=TRUE,

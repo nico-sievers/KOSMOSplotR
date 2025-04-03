@@ -110,6 +110,14 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
     (if (!is.logical(exclude_day) || exclude_day) dataset$Day %in% exclude_day else FALSE) | (dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso) | (dataset$Mesocosm %in% baseline) | (dataset$Treat_Meso %in% baseline)
   ), ]
 
+  # check on whether you need to care about a control
+  if(is.null(control) | is.na(control)){
+    control="completenonsensejusttomakesurethisdoesntactuallyfitanything"
+    drawcontrol=F
+  } else {
+    drawcontrol=T
+  }
+
   # if side-by-side plotting is on
   if(treatmentgroups_sidebyside){
     categories=unique(dataset[[KOSMOScurrentCategoricalVar]])
@@ -272,13 +280,6 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
       # baselinemean=mean(unlist(datasetwithall[(datasetwithall$Treat_Meso %in% baseline) | (datasetwithall$Mesocosm %in% baseline),parameter]))
       # abline(h=baselinemean,col=KOSMOScurrentControlcol,lwd=1.9*globalcex,lty="longdash")
       # do.call(clip,as.list(usr))
-    }
-
-    if(is.null(control) | is.na(control)){
-      control="completenonsensejusttomakesurethisdoesntactuallyfitanything"
-      drawcontrol=F
-    } else {
-      drawcontrol=T
     }
 
     #draw lines of control

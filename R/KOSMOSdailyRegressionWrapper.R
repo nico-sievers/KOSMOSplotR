@@ -130,7 +130,7 @@ KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestda
 
   # Generate plots directly inside the SVG
   suppressMessages(for(i in days){
-    KOSMOSregplot(dataset=dataset,parameter=parameter,days=i,ylimit=yrange,...)
+    try(KOSMOSregplot(dataset=dataset,parameter=parameter,days=i,ylimit=yrange,...))
   })
 
   # Close the SVG device

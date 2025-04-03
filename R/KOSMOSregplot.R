@@ -6,7 +6,9 @@
 #'
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
-#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}) or vector containing the first and last day to be included in the calculation (\code{c(5,9)}). If set to \code{FALSE} (the default), the very last sampling day in the data set is plotted.
+#' @param days Data from which day or days should be plotted and included in the regression analysis? If more than one day is selected, a mean value of y across those days is calculated per mesocosm. Supply an integer (\code{7}), or a vector containing the first and last day to be included in the calculation (\code{c(5,9)}). Note that if the vector is longer than two elements, only the first and last element are used and the rest ignored. If set to \code{FALSE} (the default), the very last sampling day in the data set is plotted. This parameter does not allow for example to exclude a specific day within that range - if you wish to do so please use the \code{subset_data} parameter on the \code{Day}-column to remove misfitting data points!
+#' @param independent Choose the independent variable over which to calculate and plot the regression. By default this will be \code{KOSMOScurrentContinuousVar}. Either, supply a column name where the variable is stored (an average over time will be created similar to how \code{parameter} is handled; see\code{independent_days}), or supply a speciic value for each mesocosm directly. To do the latter, supply a data frame object of the structure \code{independent=data.frame(Mesocosm=1:12,`Your categorical variable`=c(..., ...))} (Note that the name of the second column will be used for labeling and that the data frame function sometimes alters your given names, so consider setting \code{data.frame(..., check.names = FALSE)}). Name the Mesocosms numerically so that they can be matched to the precessed data!
+#' @param independent_days \code{independent_days} Select the range of days over which to average the chosen independent variable by supplying a numeric vector (not a start and end point like for \code{days}). If set to \code{NULL} (the default) it will adopt the value of \code{days}, and it will be ignored if \code{independent} is a data frame of manually supplied values. Note that you hereby can select differing ranges for the independent and dependent variable to be averaged over, and be aware of the implications!
 #' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} is a more convenient parameter to exclude mesocosms from the plot.
 #' @param exclude_meso List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
@@ -30,10 +32,12 @@
 #' @export
 #' @importFrom graphics abline axis legend lines par points strwidth text title
 #' @importFrom stats anova lm
-#' @importFrom dplyr %>% group_by summarise
+#' @importFrom dplyr %>% filter group_by summarise
 
 # for debugging
-#library(KOSMOSplotR);library(dplyr);dataset=KOSMOStestdata;parameter=names(dataset)[[2]][ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE
+#library(KOSMOSplotR)
+#library(dplyr);dataset=KOSMOStestdata
+#parameter=names(dataset)[ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE;independent=KOSMOScurrentContinuousVar;independent_days=NULL
 
 # library(readxl);dataset=read_excel("../../KOSMOS_2024_Kiel_Quartz-experiment_FlowCytometry/KOSMOS_Kiel_2024_Quartz-side-experiment_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count"
 
@@ -42,10 +46,14 @@
 #library(readxl);dataset=read_excel("H:/KOSMOS_2024_Kiel_spring_FlowCytometry/KOSMOS_Kiel_spring_2024_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count";days=c(9,11)
 #subset_data=list(Settings="large",Set="Cryptophytes")
 
+#KOSMOSselect("helgo");load("../../LOCAL KOSMOS_2023_Helgoland_Sediment/Nico analysis/KOSMOS_2023_Helgoland_sediment-data-combined.rda");dataset=sed
+
+
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=names(dataset)[ncol(dataset)],
                        days=FALSE,
+                       independent=KOSMOScurrentContinuousVar,independent_days=NULL,
                        subset_data=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
                        startat0=FALSE,headspace="default",includeThisInYlimit=0,
@@ -77,44 +85,73 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset=dataset[order(dataset$Day),]
 
   if(is.logical(days)){
-    days=max(dataset$Day)
+    days=max(dataset$Day,na.rm=T)
   } else if(is.numeric(days) & length(days)==2){
     days=days[1]:days[2]
   }
+  days=sort(days)
+  if(is.null(independent_days)){independent_days=days}
 
-  dataset[[KOSMOScurrentContinuousVar]]=suppressWarnings(as.numeric(dataset[[KOSMOScurrentContinuousVar]]))
-  dataset=dataset[(dataset$Day %in% days) & !is.na(dataset[[KOSMOScurrentContinuousVar]]) & dataset[[KOSMOScurrentContinuousVar]]!="NA" & !is.na(dataset[[parameter]]),c("Mesocosm",KOSMOScurrentCategoricalVar,KOSMOScurrentContinuousVar,"Treat_Meso",parameter)]
+  # set the procedure of how to get the independent variable calculated
+  calculate_independent=T
+  if(is.data.frame(independent) & isTRUE(nrow(independent)>0) & isTRUE(ncol(independent)==2)){
+    calculate_independent=F
+    independent_days=NULL
+    independent_name=names(independent)[2]
+    dataset=merge(dataset,independent,all=T)
+  } else if(is.character(independent) & independent %in% names(dataset)){
+    independent_name=independent
+    independent=NULL
+  } else {
+    warning("Couldn't process the requested independent variable - Using '",KOSMOScurrentContinuousVar,"' instead!")
+    independent_name=KOSMOScurrentContinuousVar
+    independent=NULL
+  }
+  # find the adequate labels
+  if(independent_name==KOSMOScurrentContinuousVar){
+    independent_shortlabel=KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
+    independent_longlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
+  } else {
+    independent_shortlabel=independent_name
+    independent_longlabel=paste0('"',independent_name,'"')#sprintf('"%s"',independent_name)
+  }
+
+  dataset[[independent_name]]=suppressWarnings(as.numeric(dataset[[independent_name]]))
+  dataset=dataset[!is.na(dataset[[independent_name]]) & dataset[[independent_name]]!="NA" & !is.na(dataset[[parameter]]),c("Day","Mesocosm",KOSMOScurrentCategoricalVar,independent_name,"Treat_Meso",parameter)]
   dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
-
   if(!is.logical(exclude_meso)){
     dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),]
   }
 
-  if(nrow(dataset)==0){stop("There is no data entries to plot. There either is missing values in the first place, or the chosen day range, subsetting, and / or excluded datapoints cause the data frame to end up empty.")}
+  # dataset_alldays=dataset
+  # dataset=dataset[(dataset$Day %in% days),]
+
+  # now get averages between the days
+  dataset_values=dataset %>%
+    filter(Day %in% days) %>%
+    group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
+    summarise(average=mean(get(parameter)),.groups="drop")
+  names(dataset_values)[names(dataset_values)=="average"]=parameter
+  names(dataset_values)[names(dataset_values)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
+
+  if(calculate_independent){
+    dataset_independent=dataset %>%
+      filter(Day %in% independent_days) %>%
+      group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
+      summarise(independent=mean(get(independent_name)),.groups="drop")
+    names(dataset_independent)[names(dataset_independent)=="independent"]=independent_name
+    names(dataset_independent)[names(dataset_independent)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
+  } else {
+    dataset_independent=independent
+  }
+  dataset=merge(dataset_values,dataset_independent,all.x=T)
+
+  if(nrow(dataset)==0){stop("There is no data entries to plot. There either is missing values in the first place, or the chosen day range, subsetting, and / or excluded datapoints cause the data frame to end up empty.")
+  } else if(nrow(dataset)!=nrow(KOSMOScurrentStyletable)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
 
   mesos=unique(dataset$Treat_Meso)
-  contvar=unique(dataset[[KOSMOScurrentContinuousVar]])
+  contvar=unique(dataset[[independent_name]])
   categories=levels(dataset[[KOSMOScurrentCategoricalVar]])
-
-  # now get averages between the days
-  dataset=dataset %>%
-    group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),get(KOSMOScurrentContinuousVar),Treat_Meso) %>%
-    summarise(average=mean(get(parameter)),.groups="drop") #across(everything(),first),
-  #mutate(average=mean(get(parameter)))
-  names(dataset)[names(dataset)=="average"]=parameter
-  names(dataset)[names(dataset)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
-  names(dataset)[names(dataset)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
-  if(nrow(dataset)!=length(mesos)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
-
-  # now get averages between the days
-  # test=dataset %>%
-  #   group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),get(KOSMOScurrentContinuousVar),Treat_Meso) %>%
-  #   summarise(average=mean(get(parameter)),.groups="drop") #across(everything(),first),
-  # #mutate(average=mean(get(parameter)))
-  # names(test)[names(test)=="average"]=parameter
-  # names(test)[names(test)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
-  # names(test)[names(test)=="get(KOSMOScurrentContinuousVar)"]=KOSMOScurrentContinuousVar
-  # if(nrow(test)!=length(mesos)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL
@@ -125,7 +162,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
       yrange[i]=mean(na.rm=T,data_meso[[parameter]])
     }
     if(!is.logical(includeThisInYlimit)){
-      #yrange=c(unlist(dataset[,parameter],use.names = FALSE),includeThisInYlimit)
       yrange=c(yrange,includeThisInYlimit)
     }
     yrange=yrange[!is.na(yrange)]
@@ -138,9 +174,8 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 
-  if(xlabel=="default"){xlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]}
+  if(xlabel=="default"){xlabel=independent_longlabel}
   if(new.plot){
-    #par(pty = "s")
     xenlargment=0.08*abs(max(contvar)-min(contvar))
     plot(x=0,y=0,col="white",
          xlim=c(min(contvar)-xenlargment,max(contvar)+xenlargment),
@@ -152,7 +187,11 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
         xticklabels=T
         title(xlab=parse(text=xlabel), line=2.3)
       }
-      axis(1,at=contvar,labels=xticklabels)
+      if(independent_name==KOSMOScurrentContinuousVar){
+        axis(1,at=contvar,labels=xticklabels)
+      } else {
+        axis(1,labels=xticklabels)
+      }
     }
     if(grepl("y",axis.ticks)){
       yticklabels=F
@@ -168,13 +207,13 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   # calculate the models and determine required space based on the number of categories
   if(length(categories)>1){
-    interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]]*dataset[[KOSMOScurrentCategoricalVar]])
+    interactionmodel=lm(dataset[[parameter]]~dataset[[independent_name]]*dataset[[KOSMOScurrentCategoricalVar]])
     statstablelength=4
-    longesttextwidth=strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75)
+    longesttextwidth=strwidth(bquote(paste(.(independent_shortlabel)," \u00D7 ",.(KOSMOScurrentCategoricalVar),"    p = 0.000")),cex = 0.75)
   }else{
-    interactionmodel=lm(dataset[[parameter]]~dataset[[KOSMOScurrentContinuousVar]])
+    interactionmodel=lm(dataset[[parameter]]~dataset[[independent_name]])
     statstablelength=2
-    longesttextwidth=strwidth(bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]),"    p = 0.000")),cex = 0.75)
+    longesttextwidth=strwidth(bquote(paste(.(independent_shortlabel),"    p = 0.000")),cex = 0.75)
   }
 
   # draw the lines in the plot
@@ -194,10 +233,10 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   y=statsblock$text$y
 
   # write the factors from the model
-  text(statsblock$rect$left, y[1], pos=4, cex=0.75,KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])
+  text(statsblock$rect$left, y[1], pos=4, cex=0.75,independent_shortlabel)
   if(length(categories)>1){
     text(statsblock$rect$left, y[2], pos=4, cex=0.75,KOSMOScurrentCategoricalVar)
-    text(statsblock$rect$left, y[3], pos=4, cex=0.75,bquote(paste(.(KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar])," \u00D7 ",.(KOSMOScurrentCategoricalVar))))
+    text(statsblock$rect$left, y[3], pos=4, cex=0.75,bquote(paste(.(independent_shortlabel)," \u00D7 ",.(KOSMOScurrentCategoricalVar))))
   }
   text(statsblock$rect$left, y[statstablelength], pos=4, cex=0.75,expression(paste("Adj. ",italic(R)^2)))
 
@@ -220,7 +259,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   # and note down the day
   if(length(days)>1){
     legendtext=paste("Mean of T",paste(days[c(1,length(days))],collapse="-"),sep="")
-    #legendtext=paste("T",paste(days[c(1,length(days))],collapse="-"),sep="")
   }else{
     legendtext=paste("T",days,sep="")
   }
@@ -245,11 +283,15 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
     whichstyle=grep(tmp,KOSMOScurrentStyletable[,"Treat_Meso"],perl=T,ignore.case=T)
     style=KOSMOScurrentStyletable[whichstyle,c("colourlist","ltylist","shapelist")]
-    points(mean(na.rm=T,data_meso[[KOSMOScurrentContinuousVar]]),mean(na.rm=T,data_meso[[parameter]]),
+    points(data_meso[[independent_name]],data_meso[[parameter]],
            col=style[["colourlist"]],
            bg=style[["colourlist"]],
            pch=style[["shapelist"]],
            cex=1.5)
+
+    if(length(data_meso[[parameter]])>1){
+      warning("More than one data point for ",meso," is in the summary table after averaging across sampling days - someting went quite wrong there!")
+    }
 
     # take note if you can't match the style for something
     if(nrow(style)==0){stylefailcounter=stylefailcounter+1}

@@ -41,7 +41,7 @@ KOSMOSadjustColumnnames=function(dataset=KOSMOStestdata,required_columns=c("Day"
       names(styletmp)[1]="tmp_meso"
       styletmp$tmp_meso=as.character(styletmp$tmp_meso)
       dataset$tmp_meso=#[,tmp[[5]]]=
-        as.character(gsub("m","",dataset[[tmp[[5]]]]))
+        as.character(gsub("m","",dataset[[tmp[[5]]]],ignore.case=T))
       dataset=merge(styletmp,dataset,all.y=T,by="tmp_meso")
       #dataset=dataset[,-c("tmp_meso_clean")]
       #whereisday=which(names(dataset)=="Day")
@@ -49,7 +49,7 @@ KOSMOSadjustColumnnames=function(dataset=KOSMOStestdata,required_columns=c("Day"
         select(Day,Mesocosm,everything()) %>%
         select(-tmp_meso)
 
-      message("\nNot all essential column were found by name, so they were created from the style template and added to your data set:")
+      message("\nNot all essential columns were found by name, so they were created from the style template and added to your data set:")
       message(paste(tmp[[6]],collapse=" | "))
       message("Please check the treatment assigment!")
 

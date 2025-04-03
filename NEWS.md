@@ -1,3 +1,8 @@
+# KOSMOSplotR 2.7.2
+* KOSMOSregplot() can now calculate the regression over a selcted independent variable using values from a different column or an external vector. This allows to for example calculate a regression over pCO2 rather than alkalinity.
+* Minor adjustments made on the way to better catch edge cases in several functions
+
+---
 # KOSMOSplotR 2.7.1
 * Minor bug fixes in KOSMOSdailyRegressionWrapper(), KOSMOSguessColumnnames(), and KOSMOSregplot()
 

@@ -82,7 +82,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset=KOSMOSadjustColumnnames(dataset)
 
   dataset$Day=as.integer(gsub("\\D", "", as.character(dataset$Day)))
-  dataset=dataset[order(dataset$Day),]
+  #dataset=dataset[order(dataset$Day),]
 
   if(is.logical(days)){
     days=max(dataset$Day,na.rm=T)
@@ -108,10 +108,13 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     independent=NULL
   }
   # find the adequate labels
-  if(independent_name==KOSMOScurrentContinuousVar){
-    independent_shortlabel=KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
-    independent_longlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
-  } else {
+  if(independent_name %in% KOSMOScolumntable$Names){
+    independent_shortlabel=KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==independent_name]
+    independent_longlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==independent_name]
+  # if(independent_name==KOSMOScurrentContinuousVar){
+  #   independent_shortlabel=KOSMOScolumntable$Shortlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
+  #   independent_longlabel=KOSMOScolumntable$Longlabel[KOSMOScolumntable$Names==KOSMOScurrentContinuousVar]
+    } else {
     independent_shortlabel=independent_name
     independent_longlabel=paste0('"',independent_name,'"')#sprintf('"%s"',independent_name)
   }
@@ -130,7 +133,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset_values=dataset %>%
     filter(Day %in% days) %>%
     group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
-    summarise(average=mean(get(parameter)),.groups="drop")
+    summarise(average=mean(get(parameter)))
   names(dataset_values)[names(dataset_values)=="average"]=parameter
   names(dataset_values)[names(dataset_values)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
 
@@ -138,7 +141,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     dataset_independent=dataset %>%
       filter(Day %in% independent_days) %>%
       group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
-      summarise(independent=mean(get(independent_name)),.groups="drop")
+      summarise(independent=mean(get(independent_name)))
     names(dataset_independent)[names(dataset_independent)=="independent"]=independent_name
     names(dataset_independent)[names(dataset_independent)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
   } else {
@@ -147,7 +150,9 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   dataset=merge(dataset_values,dataset_independent,all.x=T)
 
   if(nrow(dataset)==0){stop("There is no data entries to plot. There either is missing values in the first place, or the chosen day range, subsetting, and / or excluded datapoints cause the data frame to end up empty.")
-  } else if(nrow(dataset)!=nrow(KOSMOScurrentStyletable)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation!")}
+  } else if(nrow(dataset)!=nrow(KOSMOScurrentStyletable)){message("After averaging across sampling days, there is not one data point per mesocosm. Either there is a data point missing or something went wrong in the subsetting of the data set or the averaging calculation! Check the summarised data frame below:")
+    print(dataset)
+  }
 
   mesos=unique(dataset$Treat_Meso)
   contvar=unique(dataset[[independent_name]])

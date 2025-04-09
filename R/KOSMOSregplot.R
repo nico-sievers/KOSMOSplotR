@@ -10,10 +10,10 @@
 #' @param independent Choose the independent variable over which to calculate and plot the regression. By default this will be \code{KOSMOScurrentContinuousVar}. Either, supply a column name where the variable is stored (an average over time will be created similar to how \code{parameter} is handled; see\code{independent_days}), or supply a speciic value for each mesocosm directly. To do the latter, supply a data frame object of the structure \code{independent=data.frame(Mesocosm=1:12,`Your categorical variable`=c(..., ...))} (Note that the name of the second column will be used for labeling and that the data frame function sometimes alters your given names, so consider setting \code{data.frame(..., check.names = FALSE)}). Name the Mesocosms numerically so that they can be matched to the precessed data!
 #' @param independent_days \code{independent_days} Select the range of days over which to average the chosen independent variable by supplying a numeric vector (not a start and end point like for \code{days}). If set to \code{NULL} (the default) it will adopt the value of \code{days}, and it will be ignored if \code{independent} is a data frame of manually supplied values. Note that you hereby can select differing ranges for the independent and dependent variable to be averaged over, and be aware of the implications!
 #' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} is a more convenient parameter to exclude mesocosms from the plot.
+#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be ignored in the regression calculation and plot. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord".
 #' @param exclude_meso List one or multiple mesocosm numbers to exclude those from the plot and the regression analysis, i.e. \code{c(1,3,10)}. Consider the implications of an unbalanced design for the linear model!
 #' @param ylabel The y-axis label to be printed. Defaults to the same value as \code{parameter}.
 #' @param xlabel The x-axis label to be printed. Currently defaults to \code{"Added alkalinity"}.
-# @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the "Mesocosm" or "Treat_Meso" column. Defaults to "Fjord"
 #' @param startat0 Should the y-axis start at 0? Can be \code{TRUE} or \code{False} (the default), which sets it to the lowest value in the data (which may be negative, therefore consider whether \code{includeThisInYlimit=0} is the more suitable option for you).
 #' @param headspace More space needed above the data lines to accommodate the little stats table (see \code{statsblocklocation}), or to include additional features such as labels? \code{headspace} enlarges the y-axis range by the given factor, i.e. \code{0.3}, by setting the upper axis limit to \code{130\%} of the original value. The default value is dependent on the number of columns in the stats info box.
 #' @param includeThisInYlimit Set this to any value you want included in the range of the y-axis. If the value anyway falls within the range nothing will change, otherwise the lower or upper end of the Y-axis will be shifted to accommodate it. Can be useful if you wish display certain thresholds or reference values, or make sure that zero is always displayed (the default).
@@ -36,8 +36,8 @@
 
 # for debugging
 #library(KOSMOSplotR)
-#library(dplyr);dataset=KOSMOStestdata
-#parameter=names(dataset)[ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE;independent=KOSMOScurrentContinuousVar;independent_days=NULL
+#dataset=KOSMOStestdata
+#parameter=names(dataset)[ncol(dataset)];days=FALSE;subset_data=FALSE;exclude_meso=FALSE;ylabel=parameter;xlabel="default";startat0=TRUE;headspace=0.3;includeThisInYlimit=FALSE;ylimit=FALSE;axis.ticks="xy";axis.values="xy";statsblocklocation="topleft";daylabellocation="topright";new.plot=TRUE;independent=KOSMOScurrentContinuousVar;independent_days=NULL;control="Fjord"
 
 # library(readxl);dataset=read_excel("../../KOSMOS_2024_Kiel_Quartz-experiment_FlowCytometry/KOSMOS_Kiel_2024_Quartz-side-experiment_FlowCytometry_Sievers_R.xlsx",sheet="Main table");parameter="Count"
 
@@ -48,13 +48,13 @@
 
 #KOSMOSselect("helgo");load("../../LOCAL KOSMOS_2023_Helgoland_Sediment/Nico analysis/KOSMOS_2023_Helgoland_sediment-data-combined.rda");dataset=sed
 
-
+#KOSMOSregplot(sed,parameter="Total BSi:POC",independent="pH_T (watercolumn)",days=39,independent_days=35,includeThisInYlimit=F,exclude_meso=c(2,11))
 
 KOSMOSregplot=function(dataset=KOSMOStestdata,
                        parameter=names(dataset)[ncol(dataset)],
                        days=FALSE,
                        independent=KOSMOScurrentContinuousVar,independent_days=NULL,
-                       subset_data=FALSE,exclude_meso=FALSE,
+                       control="Fjord",subset_data=FALSE,exclude_meso=FALSE,
                        ylabel=parameter,xlabel="default",
                        startat0=FALSE,headspace="default",includeThisInYlimit=0,
                        ylimit=FALSE,
@@ -120,26 +120,45 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   dataset[[independent_name]]=suppressWarnings(as.numeric(dataset[[independent_name]]))
-  dataset=dataset[!is.na(dataset[[independent_name]]) & dataset[[independent_name]]!="NA" & !is.na(dataset[[parameter]]),c("Day","Mesocosm",KOSMOScurrentCategoricalVar,independent_name,"Treat_Meso",parameter)]
-  dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
+  dataset=dataset[!is.na(dataset[[KOSMOScurrentCategoricalVar]]) & !is.na(dataset$Mesocosm) & !(dataset$Mesocosm %in% control) & !(dataset$Treat_Meso %in% control)
+    ,c("Day","Mesocosm",KOSMOScurrentCategoricalVar,independent_name,"Treat_Meso",parameter)]
+  # dataset[,KOSMOScurrentCategoricalVar]=as.factor(dataset[[KOSMOScurrentCategoricalVar]])
   if(!is.logical(exclude_meso)){
     dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),]
   }
 
-  # dataset_alldays=dataset
-  # dataset=dataset[(dataset$Day %in% days),]
+
+  ##### XXX
+  #print(table(dataset$Day,dataset$Mesocosm))
+
 
   # now get averages between the days
-  dataset_values=dataset %>%
-    filter(Day %in% days) %>%
+  dataset_values=dataset %>% #dataset[!is.na(dataset[[parameter]]),] %>%
+    filter(Day %in% days)
+  if(any(is.na(dataset_values[[parameter]]))){
+    message("There is NA data points in the day rage to average over for the dependent variable:")
+    print(dataset_values[is.na(dataset_values[[parameter]]),c("Day","Mesocosm")])
+  }
+  #### XXX
+  #print(dataset_values[,c("Day","Mesocosm",independent_name)])
+
+  dataset_values=dataset_values[!is.na(dataset_values[[parameter]]),] %>%
     group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
     summarise(average=mean(get(parameter)))
   names(dataset_values)[names(dataset_values)=="average"]=parameter
   names(dataset_values)[names(dataset_values)=="get(KOSMOScurrentCategoricalVar)"]=KOSMOScurrentCategoricalVar
 
   if(calculate_independent){
-    dataset_independent=dataset %>%
-      filter(Day %in% independent_days) %>%
+    dataset_independent=dataset %>% #dataset[!is.na(dataset[[independent_name]]),] %>%
+      filter(Day %in% independent_days)
+    if(any(is.na(dataset_independent[[independent_name]]))){
+      message("There is NA data points in the day rage to average over for the independent variable:")
+      print(dataset_independent[is.na(dataset_independent[[independent_name]]),c("Day","Mesocosm")])
+    }
+    #### XXX
+    #print(dataset_independent[,c("Day","Mesocosm",independent_name)])
+
+    dataset_independent=dataset_independent[!is.na(dataset_independent[[independent_name]]),] %>%
       group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
       summarise(independent=mean(get(independent_name)))
     names(dataset_independent)[names(dataset_independent)=="independent"]=independent_name
@@ -156,7 +175,7 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
 
   mesos=unique(dataset$Treat_Meso)
   contvar=unique(dataset[[independent_name]])
-  categories=levels(dataset[[KOSMOScurrentCategoricalVar]])
+  categories=unique(dataset[[KOSMOScurrentCategoricalVar]])
 
   if(is.logical(ylimit) && ylimit==FALSE){
     yrange=NULL

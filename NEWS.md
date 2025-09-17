@@ -1,3 +1,9 @@
+# KOSMOSplotR 2.8.0
+* Added the style template for the GC 2025 campaign
+* Set this as the new default campaign
+* Added a new example data set based on this campaign
+
+---
 # KOSMOSplotR 2.7.2
 * KOSMOSregplot() can now calculate the regression over a selcted independent variable using values from a different column or an external vector. This allows to for example calculate a regression over pCO2 rather than alkalinity.
 * Minor adjustments made on the way to better catch edge cases in several functions
@@ -8,7 +14,7 @@
 
 ---
 # KOSMOSplotR 2.7.0
-* Implemented a quite rudamentary function to automatically create daily regressions in a single plot panel. This will see refinements in the future.
+* Implemented a quite rudimentary function to automatically create daily regressions in a single plot panel. This will see refinements in the future.
 * Added support for the OAEPIIP experiment
 
 ---

@@ -2,7 +2,7 @@
 #'
 #' @description Select the campaign you are working on to automatically apply the suitable style template.
 #'
-#' @param experiment Select the experiment that the data to be plotted stems from. This then pre-selects the style template. Choose from "\code{KOSMOS2024Kiel}" (the default), "\code{KOSMOS2023Helgoland}", or "\code{KOSMOS2022Bergen}". Unique sharthands such as "\code{kiel}" will be recognised. Note that you can manually adjust the style template further by overwriting \code{KOSMOScurrentStyletable} in your environment.
+#' @param experiment Select the experiment that the data to be plotted stems from. This then pre-selects the style template. Choose from "\code{KOSMOS2025GC}" (the default), "\code{OAEPIIP}", "\code{KOSMOS2024KielQuartzSideExperiment}", "\code{KOSMOS2024Kiel}", "\code{KOSMOS2023Helgoland}", or "\code{KOSMOS2022Bergen}". Unique sharthands such as "\code{kiel}" will be recognised. Note that you can manually adjust the style template further by overwriting \code{KOSMOScurrentStyletable} in your environment.
 
 #  "\code{KOSMOS2024KielQuartzSideExperiment}",
 
@@ -21,22 +21,24 @@
 #' @export
 
 
-KOSMOSselect=function(experiment="kiel"){
-  options=c("KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen","OAEPIIP")
-  catvars=c("Mineral","Mineral","Dilution","Mineral","Treatment")
-  convars=c("Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA","Replicate")
-  treatments=list(matrix(c(6,"lightblue3",10.5,"red"),nrow=2),
+KOSMOSselect=function(experiment="GC"){
+  options=c("KOSMOS2025GC","KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen","OAEPIIP")
+  catvars=c("Treatment","Mineral","Mineral","Dilution","Mineral","Treatment")
+  convars=c("Delta_TA","Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA","Replicate")
+  treatments=list(matrix(c(4,"red",6,"red"),nrow=2),
+                  matrix(c(6,"lightblue3",10.5,"red"),nrow=2),
                   matrix(c(4,"red",6,"red"),nrow=2),
                   matrix(c(4,"red",6,"darkorange"),nrow=2),
                   matrix(c(6,"red"),nrow=2),
                   matrix(c(-10,"white"),nrow =2))
   cleanings=list(matrix(c(1.5,"white"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2),
+                 matrix(c(1.5,"white"),nrow=2),
                  matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2))
 
-  numcategories=c(1,2,2,2,3)
+  numcategories=c(2,1,2,2,2,3)
   chosen=grepl(experiment,options,ignore.case=T)
 
   # because the kiel ones are not truly unique make a negative selection of the side experiment one if there is no quartz or side experiment in the query

@@ -10,7 +10,7 @@ KOSMOStimeplot()
 KOSMOStimeplot(dataset=KOSMOStestdata,
                parameter=dimnames(KOSMOStestdata)[[2]][ncol(KOSMOStestdata)],
                ylabel="Parameter [fantasy unit]",xlabel="Timeline - Experiment day",
-               control="Fjord",baseline=FALSE,treatment.abline=TRUE,
+               control="Harbour",baseline=FALSE,treatment.abline=TRUE,
                exclude_meso=FALSE,exclude_day=FALSE,
                startat0=TRUE,headspace=0,includeThisInYlimit=FALSE,ylimit=FALSE,
                xlimit=FALSE,

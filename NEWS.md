@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.8.1
+* Made the default for the parameter 'control' also be set by KOSMOSselect() automatically
+
+---
 # KOSMOSplotR 2.8.0
 * Added the style template for the GC 2025 campaign
 * Set this as the new default campaign

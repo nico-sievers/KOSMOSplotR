@@ -10,7 +10,7 @@ KOSMOStimeplot(
   subset_data = FALSE,
   exclude_meso = FALSE,
   exclude_day = FALSE,
-  control = "Fjord",
+  control = KOSMOScurrentControl,
   treatmentgroups_sidebyside = FALSE,
   showControlsBothTimes = TRUE,
   ylabel = parameter,
@@ -48,7 +48,7 @@ KOSMOStimeplot(
 
 \item{exclude_meso, exclude_day}{List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.}
 
-\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}. If you don't wish to plot one set it to \code{FALSE} or \code{NULL}.}
+\item{control}{A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. The default is set with the style template automatically. If you don't wish to plot one set it to \code{FALSE} or \code{NULL}.}
 
 \item{treatmentgroups_sidebyside}{Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!}
 

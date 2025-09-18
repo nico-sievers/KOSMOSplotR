@@ -6,7 +6,7 @@
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot.
 #' @param exclude_meso,exclude_day List one or multiple mesocosm or day numbers, respectively, to exclude those from the plot, i.e. \code{c(1,3,10)}.
-#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. Defaults to \code{"Fjord"}. If you don't wish to plot one set it to \code{FALSE} or \code{NULL}.
+#' @param control A sample that stands out of the experimental design, such as a harbour or fjord sample, and shall be plotted in a separate style. Name the identifier from the \code{"Mesocosm"} or \code{"Treat_Meso"} column. The default is set with the style template automatically. If you don't wish to plot one set it to \code{FALSE} or \code{NULL}.
 #' @param treatmentgroups_sidebyside Choose whether the two treatment groups defined by the categorical factor shall be plotted in one graph (\code{"FALSE"}, the default) or side-by-side in separate plots (\code{"TRUE"}). This option is still under development and might cause issues!
 #' @param showControlsBothTimes If (\code{treatmentgroups_sidebyside="TRUE"}), by default, those control-mesocosms without added alkalinity are plotted in all panels (\code{"TRUE"}), rather than just with their group (\code{"FALSE"}).
 #' @param ylabel The y-axis label to be printed. Defaults to \code{parameter}.
@@ -52,7 +52,7 @@
 KOSMOStimeplot=function(dataset=KOSMOStestdata,
                         parameter=last(names(dataset)),
                         subset_data=FALSE,exclude_meso=FALSE,exclude_day=FALSE,
-                        control="Fjord",
+                        control=KOSMOScurrentControl,
                         treatmentgroups_sidebyside=FALSE,showControlsBothTimes=TRUE,
                         ylabel=parameter,xlabel="Experiment day",
                         startat0=FALSE,headspace=0,includeThisInYlimit=0,excludeThisFromYlimit=FALSE,ylimit=FALSE,

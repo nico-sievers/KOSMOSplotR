@@ -25,6 +25,7 @@ KOSMOSselect=function(experiment="2025GC"){
   options=c("KOSMOS2025GC","KOSMOS2024KielQuartzSideExperiment","KOSMOS2024Kiel","KOSMOS2023Helgoland","KOSMOS2022Bergen","OAEPIIP")
   catvars=c("Treatment","Mineral","Mineral","Dilution","Mineral","Treatment")
   convars=c("Delta_TA","Mass added [mg L-1]","Delta_TA","Delta_TA","Delta_TA","Replicate")
+  controls=c("Harbour","Fjord","Fjord","Harbour","Fjord",FALSE)
   treatments=list(matrix(c(4,"red",6,"red"),nrow=2),
                   matrix(c(6,"lightblue3",10.5,"red"),nrow=2),
                   matrix(c(4,"red",6,"red"),nrow=2),
@@ -37,8 +38,8 @@ KOSMOSselect=function(experiment="2025GC"){
                  matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2))
-
   numcategories=c(2,1,2,2,2,3)
+
   chosen=grepl(experiment,options,ignore.case=T)
 
   # because the kiel ones are not truly unique make a negative selection of the side experiment one if there is no quartz or side experiment in the query
@@ -52,6 +53,7 @@ KOSMOSselect=function(experiment="2025GC"){
     assign("KOSMOScurrentStyletable",get(paste0(options,"Styletable")[chosen]),envir=.GlobalEnv)
     assign("KOSMOScurrentCategoricalVar",catvars[chosen],envir=.GlobalEnv)
     assign("KOSMOScurrentContinuousVar",convars[chosen],envir=.GlobalEnv)
+    assign("KOSMOScurrentControl",controls[chosen],envir=.GlobalEnv)
     assign("KOSMOScurrentTreatmentSchedule",treatments[[selected]],envir=.GlobalEnv)
     assign("KOSMOScurrentCleaningSchedule",cleanings[[selected]],envir=.GlobalEnv)
     nmesos=nrow(KOSMOScurrentStyletable)

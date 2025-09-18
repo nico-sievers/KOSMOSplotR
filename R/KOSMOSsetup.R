@@ -57,7 +57,7 @@ KOSMOSselect=function(experiment="2025GC"){
     nmesos=nrow(KOSMOScurrentStyletable)
     if(numcategories[chosen]==2){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[c(nmesos/2-1,nmesos-1),"colourlist"],envir=.GlobalEnv)}
     else if(numcategories[chosen]==1){assign("KOSMOScurrentStatscols",KOSMOScurrentStyletable[nmesos-1,"colourlist"],envir=.GlobalEnv)}
-    packageStartupMessage(paste0("\n\nStyle template '",options[chosen],"' selected.\n\n"))
+    packageStartupMessage(paste0("\nStyle template '",options[chosen],"' selected.\n"))
   } else {
     stop("No matching style template found!")
   }

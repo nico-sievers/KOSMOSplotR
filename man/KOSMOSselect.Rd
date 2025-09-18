@@ -4,10 +4,10 @@
 \alias{KOSMOSselect}
 \title{Set up the KOSMOSplotR package to suit your needs}
 \usage{
-KOSMOSselect(experiment = "kiel")
+KOSMOSselect(experiment = "2025GC")
 }
 \arguments{
-\item{experiment}{Select the experiment that the data to be plotted stems from. This then pre-selects the style template. Choose from "\code{KOSMOS2024Kiel}" (the default), "\code{KOSMOS2023Helgoland}", or "\code{KOSMOS2022Bergen}". Unique sharthands such as "\code{kiel}" will be recognised. Note that you can manually adjust the style template further by overwriting \code{KOSMOScurrentStyletable} in your environment.}
+\item{experiment}{Select the experiment that the data to be plotted stems from. This then pre-selects the style template. Choose from "\code{KOSMOS2025GC}" (the default), "\code{OAEPIIP}", "\code{KOSMOS2024KielQuartzSideExperiment}", "\code{KOSMOS2024Kiel}", "\code{KOSMOS2023Helgoland}", or "\code{KOSMOS2022Bergen}". Unique sharthands such as "\code{kiel}" will be recognised. Note that you can manually adjust the style template further by overwriting \code{KOSMOScurrentStyletable} in your environment.}
 }
 \value{
 Returns \code{KOSMOScurrentStyletable} as the style template for the selected experiment, \code{KOSMOScurrentStatscols} as the second-darkest colour from each treatment group for ablining the linear model, and \code{KOSMOScurrentCategoricalVar} as the categorical variable studies in the experiment.

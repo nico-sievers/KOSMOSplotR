@@ -127,11 +127,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     dataset=dataset[!((dataset$Mesocosm %in% exclude_meso) | (dataset$Treat_Meso %in% exclude_meso)),]
   }
 
-
-  ##### XXX
-  #print(table(dataset$Day,dataset$Mesocosm))
-
-
   # now get averages between the days
   dataset_values=dataset %>% #dataset[!is.na(dataset[[parameter]]),] %>%
     filter(Day %in% days)
@@ -139,8 +134,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     message("There is NA data points in the day rage to average over for the dependent variable:")
     print(dataset_values[is.na(dataset_values[[parameter]]),c("Day","Mesocosm")])
   }
-  #### XXX
-  #print(dataset_values[,c("Day","Mesocosm",independent_name)])
 
   dataset_values=dataset_values[!is.na(dataset_values[[parameter]]),] %>%
     group_by(Mesocosm,get(KOSMOScurrentCategoricalVar),Treat_Meso) %>%
@@ -194,7 +187,8 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
     } else {
       ylimit=c(min(yrange),max(yrange))
     }
-    if(length(categories)==1){headspace=0.15}else{headspace=0.3}
+    # set defaults for headspace based on number of categories, unless it has been set manually
+    if(headspacee=="default"){if(length(categories)==1){headspace=0.15}else{headspace=0.3}}
     ylimit[2]=ylimit[2]+headspace*abs(ylimit[2]-ylimit[1])
   }
 

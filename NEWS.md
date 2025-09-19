@@ -1,3 +1,7 @@
+# KOSMOSplotR 2.8.2
+* fixed the 'headspace' parameter from KOSMOSregplot()
+
+---
 # KOSMOSplotR 2.8.1
 * Made the default for the parameter 'control' also be set by KOSMOSselect() automatically
 

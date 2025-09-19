@@ -222,7 +222,6 @@ KOSMOSregplot=function(dataset=KOSMOStestdata,
   }
 
   #stats from here
-
   # calculate the models and determine required space based on the number of categories
   if(length(categories)>1){
     interactionmodel=lm(dataset[[parameter]]~dataset[[independent_name]]*dataset[[KOSMOScurrentCategoricalVar]])

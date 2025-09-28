@@ -1,3 +1,9 @@
+# KOSMOSplotR 2.8.3
+* added demo files and updated quickstart help
+* added cleaning info for GC 2025
+* KOSMOStimeplot() will now also recognise the Day column correctly if the numbers are accompanied by other characters such as "T1"
+
+---
 # KOSMOSplotR 2.8.2
 * fixed the 'headspace' parameter from KOSMOSregplot()
 

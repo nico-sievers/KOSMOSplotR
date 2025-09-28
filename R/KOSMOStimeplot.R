@@ -80,7 +80,7 @@ KOSMOStimeplot=function(dataset=KOSMOStestdata,
   }
   dataset=KOSMOSadjustColumnnames(dataset,required_columns)
   # structuring
-  dataset$Day=as.integer(dataset$Day)
+  dataset$Day=as.integer(gsub("\\D", "", as.character(dataset$Day)))
   dataset=dataset[order(dataset$Day),]
 
   # potentially subset the dataset according to the user parameter

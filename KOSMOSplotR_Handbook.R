@@ -10,6 +10,8 @@
 #                                                   #
 #             first released 12/03/2024             #
 #                                                   #
+#    https://github.com/nico-sievers/KOSMOSplotR    #
+#                                                   #
 #####################################################
 
 
@@ -185,8 +187,6 @@ mydata = read_excel(path = "C:/path/to/my/Data.xlsx",
 # that your data stems from to load the correct
 # style template:
 KOSMOSselect(experiment="kiel")
-# Currently, choose between 'KOSMOS2024Kiel',
-# 'KOSMOS2023Helgoland', and 'KOSMOS2022Bergen'.
 # You can use shorthands! See the documentation
 # of
 ?KOSMOSselect()

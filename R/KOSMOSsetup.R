@@ -32,7 +32,7 @@ KOSMOSselect=function(experiment="2025GC"){
                   matrix(c(4,"red",6,"darkorange"),nrow=2),
                   matrix(c(6,"red"),nrow=2),
                   matrix(c(-10,"white"),nrow =2))
-  cleanings=list(matrix(c(1.5,"white"),nrow=2),
+  cleanings=list(matrix(c(8,"darkgrey"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2),
                  matrix(c(1.5,"white"),nrow=2),
                  matrix(c(10,"darkgrey",18,"darkgrey",22,"darkgrey",26,"darkgrey",32,"darkgrey",38,"darkgrey"),nrow=2),

@@ -2,6 +2,7 @@
 * added demo files and updated quickstart help
 * added cleaning info for GC 2025
 * KOSMOStimeplot() will now also recognise the Day column correctly if the numbers are accompanied by other characters such as "T1"
+* GC 2025 columns are now added in the correct order
 
 ---
 # KOSMOSplotR 2.8.2

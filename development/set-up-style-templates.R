@@ -211,18 +211,53 @@ save(KOSMOS2024KielQuartzSideExperimentStyletable,file="data/KOSMOS2024KielQuart
 ############################################
 # create legend for any style
 
-KOSMOScurrentStyletable=rbind(KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable)
+# KOSMOScurrentStyletable=rbind(KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable,KOSMOSplotR::KOSMOS2024KielQuartzSideExperimentStyletable)
+#
+# data=FlowCytometry[FlowCytometry$Set=="Synechococcus" & FlowCytometry$Day %in% 1:3,1:9]
+# data=data[order(data$Day,data$Treat_Meso,decreasing=T),]
+# data$Count=rep(1:6,3)
 
-data=FlowCytometry[FlowCytometry$Set=="Synechococcus" & FlowCytometry$Day %in% 1:3,1:9]
-data=data[order(data$Day,data$Treat_Meso,decreasing=T),]
-data$Count=rep(1:6,3)
+#
+# data=merge(KOSMOStestdata,KOSMOScurrentStyletable,all=T)
+# data=merge(data,controlstyle,all=T,)
+#
+# ggplot(data=data,mapping=aes(x=Day,y=Parameter,colour=colourlist,fill=colourlist,linetype=ltylist)) +
+#   geom_point(show.legend=T) +
+#   geom_line(show.legend=T) +
+#   scale_color_identity(guide = "legend") +
+#   scale_fill_identity(guide = "legend") +
+#   scale_shape_identity(guide = "legend") +
+#   scale_linetype_identity(guide = "legend") +
+#   theme_minimal() +
+#   theme(panel.grid=element_blank())
 
-ggplot(data,aes(Day,Count,col=Treat_Meso,fill=Treat_Meso,shape=Treat_Meso)) +
-  geom_point(shape=rev(KOSMOScurrentStyletable$shapelist)) +
-  geom_line(linetype=KOSMOScurrentStyletable$ltylist) +
-  scale_color_discrete(type=KOSMOScurrentStyletable$colourlist) +
-  scale_fill_discrete(type=KOSMOScurrentStyletable$colourlist) +
-  theme_minimal() +
-  theme(panel.grid=element_blank())
-  #scale_shape_discrete(name=NULL,KOSMOScurrentStyletable$shapelist)
-KOSMOScurrentStyletable$colourlist
+
+controlstyle=data.frame(matrix(unlist(c(KOSMOScurrentControl,KOSMOSdesignfeatures[1:3])),nrow=1))
+names(controlstyle)=names(KOSMOScurrentStyletable)[4:7]
+
+legend=merge(KOSMOScurrentStyletable,controlstyle,all=T)
+legend=legend[order(legend$Treatment,legend$Delta_TA),-5:-7]
+legend$shapelist <- as.numeric(legend$shapelist)
+
+
+# Create an empty plot window
+plot.new()
+#origfont=par("font");
+par(mar = c(0,0,0,0))#,"font"=11)  # remove margins
+plot.window(xlim = c(0,1), ylim = c(0,1))
+
+# Draw the legend
+legend(
+  "center",
+  legend = legend$Treat_Meso,
+  col = legend$colourlist,
+  pt.bg = legend$colourlist,
+  lty = legend$ltylist,
+  pch = legend$shapelist,
+  cex = 3,             # text size
+  pt.cex = 5,          # symbol size
+  lwd = 5,
+  bty = "n",             # no box around
+  ncol = 1               # nicely split into 2 columns
+)
+#par("font"=origfont)

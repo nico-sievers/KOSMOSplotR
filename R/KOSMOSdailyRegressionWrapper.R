@@ -18,7 +18,7 @@
 #' @export
 
 
-KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestdata,parameter=last(names(dataset)),days=NULL,sync_y_axis=F,target_ratio=NULL,tolerance=0.5,...) {
+KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestdata,parameter=last(names(dataset)),days=NULL,sync_y_axis=FALSE,target_ratio=NULL,tolerance=0.5,...) {
 
   message("\n\nPlotting ",filename)
 

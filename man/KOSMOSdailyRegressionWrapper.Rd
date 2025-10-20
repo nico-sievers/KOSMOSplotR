@@ -9,7 +9,7 @@ KOSMOSdailyRegressionWrapper(
   dataset = KOSMOStestdata,
   parameter = last(names(dataset)),
   days = NULL,
-  sync_y_axis = F,
+  sync_y_axis = FALSE,
   target_ratio = NULL,
   tolerance = 0.5,
   ...

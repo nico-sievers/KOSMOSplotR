@@ -1,3 +1,6 @@
+# KOSMOSplotR 2.8.4
+* updated the cleaning info for GC 2025
+
 # KOSMOSplotR 2.8.3
 * added demo files and updated quickstart help
 * added cleaning info for GC 2025

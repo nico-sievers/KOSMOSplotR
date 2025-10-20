@@ -7,6 +7,7 @@
 KOSMOSdailyRegressionWrapper(
   filename = "output.svg",
   dataset = KOSMOStestdata,
+  subset_data = FALSE,
   parameter = last(names(dataset)),
   days = NULL,
   sync_y_axis = FALSE,
@@ -20,11 +21,13 @@ KOSMOSdailyRegressionWrapper(
 
 \item{dataset}{A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.}
 
+\item{subset_data}{Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot and can be passed on to \code{KOSMOSregplot()}.}
+
 \item{parameter}{The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.}
 
 \item{days}{Select a vector of sampling days to include in the plot pane. By default, all will be included.}
 
-\item{sync_y_axis}{If this is set to \code{TRUE} all sub-plots will share the same y-axis for better comparison, at the risk of overseeing signal in sampling days with smaller values. By default, each plot will have the best suitable axis range calculated independently.}
+\item{sync_y_axis}{If this is set to \code{TRUE} all sub-plots will share the same y-axis for better comparison, at the risk of overseeing signal in sampling days with smaller values. By default, each plot will have the best suitable axis range calculated independently. Note that if this is set headspace of 35 percent is currently hard-coded.}
 
 \item{target_ratio}{Select the target aspect ratio for the panel grid. The algorith will try to create a rectangle slightly wider but as close to that as possible to that. By default, it will be \code{16:9} to fit common powerpoint slides.}
 

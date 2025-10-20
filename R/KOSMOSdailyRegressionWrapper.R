@@ -4,9 +4,10 @@
 #'
 #' @param filename The path and name as which to save the file. This needs to be an \code{.svg} always.
 #' @param dataset A data set object following the common KOSMOS layout, i.e. loaded from the standard excel data sheet. If left empty, an example dataset \code{KOSMOStestdata} will be plotted to showcase the function. Check \code{View(KOSMOStestdata)} to compare the required data structure.
+#' @param subset_data Subset the data by including or excluding rows that have given values in a specified column. If set to \code{FALSE} (the default), no sub-setting is performed. To subset the data table by columns \code{'columnA'} and \code{'columnB'}, supply the following syntax: \code{subset_data = list( columnA = c("value1","value2") , columnB = c("value A","value B"))}, where the column name is the name of the element of the list and the element is a vector (or single value) that marks all rows you wish to include. Alternatively, values can be excluded by adding the prefix \code{"not_"} to a column name, such as \code{subset_data = list( not_columnA = c("value1","value2"))}. Here, rows with \code{value1} and \code{value2} are dropped while all other rows remain. Note that \code{exclude_meso} and \code{exclude_day}, as well as \code{xlimit}, are more convenient parameters to exclude sampling days and mesocosms from the plot and can be passed on to \code{KOSMOSregplot()}.
 #' @param parameter The column name of the response variable to be plotted given as a string. Defaults to the last column in the data table.
 #' @param days Select a vector of sampling days to include in the plot pane. By default, all will be included.
-#' @param sync_y_axis If this is set to \code{TRUE} all sub-plots will share the same y-axis for better comparison, at the risk of overseeing signal in sampling days with smaller values. By default, each plot will have the best suitable axis range calculated independently.
+#' @param sync_y_axis If this is set to \code{TRUE} all sub-plots will share the same y-axis for better comparison, at the risk of overseeing signal in sampling days with smaller values. By default, each plot will have the best suitable axis range calculated independently. Note that if this is set headspace of 35% is currently hard-coded.
 #' @param target_ratio Select the target aspect ratio for the panel grid. The algorith will try to create a rectangle slightly wider but as close to that as possible to that. By default, it will be \code{16:9} to fit common powerpoint slides.
 #' @param tolerance The percentage by which a gapless panel may diverge from the target ratio to still be preferred over a panel that contains empty spaces. The default is \code{0.5}.
 #' @param ... forward any other arguments of \code{KOSMOSregplot} to customise the individual plots further.
@@ -18,15 +19,34 @@
 #' @export
 
 
-KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestdata,parameter=last(names(dataset)),days=NULL,sync_y_axis=FALSE,target_ratio=NULL,tolerance=0.5,...) {
+KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestdata,subset_data=FALSE,parameter=last(names(dataset)),days=NULL,sync_y_axis=FALSE,target_ratio=NULL,tolerance=0.5,...) {
 
   message("\n\nPlotting ",filename)
 
 
   ### prepare the dataset
 
+  # potentially subset the dataset according to the user parameter
+  if(is.list(subset_data) & !is.null(subset_data)){
+    not_operator="^not_"
+    if(!all(sub(not_operator,"",names(subset_data)) %in% names(dataset))){
+      stop("Not all column names given to 'subset_data' where found in the data table!")
+    }
+    # iterate through given column names
+    for(i in names(subset_data)){
+      # if it starts in a "!", remove those entries rather than keeping them!
+      if(grepl(not_operator,i)){
+        dataset=dataset[!(dataset[[sub(not_operator,"",i)]] %in% subset_data[[i]]),]
+      } else {
+        dataset=dataset[dataset[[i]] %in% subset_data[[i]],]
+      }
+    }
+  }
+
   # get rid of all lines where there is no data for this parameter, so that these days are not considered in the paneling
   dataset=dataset[!is.na(dataset[[parameter]]),]
+  # also kick the control so it is not used in the min/max calculations
+  dataset=dataset[dataset$Mesocosm!=KOSMOScurrentControl,]
 
   if(nrow(dataset)==0){warning("No datapoints in the selected range, no plot created.")}
   else{
@@ -43,7 +63,7 @@ KOSMOSdailyRegressionWrapper=function(filename="output.svg",dataset=KOSMOStestda
 
   # determine the maximum axis range needed to accomodate all data points if requested by the user
   if(sync_y_axis){
-    yrange=c(min(dataset[[parameter]],na.rm=T),max(dataset[[parameter]],na.rm=T))
+    yrange=c(min(dataset[[parameter]],na.rm=T),max(dataset[[parameter]],na.rm=T)*1.35)
   } else {
     yrange=F
   }

@@ -1,3 +1,5 @@
+# stupid git bug
+
 #' @title Plot a regression for each sampling day quickly
 #'
 #' @description Create a file containing a panel of regression plots for each (or a selection of) sampling days automatically. This function is still quite raw and will always create an .svg file.
